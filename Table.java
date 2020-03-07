@@ -3,12 +3,8 @@ import java.util.Iterator;
 
 public class Table {
 	
-	Player[] players;
+	private Player[] players;
 	
-	/*
-	 * !!!
-	 * This will only come into use if static table position implemented
-	 */
 	private static final int numPlayers = 5;
 	
 	public Table() {
@@ -18,49 +14,10 @@ public class Table {
 		
 	}
 	
-//	public boolean dealNCards(int n) {
-//		
-//		// check number of players
-//		int playerCount = this.checkNumPlayers();
-//		
-//		// For testings
-//		System.out.println("Player count: " + playerCount);
-//		
-//		/*
-//		 * Return false and do not deal if no players
-//		 */
-//		if(playerCount < 1) {
-//			return false;
-//		}
-//		
-//		/*
-//		 * Variable to track index
-//		 * Continually increment, using modulo to loop over players
-//		 */
-//		int index = 0;
-//		int loops = 0;
-//		
-//		while(loops < n) {
-//			
-//		}
-//		
-//		for(Card card : deck.getDeck()) {
-//			
-//			// ignore empty positions
-//			while(players[(index % players.length)] == null) {
-//				index++;
-//			}
-//			
-//			// deal card to positions with players
-//			players[(index % players.length)].addCard(card);
-//			index++;
-//		}
-//		
-//		
-//	}
-	
+
 	/**
-	 * Method to deal out entire deck
+	 * ======= Test Only ========!!
+	 * Method to deal out entire deck (does not remove cards from deck
 	 * @param deck
 	 */
 	public boolean dealAll(Deck deck) {
@@ -68,7 +25,7 @@ public class Table {
 		// check number of players
 		int playerCount = this.checkNumPlayers();
 		
-		// For testings
+		// For testing
 		System.out.println("Player count: " + playerCount);
 		
 		/*
@@ -155,6 +112,12 @@ public class Table {
 		
 		return output;
 	}
+
+
+	public Player[] getPlayers() {
+		return players;
+	}
+	
 	
 
 }

@@ -34,7 +34,7 @@ public class Test {
 		Player player1 = new Player(1, "Andrew");
 		Player player2 = new Player(2, "John");
 		Player player3 = new Player(3, "Aaron");
-		Player player4 = new Player(4, "Rebecca");
+//		Player player4 = new Player(4, "Rebecca");
 		Player player5 = new Player(5, "Mike");
 		
 		/*
@@ -45,7 +45,7 @@ public class Test {
 		table.addPlayer(player1, 0);
 		table.addPlayer(player2, 1);
 		table.addPlayer(player3, 2);
-		table.addPlayer(player4, 3);
+//		table.addPlayer(player4, 3);
 		table.addPlayer(player5, 4);
 		
 		
@@ -87,18 +87,21 @@ public class Test {
 		System.out.println();
 		
 		/*
-		 * Check hand functionality
+		 * Check hand value functionality
 		 */
+		
+		System.out.println("\nCheck hand value functionality");
 		
 		player1.emptyHand();
 		player2.emptyHand();
 		player3.emptyHand();
-		player4.emptyHand();
+//		player4.emptyHand();
 		player5.emptyHand();
 		
 		table.dealAll(deck);
 		
 		System.out.println("\n" + table);
+		
 		
 		System.out.println("\nPlayer1:");
 		for(Integer i: player1.handValue()) {
@@ -112,14 +115,29 @@ public class Test {
 		for(Integer i: player3.handValue()) {
 			System.out.println(i);
 		}
-		System.out.println("\nPlayer4:");
-		for(Integer i: player4.handValue()) {
-			System.out.println(i);
-		}
+//		System.out.println("\nPlayer4:");
+//		for(Integer i: player4.handValue()) {
+//			System.out.println(i);
+//		}
 		System.out.println("\nPlayer5:");
 		for(Integer i: player5.handValue()) {
 			System.out.println(i);
 		}
+		
+		System.out.println("\nCheck initial functionality.\n"
+				+ "Cards should be removed from deck and added to hands.");
+		
+		player1.emptyHand();
+		player2.emptyHand();
+		player3.emptyHand();
+//		player4.emptyHand();
+		player5.emptyHand();
+		
+		System.out.println("\nDeck (before): " + deck);
+		
+		deck.dealInitialCards(table.getPlayers());
+		System.out.println("\nPlayer hands (after):\n" + table);
+		System.out.println("Deck (After): " + deck);
 
 	}
 }

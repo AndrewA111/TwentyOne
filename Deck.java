@@ -46,6 +46,23 @@ public class Deck {
 		Collections.shuffle(deck);
 	}
 	
+	
+	public void dealInitialCards(Player[] players) {
+		
+		// two loops of adding cards
+		for(int i = 0; i < 2; i++) {
+			
+			// for each position in players array
+			for(int j = 0; j < players.length; j++) {
+				
+				// if player in position
+				if(players[j] != null) {
+					players[j].addCard(this.deck.remove(0));
+				}
+			}
+		}
+	}
+	
 	/**
 	 * toString method
 	 */
