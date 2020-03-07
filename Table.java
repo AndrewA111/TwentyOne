@@ -3,49 +3,144 @@ import java.util.Iterator;
 
 public class Table {
 	
-	ArrayList<Player> players;
+	Player[] players;
 	
 	/*
 	 * !!!
 	 * This will only come into use if static table position implemented
 	 */
-	private static int numPlayers = 5;
+	private static final int numPlayers = 5;
 	
 	public Table() {
 		
 		// set number of places at table
-		players = new ArrayList<Player>();
+		players = new Player[numPlayers];
 		
 	}
+	
+//	public boolean dealNCards(int n) {
+//		
+//		// check number of players
+//		int playerCount = this.checkNumPlayers();
+//		
+//		// For testings
+//		System.out.println("Player count: " + playerCount);
+//		
+//		/*
+//		 * Return false and do not deal if no players
+//		 */
+//		if(playerCount < 1) {
+//			return false;
+//		}
+//		
+//		/*
+//		 * Variable to track index
+//		 * Continually increment, using modulo to loop over players
+//		 */
+//		int index = 0;
+//		int loops = 0;
+//		
+//		while(loops < n) {
+//			
+//		}
+//		
+//		for(Card card : deck.getDeck()) {
+//			
+//			// ignore empty positions
+//			while(players[(index % players.length)] == null) {
+//				index++;
+//			}
+//			
+//			// deal card to positions with players
+//			players[(index % players.length)].addCard(card);
+//			index++;
+//		}
+//		
+//		
+//	}
 	
 	/**
 	 * Method to deal out entire deck
 	 * @param deck
 	 */
-	public void dealAll(Deck deck) {
+	public boolean dealAll(Deck deck) {
 		
-		Iterator<Player> playerIt = this.players.iterator();
+		// check number of players
+		int playerCount = this.checkNumPlayers();
+		
+		// For testings
+		System.out.println("Player count: " + playerCount);
+		
+		/*
+		 * Return false and do not deal if less than 2 players
+		 */
+		if(playerCount < 2) {
+			return false;
+		}
+		
+		/*
+		 * Deal cards
+		 */
+		
+		/*
+		 * Variable to track index
+		 * Continually increment, using modulo to loop over players
+		 */
+		int index = 0;
 		
 		for(Card card : deck.getDeck()) {
 			
-			if(playerIt.hasNext()) {
-				playerIt.next().addCard(card);
-			}
-			else {
-				playerIt = this.players.iterator();
-				playerIt.next().addCard(card);
+			// ignore empty positions
+			while(players[(index % players.length)] == null) {
+				index++;
 			}
 			
-			
+			// deal card to positions with players
+			players[(index % players.length)].addCard(card);
+			index++;
 		}
+		
+		// return true to indicate that cards have been dealt
+		return true;
 	}
 	
 	/**
-	 * Add player to players ArrayList
+	 * Add player to table
 	 * @param player
+	 * @param pos position in players array
+	 * @return
 	 */
-	public void addPlayer(Player player) {
-		this.players.add(player);
+	public boolean addPlayer(Player player, int pos) {
+		
+		// if position empty, add player
+		if(this.players[pos] == null) {
+			this.players[pos] = player;
+			return true;
+		}
+		
+		// return false is position already taken
+		return false;
+
+	}
+	
+	/**
+	 * Method to check number of players at the table
+	 * @return playerCount
+	 */
+	public int checkNumPlayers() {
+
+		int playerCount = 0; 
+		
+		/*
+		 * Check how many players are at table
+		 */
+		for(Player player : players) {
+			if(player != null) {
+				playerCount++;
+			}
+		}
+		
+		return playerCount;
 	}
 	
 	/**

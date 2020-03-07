@@ -28,6 +28,10 @@ public class Card {
 		this.suit = type;
 	}
 	
+	
+	/**
+	 * toString
+	 */
 	public String toString() {
 		return suit + symbol;
 	}

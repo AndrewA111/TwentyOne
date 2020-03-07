@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class Player {
 	
@@ -32,6 +33,12 @@ public class Player {
 	 */
 	public void emptyHand() {
 		this.hand.empty();
+	}
+	
+	
+	public ArrayList<Integer> handValue() {
+		
+		return this.hand.value();
 	}
 	
 	/**

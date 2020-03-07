@@ -1,6 +1,22 @@
 import java.util.Iterator;
 
 public class Test {
+	
+	/*
+	 * TODO:
+	 * 
+	 * What happens when not enough cards to deal out?
+	 * 
+	 * Need to think about removing cards from deck when dealt
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
+	
+	
+	
+	
 	public static void main(String[] args) {
 		
 		/*
@@ -21,25 +37,38 @@ public class Test {
 		Player player4 = new Player(4, "Rebecca");
 		Player player5 = new Player(5, "Mike");
 		
+		/*
+		 * Create table and add players
+		 */
 		Table table = new Table();
 		
-		table.addPlayer(player1);
-		table.addPlayer(player2);
-		table.addPlayer(player3);
-		table.addPlayer(player4);
-		table.addPlayer(player5);
+		table.addPlayer(player1, 0);
+		table.addPlayer(player2, 1);
+		table.addPlayer(player3, 2);
+		table.addPlayer(player4, 3);
+		table.addPlayer(player5, 4);
 		
+		
+		/*
+		 * Deal
+		 */
 		table.dealAll(deck);
 		
 		System.out.println(table);
 		
 		System.out.println("Original deck:\n" + deck);
 		
+		/*
+		 * Shuffle
+		 */
 		deck.shuffle();
 		
 		System.out.println("\nShuffled deck:\n" + deck);
 		
 		
+		/*
+		 * Check numerical value matching working
+		 */
 		System.out.println("\nCheck numerical value matches card:");
 		for(Card card : deck.getDeck()) {
 			
@@ -53,41 +82,44 @@ public class Test {
 			else {
 				System.out.print(CardDetails.getAcelow() + " || " + CardDetails.getAcehigh() + ", ");
 			}
-			
-			
-			
+		
 		}
+		System.out.println();
 		
+		/*
+		 * Check hand functionality
+		 */
 		
+		player1.emptyHand();
+		player2.emptyHand();
+		player3.emptyHand();
+		player4.emptyHand();
+		player5.emptyHand();
 		
+		table.dealAll(deck);
 		
+		System.out.println("\n" + table);
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-//		Iterator<Card> it = deck.getDeck().iterator();
-//		
-//		for(int i = 0; i <100; i++) {
-//			if(it.hasNext()) {
-//				System.out.println(it.next());
-//			}
-//			else {
-//				it = deck.getDeck().iterator();
-//				System.out.println(it.next());
-//			}
-//			
-//		}
+		System.out.println("\nPlayer1:");
+		for(Integer i: player1.handValue()) {
+			System.out.println(i);
+		}
+		System.out.println("\nPlayer2:");
+		for(Integer i: player2.handValue()) {
+			System.out.println(i);
+		}
+		System.out.println("\nPlayer3:");
+		for(Integer i: player3.handValue()) {
+			System.out.println(i);
+		}
+		System.out.println("\nPlayer4:");
+		for(Integer i: player4.handValue()) {
+			System.out.println(i);
+		}
+		System.out.println("\nPlayer5:");
+		for(Integer i: player5.handValue()) {
+			System.out.println(i);
+		}
+
 	}
 }
