@@ -20,8 +20,14 @@ public class CardDetails {
 	private static HashMap<String, Integer> valueMap;
 	
 	
-	
+	/**
+	 * Constructor
+	 * 
+	 * Populate hashmap with value pairing on creation of class
+	 */
 	public CardDetails() {
+		
+		valueMap = new HashMap<String, Integer>();
 		CardDetails.valueMap.put("2", 2);
 		CardDetails.valueMap.put("3", 3);
 		CardDetails.valueMap.put("4", 4);

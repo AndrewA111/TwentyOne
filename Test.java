@@ -1,8 +1,18 @@
 import java.util.Iterator;
 
-public class Server {
+public class Test {
 	public static void main(String[] args) {
-
+		
+		/*
+		 * Create CardDetails object.
+		 * 
+		 * This calls the class constructor which populates the card value hashmap
+		 */
+		CardDetails cardDetails = new CardDetails();
+		
+		/*
+		 * Create deck
+		 */
 		Deck deck = new Deck();
 		
 		Player player1 = new Player(1, "Andrew");
@@ -28,6 +38,25 @@ public class Server {
 		deck.shuffle();
 		
 		System.out.println("\nShuffled deck:\n" + deck);
+		
+		
+		System.out.println("\nCheck numerical value matches card:");
+		for(Card card : deck.getDeck()) {
+			
+			System.out.print(card.getType() + card.getValue() + ": ");
+			
+			// if within 2,3 ... King
+			if(!card.getValue().equals("A")) {
+				System.out.print(CardDetails.getValueMap().get(card.getValue()) + ", ");
+			}
+			// if Ace
+			else {
+				System.out.print(CardDetails.getAcelow() + " || " + CardDetails.getAcehigh() + ", ");
+			}
+			
+			
+			
+		}
 		
 		
 		
