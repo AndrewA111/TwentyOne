@@ -100,6 +100,13 @@ public class Table {
 		return playerCount;
 	}
 	
+	
+	public void emptyPlayers() {
+		for(Player player : players) {
+			player.emptyHand();
+		}
+	}
+	
 	/**
 	 * toString method, shows all players hands
 	 */
