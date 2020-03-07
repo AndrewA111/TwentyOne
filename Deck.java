@@ -47,20 +47,27 @@ public class Deck {
 	}
 	
 	
-	public void dealInitialCards(Player[] players) {
+	public void dealInitialCards(Player[] players, Player dealer) {
 		
-		// two loops of adding cards
-		for(int i = 0; i < 2; i++) {
-			
-			// for each position in players array
-			for(int j = 0; j < players.length; j++) {
-				
-				// if player in position
-				if(players[j] != null) {
-					players[j].addCard(this.deck.remove(0));
-				}
+		/*
+		 * Get dealer position
+		 */
+		int dealerPos = -1;
+		
+		for(int i = 0; i < players.length; i++) {
+			if(players[i] == dealer) {
+				dealerPos = i;
 			}
 		}
+		
+		for(int i = (dealerPos + 1); i < (dealerPos + (2 * players.length) + 1); i++){
+			
+			// if player in position
+			if(players[i % players.length] != null) {
+				players[i % players.length].addCard(this.deck.remove(0));
+			}
+		}
+		
 	}
 	
 	/**

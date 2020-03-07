@@ -9,19 +9,23 @@ public class Model {
 	public Model() {
 		
 		this.table = new Table();
-		this.deck = new Deck();
+		this.newGame();
 		
 	}
 	
+	/*
+	 * This needs updated to that dealer selection is first thing that happens
+	 */
 	public void newGame() {
-		this.table.emptyPlayers();
 		this.deck = new Deck();
 		System.out.println(this.deck);
 		this.deck.shuffle();
 		System.out.println(this.deck);
-		this.deck.dealInitialCards(table.getPlayers());
-		System.out.println("\n" + this.table);	
-		System.out.println("\n" + this.deck);
+		
+//		
+//		this.deck.dealInitialCards(table.getPlayers());
+//		System.out.println("\n" + this.table);	
+//		System.out.println("\n" + this.deck);
 		
 	}
 

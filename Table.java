@@ -4,6 +4,7 @@ import java.util.Iterator;
 public class Table {
 	
 	private Player[] players;
+	private Player dealer;
 	
 	private static final int numPlayers = 5;
 	
@@ -100,8 +101,15 @@ public class Table {
 		return playerCount;
 	}
 	
+	/*
+	 * Needs updated !!
+	 */
+	public void selectDealer() {
+		this.dealer = players[0];
+	}
 	
-	public void emptyPlayers() {
+	
+	public void emptyPlayerHands() {
 		for(Player player : players) {
 			player.emptyHand();
 		}
@@ -124,6 +132,13 @@ public class Table {
 	public Player[] getPlayers() {
 		return players;
 	}
+
+
+	public Player getDealer() {
+		return dealer;
+	}
+	
+	
 	
 	
 

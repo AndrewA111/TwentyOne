@@ -2,11 +2,13 @@
 public class GameLoop {
 	public static void main(String[] args) {
 		
-		Model model = new Model();
+		
 		
 		/*
-		 * Create table and deal initial cards
+		 * Create model. Add people to table.
 		 */
+		
+		Model model = new Model();
 		
 		Player player1 = new Player(1, "Andrew");
 		Player player2 = new Player(2, "John");
@@ -14,17 +16,31 @@ public class GameLoop {
 		Player player4 = new Player(4, "Rebecca");
 		Player player5 = new Player(5, "Mike");
 		
-		model.getTable().addPlayer(player1, 0);
-		model.getTable().addPlayer(player2, 1);
-		model.getTable().addPlayer(player3, 2);
-		model.getTable().addPlayer(player4, 3);
-		model.getTable().addPlayer(player5, 4);
+		Table table = model.getTable();
+		Deck deck = model.getDeck();
 		
-		model.newGame();
+		table.addPlayer(player1, 0);
+		table.addPlayer(player2, 1);
+		table.addPlayer(player3, 2);
+		table.addPlayer(player4, 3);
+		table.addPlayer(player5, 4);
 		
 		/*
 		 * Select dealer
 		 */
+		
+		// currently just sets to p1
+		table.selectDealer();
+		System.out.println("\nDealer: " + table.getDealer().getName());
+		
+		/*
+		 * Deal initial cards
+		 */
+		
+		deck.dealInitialCards(table.getPlayers(), table.getDealer());
+		
+		System.out.println("\n" + table);
+		
 		
 		
 		
