@@ -1,20 +1,23 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Player {
+public class Player implements Serializable {
 	
 	private int ID;
 	private String name;
+	private int tablePos;
 	
 	private Hand hand;
 	
 	private int balance;
 	private int stake;
 	
-	public Player(int ID, String name) {
+	public Player(int ID, String name, int tablePos) {
 		
 		this.ID = ID;
 		this.name = name;
 		this.balance = 200;
+		this.tablePos = tablePos;
 		
 		this.hand = new Hand();
 		
@@ -56,6 +59,16 @@ public class Player {
 	public String getName() {
 		return name;
 	}
+
+	public int getTablePos() {
+		return tablePos;
+	}
+
+	public void setTablePos(int tablePos) {
+		this.tablePos = tablePos;
+	}
+
+	
 	
 	
 	

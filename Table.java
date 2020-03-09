@@ -104,7 +104,7 @@ public class Table {
 	/*
 	 * Needs updated !!
 	 */
-	public void selectDealer() {
+	public void selectInitialDealer() {
 		this.dealer = players[0];
 	}
 	

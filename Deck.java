@@ -46,7 +46,12 @@ public class Deck {
 		Collections.shuffle(deck);
 	}
 	
-	
+	/**
+	 * Deal 2 cards to each player, clockwise, starting immediately after dealer
+	 * (Clockwise is in a positive direction through array)
+	 * @param players
+	 * @param dealer
+	 */
 	public void dealInitialCards(Player[] players, Player dealer) {
 		
 		/*
@@ -68,6 +73,14 @@ public class Deck {
 			}
 		}
 		
+	}
+	
+	/**
+	 * Deal and single card to a player
+	 * @param player
+	 */
+	public void dealSingleCard(Player player) {
+		player.addCard((this.deck.remove(0)));
 	}
 	
 	/**

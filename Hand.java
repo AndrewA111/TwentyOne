@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Hand {
+public class Hand implements Serializable {
 	
 	/**
 	 * Hand - list of cards
