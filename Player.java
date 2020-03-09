@@ -50,7 +50,7 @@ public class Player implements Serializable {
 	public String toString() {
 		String output = "";
 		
-		output += this.name + "\n";
+		output += this.name + "\n, ";
 		output += this.hand;
 		
 		return output;
@@ -67,6 +67,12 @@ public class Player implements Serializable {
 	public void setTablePos(int tablePos) {
 		this.tablePos = tablePos;
 	}
+
+	public Hand getHand() {
+		return hand;
+	}
+	
+	
 
 	
 	

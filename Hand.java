@@ -75,6 +75,19 @@ public class Hand implements Serializable {
 		
 		return values;
 	}
+	
+	public String valuesAsString() {
+		
+		String output = "Value: ";
+		
+		ArrayList<Integer> values = this.value();
+		
+		for(Integer val : values) {
+			output += val + ", ";
+		}
+		
+		return output;
+	}
 		
 		
 

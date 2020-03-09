@@ -33,13 +33,18 @@ public class Client extends JFrame implements ActionListener {
 	public Client() {
 		
 		/*
+		 * Initialize hashmap for valuing hands
+		 */
+		CardDetails cardDetails = new CardDetails();
+		
+		/*
 		 * JFrame stuff
 		 */
 		this.setSize(800,600);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 		
-		this.setLayout(new GridLayout(2,3));
+		this.setLayout(new GridLayout(6,1));
 		
 		label1 = new JLabel("Empty");
 		this.add(label1);
@@ -118,19 +123,25 @@ public class Client extends JFrame implements ActionListener {
 			 * Update player details according to most recent message
 			 */
 			if(mostRecent.getPlayers()[0] != null) {
-				label1.setText(mostRecent.getPlayers()[0].toString());
+				label1.setText(mostRecent.getPlayers()[0].toString() 
+						+ mostRecent.getPlayers()[0].getHand().valuesAsString());
+				
 			}
 			if(mostRecent.getPlayers()[1] != null) {
-				label2.setText(mostRecent.getPlayers()[1].toString());	
+				label2.setText(mostRecent.getPlayers()[1].toString()
+						+ mostRecent.getPlayers()[1].getHand().valuesAsString());	
 			}
 			if(mostRecent.getPlayers()[2] != null) {
-				label3.setText(mostRecent.getPlayers()[2].toString());
+				label3.setText(mostRecent.getPlayers()[2].toString()
+						+ mostRecent.getPlayers()[2].getHand().valuesAsString());
 			}
 			if(mostRecent.getPlayers()[3] != null) {
-				label4.setText(mostRecent.getPlayers()[3].toString());
+				label4.setText(mostRecent.getPlayers()[3].toString()
+						+ mostRecent.getPlayers()[3].getHand().valuesAsString());
 			}
 			if(mostRecent.getPlayers()[4] != null) {
-				label5.setText(mostRecent.getPlayers()[4].toString());
+				label5.setText(mostRecent.getPlayers()[4].toString()
+						+ mostRecent.getPlayers()[4].getHand().valuesAsString());
 			}
 			
 		}
