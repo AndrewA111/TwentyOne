@@ -50,7 +50,7 @@ public class Player implements Serializable {
 	public String toString() {
 		String output = "";
 		
-		output += this.name + "\t";
+		output += this.name + "\n";
 		output += this.hand;
 		
 		return output;

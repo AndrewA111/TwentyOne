@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
@@ -5,7 +6,7 @@ import java.util.HashMap;
  * @author Andrew
  *
  */
-public class Card {
+public class Card implements Serializable {
 	
 	// 2,3...10,J,Q,K,A
 	private String symbol;

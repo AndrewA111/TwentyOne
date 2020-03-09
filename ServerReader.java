@@ -5,9 +5,11 @@ import java.net.Socket;
 public class ServerReader implements Runnable{
 	
 	private Socket socket;
+	private Model model;
 	
-	public ServerReader(Socket s) {
+	public ServerReader(Socket s, Model m) {
 		this.socket = s;
+		this.model = m;
 	}
 	
 	public void run() {
@@ -19,6 +21,10 @@ public class ServerReader implements Runnable{
 				Message messageIn = (Message) is.readObject();
 				
 				System.out.println("Message code: " + messageIn.getCode());
+				
+				if(messageIn.getCode() == 3) {
+					this.model.getDeck().dealInitialCards(this.model.getTable().getPlayers(), this.model.getTable().getPlayers()[0]);
+				}
 				
 			}
 		} catch (IOException e) {

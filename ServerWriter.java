@@ -20,7 +20,6 @@ public class ServerWriter implements Runnable{
 			os = new ObjectOutputStream(socket.getOutputStream());
 			
 			while(true) {
-				System.out.println(Thread.currentThread().getName());
 
 				os.writeObject(new Message(1, model.getTable().getPlayers()));
 				/*
@@ -30,11 +29,8 @@ public class ServerWriter implements Runnable{
 				 */
 				os.flush();
 				os.reset();
-				for(Player player : model.getTable().getPlayers()) {
-					System.out.println(player);
-				}
-				System.out.println(model.getTable());
-				Thread.sleep(5000);
+
+				Thread.sleep(50);
 			}
 
 		} catch (IOException e) {
