@@ -34,7 +34,7 @@ public class Server {
 					String playerName = "Player" + (i+1);
 					
 					/*
-					 * ID logic need updating !!
+					 * ID logic needs updating !!
 					 */
 					table.getPlayers()[i] = new Player(i, playerName, i);
 
@@ -46,40 +46,13 @@ public class Server {
 		
 		public void run() {
 			
-			try {
-				
-				/*
-				 * Input and output streams
-				 */
-				ObjectOutputStream os = new ObjectOutputStream(socket.getOutputStream());
-				ObjectInputStream is = new ObjectInputStream(socket.getInputStream());
-				
-				
-				while(true) {
-					System.out.println(Thread.currentThread().getName());
-					os.writeObject(new Message(1, table.getPlayers()));
-					
-					/*
-					 * !! Flush and reset
-					 * Makes sure that up to date players array sent
-					 * as opposed previously serialized version 
-					 */
-					os.flush();
-					os.reset();
-					
-					for(Player player : table.getPlayers()) {
-						System.out.println(player);
-					}
-					System.out.println(table);
-					Thread.sleep(5000);
-				}
-				
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			/*
+			 * Create and start read and write threads
+			 */
+			Thread readThread = new Thread(new ServerReader(this.socket));
+			Thread writeThread = new Thread(new ServerWriter(this.socket, model));
+			readThread.start();
+			writeThread.start();
 			
 		}
 

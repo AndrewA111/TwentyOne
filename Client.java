@@ -16,33 +16,17 @@ public class Client {
 		try {
 			socket = new Socket(server, PORT);
 			
-			ObjectOutputStream os = new ObjectOutputStream(socket.getOutputStream());
-			ObjectInputStream is = new ObjectInputStream(socket.getInputStream());
-			
-			
-			while(true) {
-				Message messageIn = (Message) is.readObject();
-				
-				System.out.println("Message code: " + messageIn.getCode());
-				
-				for(Player player : messageIn.getPlayers()) {
-					System.out.println(player);
-				}
-				
-				Thread.sleep(5000);
-			}
-			
-			
-			
-			
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			/*
+			 * Create and start read and write threads
+			 */
+			Thread readThread = new Thread(new ClientReader(socket));
+			Thread writeThread = new Thread(new ClientWriter(socket));
+			readThread.start();
+			writeThread.start();
 		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 }
