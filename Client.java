@@ -21,9 +21,11 @@ public class Client {
 			
 			
 			while(true) {
-				Player[] messageIn = (Player[]) is.readObject();
+				Message messageIn = (Message) is.readObject();
 				
-				for(Player player : messageIn) {
+				System.out.println("Message code: " + messageIn.getCode());
+				
+				for(Player player : messageIn.getPlayers()) {
 					System.out.println(player);
 				}
 				

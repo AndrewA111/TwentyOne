@@ -57,7 +57,7 @@ public class Server {
 				
 				while(true) {
 					System.out.println(Thread.currentThread().getName());
-					os.writeObject(table.getPlayers());
+					os.writeObject(new Message(1, table.getPlayers()));
 					
 					/*
 					 * !! Flush and reset
