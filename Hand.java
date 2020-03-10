@@ -101,4 +101,10 @@ public class Hand implements Serializable {
 		
 		return output;
 	}
+
+	public ArrayList<Card> getHand() {
+		return hand;
+	}
+	
+	
 }

@@ -70,6 +70,12 @@ public class Deck {
 			// if player in position
 			if(players[i % players.length] != null) {
 				players[i % players.length].addCard(this.deck.remove(0));
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		

@@ -29,19 +29,22 @@ public class TestGameLoop {
 		 * Select dealer
 		 */
 		
+		deck.dealSingleCard(table.getPlayers()[0]);
+		System.out.println(table.getPlayers()[0]);
+		
 		// currently just sets to p1
-		table.selectInitialDealer();
-		System.out.println("\nDealer: " + table.getDealer().getName());
-		
-		/*
-		 * Deal initial cards
-		 */
-		
-		deck.dealInitialCards(table.getPlayers(), table.getDealer());
-		
-		System.out.println("\n" + table);
-		
-		
+//		table.selectInitialDealer();
+//		System.out.println("\nDealer: " + table.getDealer().getName());
+//		
+//		/*
+//		 * Deal initial cards
+//		 */
+//		
+//		deck.dealInitialCards(table.getPlayers(), table.getDealer());
+//		
+//		System.out.println("\n" + table);
+//		
+//		
 		
 		/*
 		 * Check for 21

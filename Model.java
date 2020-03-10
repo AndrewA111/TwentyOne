@@ -9,7 +9,7 @@ public class Model {
 	public Model() {
 		
 		this.table = new Table();
-		this.newGame();
+
 		
 	}
 	

@@ -22,8 +22,13 @@ public class ServerReader implements Runnable{
 				
 				System.out.println("Message code: " + messageIn.getCode());
 				
+				
+				if(messageIn.getCode() == 2) {
+					
+				}
+				
 				if(messageIn.getCode() == 3) {
-					this.model.getDeck().dealInitialCards(this.model.getTable().getPlayers(), this.model.getTable().getPlayers()[0]);
+					this.model.getTable().getDeck().dealInitialCards(this.model.getTable().getPlayers(), this.model.getTable().getPlayers()[0]);
 				}
 				
 			}

@@ -29,14 +29,15 @@ public class Server {
 				if(table.getPlayers()[i] == null) {
 					
 					/*
-					 * Autogenerate player names for now !!
+					 * Auto-generate player names for now !!
 					 */
 					String playerName = "Player" + (i+1);
 					
 					/*
 					 * ID logic needs updating !!
 					 */
-					table.getPlayers()[i] = new Player(i, playerName, i);
+					System.out.println(table.addPlayer(new Player(i, playerName, i), i));
+//					table.getPlayers()[i] = new Player(i, playerName, i);
 
 					break;
 				}
@@ -71,6 +72,9 @@ public class Server {
 			 * Server
 			 */
 			listener = new ServerSocket(PORT);
+			
+			Thread gameThread = new Thread(new GameLoopThread(model));
+			gameThread.start();
 			
 			/*
 			 * Continually look for clients

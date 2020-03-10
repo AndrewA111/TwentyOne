@@ -5,13 +5,24 @@ public class Table {
 	
 	private Player[] players;
 	private Player dealer;
+	private Deck deck;
 	
 	private static final int numPlayers = 5;
+	
+	private int currentPlayer;
+	
+	private int noPlayers;
 	
 	public Table() {
 		
 		// set number of places at table
-		players = new Player[numPlayers];
+		this.players = new Player[numPlayers];
+		this.currentPlayer = 0;
+		this.noPlayers = 0;
+		this.deck = new Deck();
+		System.out.println(this.deck);
+		this.deck.shuffle();
+		System.out.println(this.deck);
 		
 	}
 	
@@ -73,6 +84,8 @@ public class Table {
 		// if position empty, add player
 		if(this.players[pos] == null) {
 			this.players[pos] = player;
+			this.noPlayers++;
+			System.out.println(noPlayers);
 			return true;
 		}
 		
@@ -101,6 +114,50 @@ public class Table {
 		return playerCount;
 	}
 	
+	public boolean drawForAce(){
+		
+		/*
+		 * Deal a single card to the current player
+		 */
+		System.out.println("Current player: " + this.players[this.currentPlayer].getName());
+		Player playerToDealTo = this.players[this.currentPlayer];
+		this.deck.dealSingleCard(playerToDealTo);
+		
+		/*
+		 * Get current player hand
+		 */
+		ArrayList<Card> playerHand = players[currentPlayer].getHand().getHand();
+		
+		/*
+		 * If most recently drawn card is Ace, set current player to dealer
+		 * and return true to indicate dealer has been selected
+		 */
+		if(playerHand.get(playerHand.size() - 1).getValue() == "A") {
+			dealer = players[currentPlayer];
+			return true;
+		}
+		
+		/*
+		 * Increment current player
+		 */
+		currentPlayer++;
+		if(currentPlayer >= numPlayers) {
+			currentPlayer = 0;
+		}
+		
+		/*
+		 * Check if next position filled, loop until filled position found
+		 */
+		while(players[currentPlayer] == null) {
+			currentPlayer++;
+			if(currentPlayer >= numPlayers) {
+				currentPlayer = 0;
+			}
+		}
+		
+		return false;
+	}
+	
 	/*
 	 * Needs updated !!
 	 */
@@ -110,8 +167,11 @@ public class Table {
 	
 	
 	public void emptyPlayerHands() {
-		for(Player player : players) {
-			player.emptyHand();
+		for(Player player : this.players) {
+			if(player != null) {
+				player.emptyHand();
+			}
+			
 		}
 	}
 	
@@ -137,6 +197,20 @@ public class Table {
 	public Player getDealer() {
 		return dealer;
 	}
+
+
+	public int getNoPlayers() {
+		return noPlayers;
+	}
+
+
+	public Deck getDeck() {
+		return deck;
+	}
+	
+	
+	
+	
 	
 	
 	

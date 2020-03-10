@@ -11,6 +11,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
 public class Client extends JFrame implements ActionListener {
@@ -24,6 +25,7 @@ public class Client extends JFrame implements ActionListener {
 	JLabel label4;
 	JLabel label5;
 	
+	JButton startButton;
 	JButton dealButton;
 	
 	private Socket socket;
@@ -57,9 +59,19 @@ public class Client extends JFrame implements ActionListener {
 		label5 = new JLabel();
 		this.add(label5);
 		
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new GridLayout(1,6));
+		this.add(buttonPanel);
+		
+		startButton = new JButton("Start");
+		startButton.addActionListener(this);
+		buttonPanel.add(startButton);
+		
 		dealButton = new JButton("Deal");
 		dealButton.addActionListener(this);
-		this.add(dealButton);
+		buttonPanel.add(dealButton);
+		
+		
 		
 		/*
 		 * Initialize output stream
