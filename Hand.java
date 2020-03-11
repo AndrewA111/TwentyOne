@@ -1,5 +1,6 @@
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class Hand implements Serializable {
@@ -82,6 +83,26 @@ public class Hand implements Serializable {
 		}
 		
 		return values;
+	}
+	
+	public int maxLegalValue() {
+		ArrayList<Integer> values = this.value();
+		int index = 0;
+		
+		while(index < values.size()) {
+			
+			/*
+			 * Values array in order largest to smallest
+			 */
+			if(values.get(index) > 21) {
+				index++;
+			}
+			else {
+				return values.get(index);
+			}
+		}
+		
+		return -1;
 	}
 	
 	public String valuesAsString() {

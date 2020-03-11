@@ -60,7 +60,7 @@ public class Client extends JFrame implements ActionListener {
 		/*
 		 * JFrame stuff
 		 */
-		this.setSize(800,600);
+		this.setSize(450,300);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 		
@@ -111,10 +111,10 @@ public class Client extends JFrame implements ActionListener {
 		stand.addActionListener(this);
 		buttonPanel.add(stand);
 		
-		
-		dealButton = new JButton("Deal");
-		dealButton.addActionListener(this);
-		buttonPanel.add(dealButton);
+//		
+//		dealButton = new JButton("Deal");
+//		dealButton.addActionListener(this);
+//		buttonPanel.add(dealButton);
 		
 			
 		
@@ -277,14 +277,14 @@ public class Client extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 		}
-		if(e.getSource() == dealButton) {
-			try {
-				os.writeObject(new MessageToServer(5, null));
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
+//		if(e.getSource() == dealButton) {
+//			try {
+//				os.writeObject(new MessageToServer(5, null));
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//		}
 		
 	}
 }

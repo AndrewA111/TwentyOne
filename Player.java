@@ -78,6 +78,22 @@ public class Player implements Serializable {
 		}
 	}
 	
+	public void addToBalance(int ammount) {
+		this.balance += ammount;
+	}
+	
+	public void removeFromBalance(int ammount) {
+		this.balance -= ammount;
+	}
+	
+	/*
+	 * Pay Player p this players balance and reset this balance to min value
+	 */
+	public void payStake(Player p) {
+		p.addToBalance(this.stake);
+		this.removeFromBalance(MIN_STAKE);
+		this.stake = MIN_STAKE;
+	}
 	
 	public ArrayList<Integer> handValue() {
 		

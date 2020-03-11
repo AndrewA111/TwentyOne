@@ -146,6 +146,8 @@ public class GameLoopThread implements Runnable{
 			this.table.incrementCurrentPlayer();
 		}
 		
+		this.table.checkingWinnerEndRound();
+		
 		
 		
 		

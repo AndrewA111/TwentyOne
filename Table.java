@@ -12,6 +12,7 @@ public class Table {
 	private static final int numPlayers = 5;
 	
 	private int currentPlayer;
+	private int dealerPos;
 	
 	private int noPlayers;
 	
@@ -32,9 +33,40 @@ public class Table {
 		System.out.println(this.deck);
 		this.gameMessage = null;
 		
+		/*
+		 * Initialize hashmap for valuing hands
+		 */
+		CardDetails cardDetails = new CardDetails();
+		
 	}
 	
-
+	public void checkingWinnerEndRound() {
+		
+		this.currentPlayer = this.dealerPos;
+		this.incrementCurrentPlayer();
+		
+		while(currentPlayer != dealerPos) {
+			
+			// if player bust
+			if(this.players[currentPlayer].getHand().maxLegalValue() == -1) {
+				this.players[currentPlayer].payStake(this.players[dealerPos]);
+			}
+			// if player has greater value than dealer
+			else if(this.players[currentPlayer].getHand().maxLegalValue() >
+					this.players[this.dealerPos].getHand().maxLegalValue()) {
+				this.players[dealerPos].payStake(this.players[currentPlayer]);
+			}
+			// if player has lower value than dealer
+			else if(this.players[currentPlayer].getHand().maxLegalValue() >
+					this.players[this.dealerPos].getHand().maxLegalValue()) {
+				this.players[currentPlayer].payStake(this.players[dealerPos]);
+			}
+			
+			this.incrementCurrentPlayer();
+		}
+		
+	}
+	
 	/**
 	 * ======= Test Only ========!!
 	 * Method to deal out entire deck (does not remove cards from deck
@@ -141,7 +173,11 @@ public class Table {
 		 * and return true to indicate dealer has been selected
 		 */
 		if(playerHand.get(playerHand.size() - 1).getValue() == "A") {
+			/*
+			 * !! need to decide how to handle this
+			 */
 			dealer = players[currentPlayer];
+			dealerPos = currentPlayer;
 			return true;
 		}
 		
@@ -188,12 +224,12 @@ public class Table {
 		}
 	}
 	
-	/*
-	 * Needs updated !!
-	 */
-	public void selectInitialDealer() {
-		this.dealer = players[0];
-	}
+//	/*
+//	 * Needs updated !!
+//	 */
+//	public void selectInitialDealer() {
+//		this.dealer = players[0];
+//	}
 	
 	
 	public void recallPlayerHands() {
@@ -239,12 +275,16 @@ public class Table {
 	public Player getDealer() {
 		return dealer;
 	}
+	
+	
+	public int getDealerPos() {
+		return dealerPos;
+	}
 
 
 	public int getNoPlayers() {
 		return noPlayers;
 	}
-
 
 	public Deck getDeck() {
 		return deck;
