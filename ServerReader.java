@@ -33,6 +33,22 @@ public class ServerReader implements Runnable{
 					}
 					
 				}
+				/*
+				 * Draw
+				 */
+				if(messageIn.getCode() == 3) {
+					if(this.model.getTable().getPlayers()[messageIn.getID()].isAbleToDrawOrStand()) {
+						this.model.getTable().getPlayers()[messageIn.getID()].setDrawOrStand(1);;
+					}
+				}
+				/*
+				 * Stand
+				 */
+				if(messageIn.getCode() == 4) {
+					if(this.model.getTable().getPlayers()[messageIn.getID()].isAbleToDrawOrStand()) {
+						this.model.getTable().getPlayers()[messageIn.getID()].setDrawOrStand(2);
+					}
+				}
 				
 				if(messageIn.getCode() == 5) {
 					this.model.lock();

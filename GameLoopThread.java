@@ -97,8 +97,60 @@ public class GameLoopThread implements Runnable{
 		
 		this.table.incrementCurrentPlayer();
 		
-		System.out.println(this.table.getPlayers()[this.table.getCurrentPlayer()].getName() + ". Draw or stand?");
-		this.table.setGameMessage(this.table.getPlayers()[this.table.getCurrentPlayer()].getName() + ". Draw or stand?");
+		boolean dealerHasPlayed = false;
+		
+		while(!dealerHasPlayed) {
+			
+			//notify who is playing
+			System.out.println(this.table.getPlayers()[this.table.getCurrentPlayer()].getName() + ". Draw or stand?");
+			this.table.setGameMessage(this.table.getPlayers()[this.table.getCurrentPlayer()].getName() + ". Draw or stand? 10000s to choose");
+			
+			// set flags that player is to select
+			this.table.getPlayers()[this.table.getCurrentPlayer()].setAbleToDrawOrStand(true);
+			
+			/*
+			 * Keep looping until player stands
+			 */
+			while(!(this.table.getPlayers()[this.table.getCurrentPlayer()].getDrawOrStand() == 2)) {
+					
+					System.out.println("-1");
+					try {
+						/*
+						 * 0.1s pause to limit no of loops
+						 */
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				
+				/*
+				 * If player selects to draw
+				 */
+				if(this.table.getPlayers()[this.table.getCurrentPlayer()].getDrawOrStand() == 1) {
+					System.out.println("1");
+					this.table.getDeck().dealSingleCard((this.table.getPlayers()[this.table.getCurrentPlayer()]));
+					this.table.getPlayers()[this.table.getCurrentPlayer()].setDrawOrStand(-1);
+				}
+			}
+			
+			// if this was dealers turn, round finished
+			if(this.table.getPlayers()[this.table.getCurrentPlayer()] == this.table.getDealer()) {
+				dealerHasPlayed = true;
+			}
+			
+			System.out.println("2");
+			this.table.getPlayers()[this.table.getCurrentPlayer()].setDrawOrStand(-1);
+			this.table.getPlayers()[this.table.getCurrentPlayer()].setAbleToDrawOrStand(false);
+			this.table.incrementCurrentPlayer();
+		}
+		
+		
+		
+		
+		
+		
 		
 		
 	}

@@ -18,12 +18,24 @@ public class Player implements Serializable {
 	private boolean ableToChangeStake;
 	private boolean ableToDrawOrStand;
 	
+	/*
+	 * -1 undecided
+	 * 1 draw
+	 * 2 stand
+	 */
+	private int drawOrStand;
+	
 	public Player(int ID, String name, int tablePos) {
 		
 		this.ID = ID;
 		this.name = name;
 		this.balance = 200;
 		this.tablePos = tablePos;
+		
+		/*
+		 * Initially undecided
+		 */
+		drawOrStand = -1;
 		
 		this.stake = 20;
 		
@@ -49,6 +61,9 @@ public class Player implements Serializable {
 		this.hand.empty();
 	}
 	
+	/**
+	 * !! coudl include check whether can change stake in here?
+	 */
 	public void stakeUp() {
 		if(this.balance >= STAKE_INC){
 			this.stake += STAKE_INC;
@@ -114,6 +129,16 @@ public class Player implements Serializable {
 	public void setAbleToDrawOrStand(boolean ableToDrawOrStand) {
 		this.ableToDrawOrStand = ableToDrawOrStand;
 	}
+
+	public int getDrawOrStand() {
+		return drawOrStand;
+	}
+
+	public void setDrawOrStand(int drawOrStand) {
+		this.drawOrStand = drawOrStand;
+	}
+	
+	
 
 
 	
