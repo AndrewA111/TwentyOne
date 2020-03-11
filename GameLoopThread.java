@@ -12,6 +12,11 @@ public class GameLoopThread implements Runnable{
 	
 	public void run() {
 		
+		
+		/*
+		 * 
+		 * 
+		 */
 		System.out.println("Waiting for players to arrive");
 		this.table.setGameMessage("Waiting for players to arrive");
 		

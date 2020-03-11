@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Table {
 	
@@ -13,6 +14,11 @@ public class Table {
 	private int currentPlayer;
 	
 	private int noPlayers;
+	
+	/*
+	 * Lock
+	 */
+	private ReentrantLock tableLock = new ReentrantLock();
 	
 	public Table() {
 		
@@ -179,6 +185,14 @@ public class Table {
 			}
 			
 		}
+	}
+	
+	public void lock(){
+		tableLock.lock();
+	}
+	
+	public void unlock() {
+		tableLock.unlock();
 	}
 	
 	/**

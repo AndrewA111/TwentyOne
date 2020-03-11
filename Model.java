@@ -1,9 +1,15 @@
 import java.util.ArrayList;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Model {
 	
 	private Table table;
 	private Deck deck;
+	
+	/*
+	 * Lock
+	 */
+	private ReentrantLock modelLock = new ReentrantLock();
 	
 	
 	public Model() {
@@ -37,7 +43,14 @@ public class Model {
 	public Deck getDeck() {
 		return deck;
 	}
-
+	
+	public void lock() {
+		this.modelLock.lock();
+	}
+	
+	public void unlock() {
+		this.modelLock.unlock();
+	}
 
 
 	public static void main(String[] args) {

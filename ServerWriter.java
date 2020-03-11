@@ -20,8 +20,9 @@ public class ServerWriter implements Runnable{
 			os = new ObjectOutputStream(socket.getOutputStream());
 			
 			while(true) {
-
+				this.model.lock();
 				os.writeObject(new Message(1, model.getTable().getPlayers(), model.getTable().getGameMessage()));
+				this.model.unlock();
 				/*
 				 * !! Flush and reset
 				 * Makes sure that up to date players array sent

@@ -28,7 +28,8 @@ public class Client extends JFrame implements ActionListener {
 	
 	JLabel gameMessage;
 	
-	JButton startButton;
+	JButton stakeUp;
+	JButton stakeDown;
 	JButton dealButton;
 	
 	private Socket socket;
@@ -66,9 +67,13 @@ public class Client extends JFrame implements ActionListener {
 		buttonPanel.setLayout(new GridLayout(1,6));
 		this.add(buttonPanel);
 		
-		startButton = new JButton("Start");
-		startButton.addActionListener(this);
-		buttonPanel.add(startButton);
+		stakeUp = new JButton("Stake Up");
+		stakeUp.addActionListener(this);
+		buttonPanel.add(stakeUp);
+		
+		stakeDown = new JButton("Stake Down");
+		stakeDown.addActionListener(this);
+		buttonPanel.add(stakeDown);
 		
 		dealButton = new JButton("Deal");
 		dealButton.addActionListener(this);

@@ -28,7 +28,9 @@ public class ServerReader implements Runnable{
 				}
 				
 				if(messageIn.getCode() == 3) {
+					this.model.lock();
 					this.model.getTable().getDeck().dealInitialCards(this.model.getTable().getPlayers(), this.model.getTable().getPlayers()[0]);
+					this.model.unlock();
 				}
 				
 			}
