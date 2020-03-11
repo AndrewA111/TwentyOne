@@ -15,6 +15,9 @@ public class Player implements Serializable {
 	private final static int MIN_STAKE = 20;
 	private final static int STAKE_INC = 10;
 	
+	private boolean ableToChangeStake;
+	private boolean ableToDrawOrStand;
+	
 	public Player(int ID, String name, int tablePos) {
 		
 		this.ID = ID;
@@ -25,6 +28,9 @@ public class Player implements Serializable {
 		this.stake = 20;
 		
 		this.hand = new Hand();
+		
+		this.ableToChangeStake = true;
+		this.ableToDrawOrStand = false;
 		
 	}
 	
@@ -92,6 +98,26 @@ public class Player implements Serializable {
 	public Hand getHand() {
 		return hand;
 	}
+
+	public boolean isAbleToChangeStake() {
+		return ableToChangeStake;
+	}
+
+	public void setAbleToChangeStake(boolean ableToChangeStake) {
+		this.ableToChangeStake = ableToChangeStake;
+	}
+
+	public boolean isAbleToDrawOrStand() {
+		return ableToDrawOrStand;
+	}
+
+	public void setAbleToDrawOrStand(boolean ableToDrawOrStand) {
+		this.ableToDrawOrStand = ableToDrawOrStand;
+	}
+
+
+	
+	
 	
 	
 

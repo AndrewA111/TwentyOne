@@ -23,13 +23,18 @@ public class ServerReader implements Runnable{
 				System.out.println("Message code: " + messageIn.getCode());
 				
 				if(messageIn.getCode() == 1) {
-					this.model.getTable().getPlayers()[messageIn.getID()].stakeUp();
+					if(this.model.getTable().getPlayers()[messageIn.getID()].isAbleToChangeStake()) {
+						this.model.getTable().getPlayers()[messageIn.getID()].stakeUp();
+					}
 				}
 				if(messageIn.getCode() == 2) {
-					this.model.getTable().getPlayers()[messageIn.getID()].stakeDown();
+					if(this.model.getTable().getPlayers()[messageIn.getID()].isAbleToChangeStake()) {
+						this.model.getTable().getPlayers()[messageIn.getID()].stakeDown();
+					}
+					
 				}
 				
-				if(messageIn.getCode() == 3) {
+				if(messageIn.getCode() == 5) {
 					this.model.lock();
 					this.model.getTable().getDeck().dealInitialCards(this.model.getTable().getPlayers(), this.model.getTable().getPlayers()[0]);
 					this.model.unlock();

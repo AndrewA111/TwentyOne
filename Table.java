@@ -147,6 +147,8 @@ public class Table {
 		
 		/*
 		 * Increment current player
+		 * 
+		 * !! can probably replace this with helper method below
 		 */
 		currentPlayer++;
 		if(currentPlayer >= numPlayers) {
@@ -164,6 +166,26 @@ public class Table {
 		}
 		
 		return false;
+	}
+	
+	public void incrementCurrentPlayer() {
+		/*
+		 * Increment current player
+		 */
+		currentPlayer++;
+		if(currentPlayer >= numPlayers) {
+			currentPlayer = 0;
+		}
+		
+		/*
+		 * Check if next position filled, loop until filled position found
+		 */
+		while(players[currentPlayer] == null) {
+			currentPlayer++;
+			if(currentPlayer >= numPlayers) {
+				currentPlayer = 0;
+			}
+		}
 	}
 	
 	/*
@@ -236,6 +258,11 @@ public class Table {
 
 	public void setGameMessage(String gameMessage) {
 		this.gameMessage = gameMessage;
+	}
+
+
+	public int getCurrentPlayer() {
+		return currentPlayer;
 	}
 	
 	

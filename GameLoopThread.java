@@ -79,5 +79,27 @@ public class GameLoopThread implements Runnable{
 		System.out.println("Dealing cards");
 		this.table.getDeck().dealInitialCards(this.table.getPlayers(), this.table.getDealer());
 		
+		System.out.println("Players have 10s to place stake");
+		this.table.setGameMessage("Players have 10s to place stake");
+		
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		for(Player player : this.table.getPlayers()) {
+			if(player != null) {
+				player.setAbleToChangeStake(false);
+			}
+		}
+		
+		this.table.incrementCurrentPlayer();
+		
+		System.out.println(this.table.getPlayers()[this.table.getCurrentPlayer()].getName() + ". Draw or stand?");
+		this.table.setGameMessage(this.table.getPlayers()[this.table.getCurrentPlayer()].getName() + ". Draw or stand?");
+		
+		
 	}
 }
