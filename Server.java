@@ -17,6 +17,8 @@ public class Server {
 	private static class ClientThread extends Thread {
 		
 		private Socket socket;
+		
+		private int clientID;
 
 		
 		public ClientThread(Socket s) {
@@ -27,6 +29,9 @@ public class Server {
 			 */
 			for(int i = 0; i < table.getPlayers().length; i++) {
 				if(table.getPlayers()[i] == null) {
+					
+					
+					this.clientID = i;
 					
 					/*
 					 * Auto-generate player names for now !!
@@ -51,7 +56,7 @@ public class Server {
 			 * Create and start read and write threads
 			 */
 			Thread readThread = new Thread(new ServerReader(this.socket, model));
-			Thread writeThread = new Thread(new ServerWriter(this.socket, model));
+			Thread writeThread = new Thread(new ServerWriter(this.socket, model, this.clientID));
 			readThread.start();
 			writeThread.start();
 			

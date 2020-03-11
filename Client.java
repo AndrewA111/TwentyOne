@@ -34,6 +34,8 @@ public class Client extends JFrame implements ActionListener {
 	
 	private Socket socket;
 	
+	private static int clientID;
+	
 	private ObjectOutputStream os;
 	
 	public Client() {
@@ -102,7 +104,7 @@ public class Client extends JFrame implements ActionListener {
 		rw.execute();
 	}
 	
-	public class ReadWorker extends SwingWorker<Void, Message>{
+	public class ReadWorker extends SwingWorker<Void, MessageToClient>{
 		
 		private Socket s;
 		private ObjectInputStream is = null;
@@ -126,19 +128,21 @@ public class Client extends JFrame implements ActionListener {
 				/*
 				 * Read and publish messages
 				 */
-				Message messageIn = (Message) is.readObject();
+				MessageToClient messageIn = (MessageToClient) is.readObject();
 				publish(messageIn);
 			}
 		}
 		
-		protected void process(List<Message> messages) {
+		protected void process(List<MessageToClient> messages) {
 			
 			/*
 			 * Select the most recently published message
 			 */
-			Message mostRecent = messages.get(messages.size() -1);
+			MessageToClient mostRecent = messages.get(messages.size() -1);
 
 			gameMessage.setText(mostRecent.getGameMessage());
+			
+			clientID = mostRecent.getClientID();
 			
 			/*
 			 * !! needs refactoring
@@ -180,7 +184,23 @@ public class Client extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == dealButton) {
 			try {
-				os.writeObject(new Message(3, null, null));
+				os.writeObject(new MessageToServer(3, null));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		if(e.getSource() == stakeUp) {
+			try {
+				os.writeObject(new MessageToServer(1, clientID));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		if(e.getSource() == stakeDown) {
+			try {
+				os.writeObject(new MessageToServer(2, clientID));
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

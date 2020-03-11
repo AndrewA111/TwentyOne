@@ -8,9 +8,12 @@ public class ServerWriter implements Runnable{
 	
 	private Model model;
 	
-	public ServerWriter(Socket s, Model m) {
+	private int clientID;
+	
+	public ServerWriter(Socket s, Model m, int clientID) {
 		this.socket = s;
 		this.model = m;
+		this.clientID = clientID;
 	}
 	
 	public void run() {
@@ -21,7 +24,7 @@ public class ServerWriter implements Runnable{
 			
 			while(true) {
 				this.model.lock();
-				os.writeObject(new Message(1, model.getTable().getPlayers(), model.getTable().getGameMessage()));
+				os.writeObject(new MessageToClient(1, this.clientID, model.getTable().getPlayers(), model.getTable().getGameMessage()));
 				this.model.unlock();
 				/*
 				 * !! Flush and reset

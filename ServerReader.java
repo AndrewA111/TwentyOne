@@ -18,13 +18,15 @@ public class ServerReader implements Runnable{
 			ObjectInputStream is = new ObjectInputStream(socket.getInputStream());
 			
 			while(true) {
-				Message messageIn = (Message) is.readObject();
+				MessageToServer messageIn = (MessageToServer) is.readObject();
 				
 				System.out.println("Message code: " + messageIn.getCode());
 				
-				
+				if(messageIn.getCode() == 1) {
+					this.model.getTable().getPlayers()[messageIn.getID()].stakeUp();
+				}
 				if(messageIn.getCode() == 2) {
-					
+					this.model.getTable().getPlayers()[messageIn.getID()].stakeDown();
 				}
 				
 				if(messageIn.getCode() == 3) {

@@ -1,6 +1,6 @@
 import java.io.Serializable;
 
-public class Message implements Serializable{
+public class MessageToClient implements Serializable{
 	
 	/*
 	 * Message codes:
@@ -8,6 +8,7 @@ public class Message implements Serializable{
 	 * 	2 - 
 	 */
 	private Integer code;
+	private Integer clientID;
 	private String gameMessage;
 	
 	/*
@@ -18,14 +19,19 @@ public class Message implements Serializable{
 	 */
 	private Player[] players;
 	
-	public Message(Integer code, Player[] players, String gameMessage) {
+	public MessageToClient(Integer code, Integer clientID,  Player[] players, String gameMessage) {
 		this.code = code;
+		this.clientID = clientID;
 		this.players = players;
 		this.gameMessage = gameMessage;
 	}
 
 	public Integer getCode() {
 		return code;
+	}
+
+	public Integer getClientID() {
+		return clientID;
 	}
 
 	public Player[] getPlayers() {

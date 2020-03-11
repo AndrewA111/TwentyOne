@@ -12,12 +12,17 @@ public class Player implements Serializable {
 	private int balance;
 	private int stake;
 	
+	private final static int MIN_STAKE = 20;
+	private final static int STAKE_INC = 10;
+	
 	public Player(int ID, String name, int tablePos) {
 		
 		this.ID = ID;
 		this.name = name;
 		this.balance = 200;
 		this.tablePos = tablePos;
+		
+		this.stake = 20;
 		
 		this.hand = new Hand();
 		
@@ -38,6 +43,20 @@ public class Player implements Serializable {
 		this.hand.empty();
 	}
 	
+	public void stakeUp() {
+		if(this.balance >= STAKE_INC){
+			this.stake += STAKE_INC;
+			this.balance -= STAKE_INC;
+		}
+	}
+	
+	public void stakeDown() {
+		if(this.stake >= MIN_STAKE + STAKE_INC) {
+			this.stake -= STAKE_INC;
+			this.balance += STAKE_INC;
+		}
+	}
+	
 	
 	public ArrayList<Integer> handValue() {
 		
@@ -50,8 +69,10 @@ public class Player implements Serializable {
 	public String toString() {
 		String output = "";
 		
-		output += this.name + "\n, ";
-		output += this.hand;
+		output += this.name;
+		output += "\n" + this.hand;
+		output += "\nBalance: " + this.balance;
+		output += "\nStake: " + this.stake;
 		
 		return output;
 	}
