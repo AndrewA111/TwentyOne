@@ -46,6 +46,10 @@ public class Deck {
 		Collections.shuffle(deck);
 	}
 	
+	public void addCard(Card card) {
+		this.deck.add(card);
+	}
+	
 	/**
 	 * Deal 2 cards to each player, clockwise, starting immediately after dealer
 	 * (Clockwise is in a positive direction through array)

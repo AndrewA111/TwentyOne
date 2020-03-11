@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 
 public class Client extends JFrame implements ActionListener {
@@ -24,6 +25,8 @@ public class Client extends JFrame implements ActionListener {
 	JLabel label3;
 	JLabel label4;
 	JLabel label5;
+	
+	JLabel gameMessage;
 	
 	JButton startButton;
 	JButton dealButton;
@@ -71,6 +74,8 @@ public class Client extends JFrame implements ActionListener {
 		dealButton.addActionListener(this);
 		buttonPanel.add(dealButton);
 		
+		gameMessage = new JLabel("Message space", SwingConstants.CENTER);
+		buttonPanel.add(gameMessage);		
 		
 		
 		/*
@@ -128,7 +133,8 @@ public class Client extends JFrame implements ActionListener {
 			 */
 			Message mostRecent = messages.get(messages.size() -1);
 
-
+			gameMessage.setText(mostRecent.getGameMessage());
+			
 			/*
 			 * !! needs refactoring
 			 * 
@@ -169,7 +175,7 @@ public class Client extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == dealButton) {
 			try {
-				os.writeObject(new Message(3, null));
+				os.writeObject(new Message(3, null, null));
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

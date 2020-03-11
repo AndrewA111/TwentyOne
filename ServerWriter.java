@@ -21,7 +21,7 @@ public class ServerWriter implements Runnable{
 			
 			while(true) {
 
-				os.writeObject(new Message(1, model.getTable().getPlayers()));
+				os.writeObject(new Message(1, model.getTable().getPlayers(), model.getTable().getGameMessage()));
 				/*
 				 * !! Flush and reset
 				 * Makes sure that up to date players array sent

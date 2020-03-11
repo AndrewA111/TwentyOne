@@ -6,6 +6,7 @@ public class Table {
 	private Player[] players;
 	private Player dealer;
 	private Deck deck;
+	private String gameMessage;
 	
 	private static final int numPlayers = 5;
 	
@@ -23,6 +24,7 @@ public class Table {
 		System.out.println(this.deck);
 		this.deck.shuffle();
 		System.out.println(this.deck);
+		this.gameMessage = null;
 		
 	}
 	
@@ -166,10 +168,14 @@ public class Table {
 	}
 	
 	
-	public void emptyPlayerHands() {
+	public void recallPlayerHands() {
 		for(Player player : this.players) {
 			if(player != null) {
-				player.emptyHand();
+				
+				while(player.getHand().getHand().size() > 0) {
+					deck.addCard(player.getHand().removeCard(0));
+				}
+//				player.emptyHand();
 			}
 			
 		}
@@ -207,6 +213,18 @@ public class Table {
 	public Deck getDeck() {
 		return deck;
 	}
+
+
+	public String getGameMessage() {
+		return gameMessage;
+	}
+
+
+	public void setGameMessage(String gameMessage) {
+		this.gameMessage = gameMessage;
+	}
+	
+	
 	
 	
 	

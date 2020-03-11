@@ -13,6 +13,8 @@ public class GameLoopThread implements Runnable{
 	public void run() {
 		
 		System.out.println("Waiting for players to arrive");
+		this.table.setGameMessage("Waiting for players to arrive");
+		
 		while(this.table.getNoPlayers() < 2) {
 			System.out.println("Still waiting");
 			try {
@@ -24,6 +26,7 @@ public class GameLoopThread implements Runnable{
 		}
 		
 		System.out.println("10s for players to join");
+		this.table.setGameMessage("10s for players to join");
 		try {
 			Thread.sleep(10000);
 		} catch (InterruptedException e) {
@@ -31,6 +34,7 @@ public class GameLoopThread implements Runnable{
 		}
 		
 		System.out.println("Selecting dealer");
+		this.table.setGameMessage("Selecting dealer");
 		
 		int selectCards = 1;
 		
@@ -46,6 +50,7 @@ public class GameLoopThread implements Runnable{
 		}
 		
 		System.out.println("The dealer is: " + this.table.getDealer().getName());
+		this.table.setGameMessage("The dealer is: " + this.table.getDealer().getName());
 		
 		try {
 			Thread.sleep(3000);
@@ -54,7 +59,10 @@ public class GameLoopThread implements Runnable{
 			e.printStackTrace();
 		}
 		
-		this.table.emptyPlayerHands();
+		this.table.recallPlayerHands();
+		System.out.println(this.table.getDeck());
+		this.table.getDeck().shuffle();
+		System.out.println(this.table.getDeck());
 		
 		try {
 			Thread.sleep(3000);

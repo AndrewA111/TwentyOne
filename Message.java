@@ -8,6 +8,7 @@ public class Message implements Serializable{
 	 * 	2 - 
 	 */
 	private Integer code;
+	private String gameMessage;
 	
 	/*
 	 * Array of players to store game state for client
@@ -17,9 +18,10 @@ public class Message implements Serializable{
 	 */
 	private Player[] players;
 	
-	public Message(Integer code, Player[] players) {
+	public Message(Integer code, Player[] players, String gameMessage) {
 		this.code = code;
 		this.players = players;
+		this.gameMessage = gameMessage;
 	}
 
 	public Integer getCode() {
@@ -29,6 +31,12 @@ public class Message implements Serializable{
 	public Player[] getPlayers() {
 		return players;
 	}
+
+	public String getGameMessage() {
+		return gameMessage;
+	}
+	
+	
 	
 	
 }
