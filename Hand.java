@@ -26,7 +26,7 @@ public class Hand implements Serializable {
 	public Card removeCard(int index) {
 		
 		Card returnCard = this.hand.remove(index);
-		System.out.println(returnCard + "Test");
+//		System.out.println(returnCard + "Test");
 		return returnCard;
 	}
 	

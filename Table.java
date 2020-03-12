@@ -40,6 +40,79 @@ public class Table {
 		
 	}
 	
+	public boolean checkVingtUn() {
+		
+		// start at pos after dealer
+		this.currentPlayer = this.dealerPos;
+		this.incrementCurrentPlayer();
+		
+		
+		/*
+		 * if dealer has 21
+		 */
+		if(this.players[dealerPos].getHand().maxLegalValue() == 21) {
+			
+			System.out.println("Dealer has 21!");
+			this.gameMessage = "Dealer has 21!";
+			while(currentPlayer !=  dealerPos) {
+				
+				// if player doesn't have 21 pay dealer
+				if(!(this.players[currentPlayer].getHand().maxLegalValue() == 21)) {
+					this.players[currentPlayer].payStake(this.players[dealerPos]);
+				}
+				
+				this.incrementCurrentPlayer();
+			}
+			
+			return true;
+		}
+		
+		/*
+		 * Else (dealer does not have 21)
+		 */
+		else {
+			while(currentPlayer !=  dealerPos) {
+				/* 
+				 * If a player has 21 all other players who 
+				 * don't also have 21 pay this player
+				 * 
+				 * In the case another player has 21, they do not pay this 
+				 * player. However, all other players still player this player
+				 * as they have positional advantage (they come first after dealer)
+				 * 
+				 */
+				if((this.players[currentPlayer].getHand().maxLegalValue() == 21)) {
+					
+					// store winner pos
+					int winnerPos = currentPlayer;
+					this.incrementCurrentPlayer();
+					
+					
+					System.out.println("Player " + winnerPos + " has 21!");
+					this.gameMessage = "Player " + winnerPos + " has 21!";
+					
+					while(currentPlayer != winnerPos) {
+						// if player doesn't have 21 pay winning player
+						if(!(this.players[currentPlayer].getHand().maxLegalValue() == 21)) {
+							this.players[currentPlayer].payStake(this.players[winnerPos]);
+						}
+						this.incrementCurrentPlayer();
+					}
+					
+					return true;
+				}
+				
+				this.incrementCurrentPlayer();
+					
+			}
+		}
+		
+		/*
+		 * No 21s
+		 */
+		return false;
+	}
+	
 	public void checkingWinnerEndRound() {
 		
 		this.currentPlayer = this.dealerPos;
@@ -304,6 +377,15 @@ public class Table {
 	public int getCurrentPlayer() {
 		return currentPlayer;
 	}
+
+	public void setCurrentPlayer(int currentPlayer) {
+		this.currentPlayer = currentPlayer;
+	}
+
+	public void setDealerPos(int dealerPos) {
+		this.dealerPos = dealerPos;
+	}
+	
 	
 	
 	
