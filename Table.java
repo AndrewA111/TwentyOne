@@ -385,6 +385,12 @@ public class Table {
 	public void setDealerPos(int dealerPos) {
 		this.dealerPos = dealerPos;
 	}
+
+	public void setDealer(Player dealer) {
+		this.dealer = dealer;
+	}
+	
+	
 	
 	
 	
