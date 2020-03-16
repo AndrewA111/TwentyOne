@@ -6,21 +6,39 @@ import java.net.Socket;
 
 public class Server {
 	
+	/*
+	 * Port
+	 */
 	private static int PORT = 8765;
 	
+	/*
+	 * Game objects
+	 */
 	private static Model model;
 	private static Table table;
 	private static Deck deck;
 	
 	
-	
+	/**
+	 * Class to produce threads to communicate with clients
+	 * @author Andrew
+	 *
+	 */
 	private static class ClientThread extends Thread {
 		
+		/*
+		 * Socket for connection
+		 */
 		private Socket socket;
 		
+		/*
+		 * ID of client associated with this thread
+		 */
 		private int clientID;
 
-		
+		/*
+		 * Constructor
+		 */
 		public ClientThread(Socket s) {
 			this.socket = s;
 			
@@ -29,7 +47,6 @@ public class Server {
 			 */
 			for(int i = 0; i < table.getPlayers().length; i++) {
 				if(table.getPlayers()[i] == null) {
-					
 					
 					this.clientID = i;
 					
@@ -78,6 +95,9 @@ public class Server {
 			 */
 			listener = new ServerSocket(PORT);
 			
+			/*
+			 * Main game logic thread
+			 */
 			Thread gameThread = new Thread(new GameLoopThread(model));
 			gameThread.start();
 			

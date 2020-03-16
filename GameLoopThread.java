@@ -1,21 +1,31 @@
-
+/*
+ * Thread to run main game logic
+ */
 public class GameLoopThread implements Runnable{
 	
+	/*
+	 * Game objects
+	 */
 	private Model model;
 	private Table table;
 //	private Deck deck;
 	
+	/*
+	 * Constructor
+	 */
 	public GameLoopThread(Model model) {
 		this.model = model;
 		this.table = model.getTable();
 	}
 	
+	/*
+	 * Main game logic
+	 */
 	public void run() {
 		
 		
 		/*
-		 * 
-		 * 
+		 * While until at least two players have arrived 
 		 */
 		System.out.println("Waiting for players to arrive");
 		this.table.setGameMessage("Waiting for players to arrive");
@@ -30,6 +40,9 @@ public class GameLoopThread implements Runnable{
 			}
 		}
 		
+		/*
+		 * Once 2 players have joined, wait further 10s to start game
+		 */
 		System.out.println("10s for players to join");
 		this.table.setGameMessage("10s for players to join");
 		try {
@@ -38,6 +51,9 @@ public class GameLoopThread implements Runnable{
 			e.printStackTrace();
 		}
 		
+		/*
+		 * Select dealer
+		 */
 		System.out.println("Selecting dealer");
 		this.table.setGameMessage("Selecting dealer");
 		
@@ -119,7 +135,7 @@ public class GameLoopThread implements Runnable{
 					
 					//notify who is playing
 					System.out.println(this.table.getPlayers()[this.table.getCurrentPlayer()].getName() + ". Draw or stand?");
-					this.table.setGameMessage(this.table.getPlayers()[this.table.getCurrentPlayer()].getName() + ". Draw or stand? 10000s to choose");
+					this.table.setGameMessage(this.table.getPlayers()[this.table.getCurrentPlayer()].getName() + ". Draw or stand? 10s to choose");
 					System.out.println("Test9");
 					// set flags that player is to select
 					this.table.getPlayers()[this.table.getCurrentPlayer()].setAbleToDrawOrStand(true);
