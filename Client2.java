@@ -117,41 +117,7 @@ public class Client2 extends JFrame implements ActionListener {
 		handsPanel = new HandsPanel(this.players);
 		this.add(handsPanel, BorderLayout.CENTER);
 		
-		
-		
-		
-		
-//		label1 = new JLabel("Empty");
-//		this.add(label1);
-//		label2 = new JLabel();
-//		this.add(label2);
-//		label3 = new JLabel();
-//		this.add(label3);
-//		label4 = new JLabel();
-//		this.add(label4);
-//		label5 = new JLabel();
-//		this.add(label5);
-		
-//		playerLabels = new JLabel[5];
-//		
-//		for(int i = 0; i < playerLabels.length; i++) {
-//			playerLabels[i] = new JLabel();
-//			this.add(playerLabels[i]);
-//		}
-		
-		
-	
-		
-		
-		
-//		
-//		dealButton = new JButton("Deal");
-//		dealButton.addActionListener(this);
-//		buttonPanel.add(dealButton);
-		
-			
-		
-		
+
 		/*
 		 * Initialize output stream
 		 * 
@@ -241,39 +207,7 @@ public class Client2 extends JFrame implements ActionListener {
 			Client2.this.handsPanel.setPlayers(mostRecent.getPlayers());
 			Client2.this.handsPanel.repaint();
 			
-//			Client2.this.players = mostRecent.getPlayers();
-//			System.out.println("In process method");
-//			Client2.this.handsPanel.repaint();
-//			Client2.this.repaint();
-			
-			
-//			for(int i = 0; i < mostRecent.getPlayers().length; i++) {
-//				if(mostRecent.getPlayers()[i] != null) {
-//					playerLabels[i].setText(mostRecent.getPlayers()[i].toString() 
-//							+ mostRecent.getPlayers()[i].getHand().valuesAsString());
-//				}
-//			}
-//			if(mostRecent.getPlayers()[0] != null) {
-//				label1.setText(mostRecent.getPlayers()[0].toString() 
-//						+ mostRecent.getPlayers()[0].getHand().valuesAsString());
-//				
-//			}
-//			if(mostRecent.getPlayers()[1] != null) {
-//				label2.setText(mostRecent.getPlayers()[1].toString()
-//						+ mostRecent.getPlayers()[1].getHand().valuesAsString());	
-//			}
-//			if(mostRecent.getPlayers()[2] != null) {
-//				label3.setText(mostRecent.getPlayers()[2].toString()
-//						+ mostRecent.getPlayers()[2].getHand().valuesAsString());
-//			}
-//			if(mostRecent.getPlayers()[3] != null) {
-//				label4.setText(mostRecent.getPlayers()[3].toString()
-//						+ mostRecent.getPlayers()[3].getHand().valuesAsString());
-//			}
-//			if(mostRecent.getPlayers()[4] != null) {
-//				label5.setText(mostRecent.getPlayers()[4].toString()
-//						+ mostRecent.getPlayers()[4].getHand().valuesAsString());
-//			}
+
 			
 		}
 	}

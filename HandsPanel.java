@@ -17,11 +17,22 @@ import javax.swing.SwingWorker;
 
 public class HandsPanel extends JPanel {
 	
-	
+	// variable to store card images
 	BufferedImage image;
 	
-	Card testCard = new Card("A", 'S');
+	BufferedImage chip;
 	
+	private final int TEXT_SIZE = 14;
+	
+	
+//	Card testCard = new Card("A", 'S');
+	
+	/*
+	 * Int to store min value of width 
+	 * and height of panel
+	 * 
+	 * Used to ensure card circle fits window
+	 */
 	private int minWidthOrHeight;
 	
 	private Player[] players;
@@ -34,6 +45,13 @@ public class HandsPanel extends JPanel {
 		
 		this.players = p;
 		
+		try {
+			this.chip = ImageIO.read(new File("Chip.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 		
 	}
@@ -44,17 +62,16 @@ public class HandsPanel extends JPanel {
 	    super.paintComponent(g);
 	    Graphics2D g2d = (Graphics2D) g;
 	    
-	    System.out.println("In repaint method");
-	    System.out.println(players);
+	    // check players array has been received
 	    if(players != null) {
 	    	
-	    	System.out.println("In  the if statement");
-	    	
-	    	g2d.setFont(new Font("Serif", Font.BOLD, 14));
+	    	// set font
+	    	g2d.setFont(new Font("Serif", Font.BOLD, this.TEXT_SIZE));
 	  	    
 	  	    // arbitrary image to get card sizes from
 	  	    image = CardDetails.getBlankCardMap().get('D');
 	  	    
+	  	    // set min from width and height
 	  	    this.minWidthOrHeight = Math.min(this.getWidth(), this.getHeight());
 	  	    
 	  	    // get to center
@@ -64,19 +81,53 @@ public class HandsPanel extends JPanel {
 	  	    // card offset
 	      	int cardOffset = image.getWidth()/3;
 	  	    
+	      	// loop through each player
 	  	    for(int i = 0; i < this.players.length; i++) {
 	  	    	if(this.players[i] != null) {
 	  	    		
-	  	    		
+	  	    		// track number of cards a player has
 	  	    		int cardNo = 0;
 	  	    		
 	  	    		// translate to first card position
 	  	    		g2d.translate(0, this.minWidthOrHeight/3);
 	  	    		
+	  	    		// if upside down, flip
+  	    			if(i == 2 || i == 3) {
+  	    				g2d.rotate(Math.toRadians(180), 
+	  				    		image.getWidth()/2, 
+	  				    		image.getHeight()/2);
+  	    			}	
+  	    			
+  	    			g2d.setColor(Color.WHITE);
+  	    			g2d.drawImage(this.chip, image.getWidth()/3, -image.getWidth()/3 - this.TEXT_SIZE, this);
+  	    			g2d.drawString("" + players[i].getStake(), (image.getWidth()* 2)/ 3, -image.getWidth()/3);
+  	    			
+  	    			// Revert
+  	    			if(i == 2 || i == 3) {
+  	    				g2d.rotate(Math.toRadians(180), 
+	  				    		image.getWidth()/2, 
+	  				    		image.getHeight()/2);
+  	    			}
+	  	    		
+	  	    		/*
+	  	    		 * Loop through cards
+	  	    		 * 
+	  	    		 * Max row length is 5 cards
+	  	    		 */
 	  	    		for(Card card : this.players[i].getHand().getHand()) {
 	  	    			
+	  	    			/*
+	  	    			 * S stake
+	  	    			 */
+	  	    			
+	  	    			
+	  	    			
+	  	    			// get and draw card
 	  		    		image = CardDetails.getBlankCardMap().get(card.getType());
-	  		    		g2d.drawImage(image, cardNo * cardOffset, 0, this);
+	  		    		
+	  		    		g2d.drawImage(image, 
+	  		    				(cardNo % 5) * cardOffset, 
+	  		    				(cardNo/5) * cardOffset, this);
 	  		    		
 	  		    		//set color
 	  		    		if(card.getType() == 'H' || card.getType() == 'D') {
@@ -88,54 +139,52 @@ public class HandsPanel extends JPanel {
 	  		    		
 	  		    		
 	  		    		// draw values on top left and bottom right corners
-	  				    g2d.drawString(card.getValue(), image.getWidth()/9 +(cardNo * cardOffset), image.getWidth()/4);
-	  				    g2d.rotate(Math.toRadians(180), image.getWidth()/2, image.getHeight()/2);
-	  				    g2d.drawString(card.getValue(), image.getWidth()/9 - cardNo * cardOffset, image.getWidth()/4);
+	  				    g2d.drawString(card.getValue(), 
+	  				    		image.getWidth()/9 +((cardNo % 5) * cardOffset), 
+	  				    		image.getWidth()/4 + (cardNo/5) * cardOffset);
+	  				    
+	  				    g2d.rotate(Math.toRadians(180), 
+	  				    		image.getWidth()/2, 
+	  				    		image.getHeight()/2);
+	  				    
+	  				    g2d.drawString(card.getValue(), 
+	  				    		image.getWidth()/9 - (cardNo % 5) * cardOffset, 
+	  				    		image.getWidth()/4 - (cardNo/5) * cardOffset);
 	  				    
 	  				    // reverse rotation
-	  				    g2d.rotate(-Math.toRadians(180), image.getWidth()/2, image.getHeight()/2);
+	  				    g2d.rotate(-Math.toRadians(180), 
+	  				    		image.getWidth()/2, 
+	  				    		image.getHeight()/2);
 	  		    		
 	  		    		cardNo++;
 	  	    		}
 	  	    		// translate back to center
 	  			    g2d.translate(0, -this.minWidthOrHeight/3);    
+	  			    
 	  	    	}	    
-	  			    // rotate to next player angle
-	  			    g2d.rotate(Math.toRadians(72 % 360), image.getWidth()/2, image.getHeight()/2); 
-	    }
+  			    // rotate to next player angle
+  			    g2d.rotate(Math.toRadians(72 % 360), 
+  			    		image.getWidth()/2, 
+  			    		image.getHeight()/2); 
+	  	    }
 	     
 	    	
 	    }
 
 	  }
+
+
+	/*
+	 *  Getters and setters
+	 */
+	public Player[] getPlayers() {
+		return players;
+	}
 	
-public class UpdateWorker extends SwingWorker<Void, Player[]>{
-
-
-		@Override
-		protected Void doInBackground() throws Exception {
-			while(true) {
-				publish(HandsPanel.this.players);
-				Thread.sleep(100);
-			}
-			
-		}
-		
-		protected void process(List<Player[]> messages) {
-
-			HandsPanel.this.players = messages.get(messages.size() - 1);
-		}
-
-}
-
-public Player[] getPlayers() {
-	return players;
-}
-
-
-public void setPlayers(Player[] players) {
-	this.players = players;
-}
+	
+	public void setPlayers(Player[] players) {
+		this.players = players;
+	}
 
 
 

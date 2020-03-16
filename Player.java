@@ -153,6 +153,12 @@ public class Player implements Serializable {
 	public void setDrawOrStand(int drawOrStand) {
 		this.drawOrStand = drawOrStand;
 	}
+
+	public int getStake() {
+		return stake;
+	}
+	
+	
 	
 	
 
