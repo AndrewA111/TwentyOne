@@ -1,4 +1,9 @@
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
+
+import javax.imageio.ImageIO;
 
 public class CardDetails {
 	/**
@@ -21,6 +26,13 @@ public class CardDetails {
 	
 	
 	/**
+	 * HashMap to store blank card images for each suit
+
+	 */
+	private static HashMap<Character, BufferedImage> blankCardMap;
+	
+	
+	/**
 	 * Constructor
 	 * 
 	 * Populate hashmap with value pairing on creation of class
@@ -40,6 +52,24 @@ public class CardDetails {
 		CardDetails.valueMap.put("J", 10);
 		CardDetails.valueMap.put("Q", 10);
 		CardDetails.valueMap.put("K", 10);
+		
+		BufferedImage spriteSheet = null;
+		
+		try {
+			spriteSheet = ImageIO.read(new File("BlankCards.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		int cardWidth = spriteSheet.getWidth()/2;
+		int cardHeight = spriteSheet.getHeight()/2;
+		
+		
+		blankCardMap = new HashMap<Character, BufferedImage>();
+		CardDetails.blankCardMap.put('H', spriteSheet.getSubimage(0, 0, cardWidth, cardHeight));
+		CardDetails.blankCardMap.put('D', spriteSheet.getSubimage(cardWidth, 0, cardWidth, cardHeight));
+		CardDetails.blankCardMap.put('C', spriteSheet.getSubimage(0, cardHeight, cardWidth, cardHeight));
+		CardDetails.blankCardMap.put('S', spriteSheet.getSubimage(cardWidth, cardHeight, cardWidth, cardHeight));
 	}
 	
 	/**
@@ -64,6 +94,10 @@ public class CardDetails {
 
 	public static HashMap<String, Integer> getValueMap() {
 		return valueMap;
+	}
+
+	public static HashMap<Character, BufferedImage> getBlankCardMap() {
+		return blankCardMap;
 	}
 
 	public static int getAcehigh() {

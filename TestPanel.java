@@ -21,11 +21,14 @@ public class TestPanel extends JPanel {
 	
 	public TestPanel() {
 		
+		CardDetails cardDetails = new CardDetails();
+		
 		this.setBackground(new Color(0,102,0));
 		
 
 		try {
-		      image = ImageIO.read(new File("Clubs.png"));
+//		      image = ImageIO.read(new File("BlankCards.png"));
+				image = CardDetails.getBlankCardMap().get('D');
 		    } catch (Exception e) {
 		      e.printStackTrace();
 		    }
