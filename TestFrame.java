@@ -11,7 +11,7 @@ public class TestFrame extends JFrame{
 	
 	public TestFrame() {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setSize(800, 600);
+		this.setSize(900, 700);
 
 		
 		TestPanel testPanel = new TestPanel();
