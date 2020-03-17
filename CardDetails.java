@@ -62,7 +62,7 @@ public class CardDetails {
 		}
 		
 		int cardWidth = spriteSheet.getWidth()/2;
-		int cardHeight = spriteSheet.getHeight()/2;
+		int cardHeight = spriteSheet.getHeight()/3;
 		
 		
 		blankCardMap = new HashMap<Character, BufferedImage>();
@@ -70,6 +70,7 @@ public class CardDetails {
 		CardDetails.blankCardMap.put('D', spriteSheet.getSubimage(cardWidth, 0, cardWidth, cardHeight));
 		CardDetails.blankCardMap.put('C', spriteSheet.getSubimage(0, cardHeight, cardWidth, cardHeight));
 		CardDetails.blankCardMap.put('S', spriteSheet.getSubimage(cardWidth, cardHeight, cardWidth, cardHeight));
+		CardDetails.blankCardMap.put('E', spriteSheet.getSubimage(0, 2 * cardHeight, cardWidth, cardHeight));
 	}
 	
 	/**

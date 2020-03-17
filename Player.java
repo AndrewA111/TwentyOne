@@ -157,6 +157,12 @@ public class Player implements Serializable {
 	public int getStake() {
 		return stake;
 	}
+
+	public int getBalance() {
+		return balance;
+	}
+	
+	
 	
 	
 	
