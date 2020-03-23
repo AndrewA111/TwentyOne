@@ -227,6 +227,12 @@ public class Table {
 		return playerCount;
 	}
 	
+	/*
+	 * ===================
+	 * Deal Methods
+	 * ===================
+	 */
+	
 	public boolean drawForAce(){
 		
 		/*
@@ -275,6 +281,10 @@ public class Table {
 		}
 		
 		return false;
+	}
+	
+	public void dealToCurrentPlayer(){
+		this.deck.dealSingleCard(this.players[this.currentPlayerPos]);
 	}
 	
 	/*
