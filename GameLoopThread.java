@@ -25,7 +25,10 @@ public class GameLoopThread implements Runnable{
 		
 		
 		/*
-		 * While until at least two players have arrived 
+		 * ==============================================
+		 * Wait until at least two players have arrived 
+		 * then wait 10s to start game
+		 * ==============================================
 		 */
 		System.out.println("Waiting for players to arrive");
 		this.table.setGameMessage("Waiting for players to arrive");
@@ -52,7 +55,9 @@ public class GameLoopThread implements Runnable{
 		}
 		
 		/*
-		 * Select dealer
+		 * =============================
+		 * Select dealer by drawing lots
+		 * =============================
 		 */
 		System.out.println("Selecting dealer");
 		this.table.setGameMessage("Selecting dealer");
@@ -69,9 +74,15 @@ public class GameLoopThread implements Runnable{
 				e.printStackTrace();
 			}
 		}
+		
+		/*
+		 * =======================
+		 * Round logic
+		 * =======================
+		 */
 		while(true) {
-			System.out.println("The dealer is: " + this.table.getDealer().getName());
-			this.table.setGameMessage("The dealer is: " + this.table.getDealer().getName());
+			System.out.println("The dealer is: " + this.table.dealer().getName());
+			this.table.setGameMessage("The dealer is: " + this.table.dealer().getName());
 			
 			try {
 				Thread.sleep(3000);
@@ -92,40 +103,52 @@ public class GameLoopThread implements Runnable{
 				e.printStackTrace();
 			}
 			
-//			System.out.println("Dealing cards");
-//			this.table.getDeck().dealInitialCards(this.table.getPlayers(), this.table.getDealer());
+
 			
 			System.out.println("Players have 10s to place stake");
 			this.table.setGameMessage("Players have 10s to place stake");
-			System.out.println("Test1");
+			
+			// enable stake-placing
+			this.table.allowStakes(true);
+			
 			try {
 				Thread.sleep(10000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println("Test2");
-			for(Player player : this.table.getPlayers()) {
-				if(player != null) {
-					player.setAbleToChangeStake(false);
-				}
-			}
+			
+			// disable stake-placing
+			this.table.allowStakes(false);
+			
+
 			System.out.println("Dealing cards");
-			this.table.getDeck().dealInitialCards(this.table.getPlayers(), this.table.getDealer());
-			System.out.println("Test3");
+			/*
+			 * ! probably shouldn't have to pass these arguments
+			 */
+			this.table.getDeck().dealInitialCards(this.table.getPlayers(), this.table.dealer());
+			
+			
+			/*
+			 * ! is delear set before this increment somewhere?
+			 */
 			this.table.incrementCurrentPlayer();
-			System.out.println("Test4");
+			
+			// boolean to check when everyone played
 			boolean dealerHasPlayed = false;
-			System.out.println("Test5");
+
 			// check for 21
+			/*
+			 * ! need to add some message if 21
+			 */
 			boolean vingtUn = this.table.checkVingtUn();
-			System.out.println("Test6");
+
+			
 			// if no 21
 			if(!vingtUn) {
-				System.out.println("Test7");
 				
 				// start from player after dealer
-				this.table.setCurrentPlayer(this.table.getDealerPos());
+				this.table.resetToDealerPos();
 				this.table.incrementCurrentPlayer();
 				
 				// loop from player after dealer until dealer has played
@@ -134,9 +157,9 @@ public class GameLoopThread implements Runnable{
 					
 					
 					//notify who is playing
-					System.out.println(this.table.getPlayers()[this.table.getCurrentPlayer()].getName() + ". Draw or stand?");
-					this.table.setGameMessage(this.table.getPlayers()[this.table.getCurrentPlayer()].getName() + ". Draw or stand? 10s to choose");
-					System.out.println("Test9");
+					System.out.println(this.table.currentPlayer().getName() + ". Draw or stand?");
+					this.table.setGameMessage(this.table.currentPlayer().getName() + ". Draw or stand? 10s to choose");
+
 					// set flags that player is to select
 					this.table.getPlayers()[this.table.getCurrentPlayer()].setAbleToDrawOrStand(true);
 					
@@ -168,7 +191,7 @@ public class GameLoopThread implements Runnable{
 					}
 					
 					// if this was dealers turn, round finished
-					if(this.table.getPlayers()[this.table.getCurrentPlayer()] == this.table.getDealer()) {
+					if(this.table.getPlayers()[this.table.getCurrentPlayer()] == this.table.dealer()) {
 						dealerHasPlayed = true;
 					}
 					
@@ -185,10 +208,7 @@ public class GameLoopThread implements Runnable{
 				/*
 				 * Set new dealer
 				 */
-				this.table.setCurrentPlayer(this.table.getDealerPos());
-				this.table.incrementCurrentPlayer();
-				this.table.setDealerPos(this.table.getCurrentPlayer());
-				this.table.setDealer(this.table.getPlayers()[this.table.getDealerPos()]);
+				this.table.incrementDealerPos();
 				
 				/*
 				 * 5s to new round
