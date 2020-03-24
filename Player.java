@@ -119,6 +119,10 @@ public class Player implements Serializable {
 		output += "\t" + this.hand;
 		output += "\tBalance: " + this.balance;
 		output += "\tStake: " + this.stake;
+		output += "\tValue(s): " + this.hand.value();
+		if(this.dealer) {
+			output += "    (Dealer)";
+		}
 		
 		return output;
 	}
