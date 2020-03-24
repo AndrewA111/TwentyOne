@@ -32,7 +32,7 @@ public class TestFrame extends JFrame{
 		Player player4 = new Player(4, "Rebecca", 4);
 		Player player5 = new Player(5, "Mike", 5);
 		
-		player4.setDealer(true);
+		player1.setDealer(true);
 		
 		p[0] = player1;
 		p[1] = player2;
@@ -42,30 +42,30 @@ public class TestFrame extends JFrame{
 		
 		p[0].addCard(new Card("A", 'S'));
 		p[0].addCard(new Card("K", 'S'));
-		p[0].addCard(new Card("A", 'S'));
-		p[0].addCard(new Card("K", 'S'));
-		p[0].addCard(new Card("A", 'S'));
-		p[0].addCard(new Card("K", 'S'));
-		p[0].addCard(new Card("A", 'S'));
-		p[0].addCard(new Card("K", 'S'));
-		p[0].addCard(new Card("A", 'S'));
+//		p[0].addCard(new Card("A", 'S'));
+//		p[0].addCard(new Card("K", 'S'));
+//		p[0].addCard(new Card("A", 'S'));
+//		p[0].addCard(new Card("K", 'S'));
+//		p[0].addCard(new Card("A", 'S'));
+//		p[0].addCard(new Card("K", 'S'));
+//		p[0].addCard(new Card("A", 'S'));
 //		p[0].addCard(new Card("K", 'S'));
 //		p[0].addCard(new Card("A", 'S'));
 //		p[0].addCard(new Card("K", 'S'));
 		p[1].addCard(new Card("8", 'D'));
 		p[1].addCard(new Card("9", 'C'));
-		p[2].addCard(new Card("2", 'S'));
-		p[2].addCard(new Card("5", 'H'));
-		p[2].addCard(new Card("2", 'S'));
-		p[2].addCard(new Card("5", 'H'));
-		p[2].addCard(new Card("2", 'S'));
-		p[2].addCard(new Card("5", 'H'));
-		p[2].addCard(new Card("2", 'S'));
-		p[2].addCard(new Card("5", 'H'));
-		p[2].addCard(new Card("2", 'S'));
-		p[2].addCard(new Card("5", 'H'));
-		p[2].addCard(new Card("2", 'S'));
-		p[2].addCard(new Card("5", 'H'));
+//		p[2].addCard(new Card("2", 'S'));
+//		p[2].addCard(new Card("5", 'H'));
+//		p[2].addCard(new Card("2", 'S'));
+//		p[2].addCard(new Card("5", 'H'));
+//		p[2].addCard(new Card("2", 'S'));
+//		p[2].addCard(new Card("5", 'H'));
+//		p[2].addCard(new Card("2", 'S'));
+//		p[2].addCard(new Card("5", 'H'));
+//		p[2].addCard(new Card("2", 'S'));
+//		p[2].addCard(new Card("5", 'H'));
+//		p[2].addCard(new Card("2", 'S'));
+//		p[2].addCard(new Card("5", 'H'));
 		p[2].addCard(new Card("2", 'S'));
 		p[2].addCard(new Card("5", 'H'));
 		p[3].addCard(new Card("7", 'D'));

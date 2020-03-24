@@ -1,8 +1,10 @@
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -20,13 +22,10 @@ public class HandsPanel extends JPanel {
 	// variable to store card images
 	BufferedImage image;
 	
-//	BufferedImage chip;
-	
 	private final int TEXT_SIZE = 14;
 	
 	private int radius;
 	
-//	Card testCard = new Card("A", 'S');
 	
 	/*
 	 * Int to store min value of width 
@@ -58,13 +57,16 @@ public class HandsPanel extends JPanel {
 	    super.paintComponent(g);
 	    Graphics2D g2d = (Graphics2D) g;
 	    
-	    
+	    // use antialiasing to reduce effect of pixelation
+	    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	    
 	    // check players array has been received
 	    if(players != null) {
 	    	
 	    	// set font
 	    	g2d.setFont(new Font("Serif", Font.BOLD, this.TEXT_SIZE));
+	    	
+	    	
 	  	    
 	  	    // arbitrary image to get card sizes from
 	  	    image = ImageAssets.getBlankCardMap().get('D');
@@ -72,8 +74,74 @@ public class HandsPanel extends JPanel {
 	  	    // set min from width and height
 	  	    this.minWidthOrHeight = Math.min(this.getWidth(), this.getHeight());
 	  	    
+	  	    /*
+	  	     * =============
+	  	     * Legend
+	  	     * =============
+	  	     */
+	  	    
+	  	    
+	  	  
+	  	    
+	  	    // Stake
+	  	    g2d.translate((this.getWidth() * 8)/10, this.getHeight()/10);
+	  	    
+	  	    g2d.setColor(new Color(0,77,0));
+	  	    
+	  	    g2d.fillRect(-ImageAssets.getChip().getWidth(), 
+	  	    		-2 * ImageAssets.getChip().getWidth(), 
+	  	    		(this.getWidth() * 2) / 10, 
+	  	    		(this.getHeight() * 2) / 10);
+	  	    
+	  	    g2d.setColor(new Color(102, 51, 0));
+	  	    g2d.setStroke(new BasicStroke(5));
+	  	    
+	  	    g2d.drawRect(-ImageAssets.getChip().getWidth(), 
+	  	    		-2 * ImageAssets.getChip().getWidth(), 
+	  	    		(this.getWidth() * 2) / 10, 
+	  	    		(this.getHeight() * 2) / 10);
+	  	    
+	  	    g2d.drawImage(ImageAssets.getChip(), 
+					0, 
+					 - TEXT_SIZE, 
+					this);
+	  	    
+	  	    g2d.setColor(Color.WHITE);
+	  	    
+	  	    g2d.drawString("Stake", 
+    					3 * ImageAssets.getChip().getWidth(), 
+    					0);
+	  	    
+	  	    // Balance
+	  	    for(int j = 0; j < 3; j++) {
+				
+				g2d.drawImage(ImageAssets.getChip(), 
+						j * (ImageAssets.getChip().getWidth()/2), 
+						2 * ImageAssets.getChip().getHeight() - TEXT_SIZE, 
+						this);
+			}
+	  	    
+	  	    g2d.drawString("Balance", 
+					3 * ImageAssets.getChip().getWidth(), 
+					2 * ImageAssets.getChip().getHeight());
+	  	  	
+	  	  	// Dealer chip
+		  	g2d.drawImage(ImageAssets.getDealerChip(), 
+	  				0, 
+	  				4 * ImageAssets.getChip().getHeight() - TEXT_SIZE, 
+	  				this);
+		  	
+		  	g2d.drawString("Dealer", 
+					3 * ImageAssets.getChip().getWidth(), 
+					4 * ImageAssets.getChip().getHeight());
+	  	    
+	  	    g2d.translate((-this.getWidth() * 8)/10, -this.getHeight()/10);
+	  	  
+	  	  
+	  	    
+	  	    
 	  	    // set circle radius
-	  	    this.radius = (this.minWidthOrHeight * 3) / 10;
+	  	    this.radius = (this.minWidthOrHeight * 5) / 20;
 	  	    
 	  	    // get to center
 	  	    g2d.translate(this.getWidth()/2 - image.getWidth()/2, 
@@ -102,7 +170,8 @@ public class HandsPanel extends JPanel {
 	  	    
 	  	    
 	  	    // card offset (within player's hand)
-	      	int cardOffset = image.getWidth()/3;
+	      	int hCardOffset = image.getWidth()/3;
+	      	int vCardOffset = image.getWidth()/4;
 	  	    
 	      	// loop through each player
 	  	    for(int i = 0; i < this.players.length; i++) {
@@ -132,14 +201,23 @@ public class HandsPanel extends JPanel {
   	    			// if dealer show dealer chip
     				if(this.players[i].isDealer()) {
 		  	    		
-		  	    		g2d.drawImage(ImageAssets.getDealerChip(), image.getWidth()/4, this.image.getHeight() + (image.getWidth()) / 3 - this.TEXT_SIZE, this);
+		  	    		g2d.drawImage(ImageAssets.getDealerChip(), 
+		  	    				image.getWidth()/4, 
+		  	    				this.image.getHeight() + (image.getWidth()) / 3 - this.TEXT_SIZE, 
+		  	    				this);
 		  	    		
 	  	    			
 		  	    		}
 	    				// stake
 	    				else {
-	    					g2d.drawImage(ImageAssets.getChip(), 0, this.image.getHeight() + (image.getWidth()) / 3 - this.TEXT_SIZE, this);
-	  	  	    			g2d.drawString("" + players[i].getStake(), (image.getWidth())/ 3, this.image.getHeight() + (image.getWidth()) / 3);
+	    					g2d.drawImage(ImageAssets.getChip(), 
+	    							image.getWidth() / 4, 
+	    							this.image.getHeight() + (image.getWidth()) / 3 - this.TEXT_SIZE, 
+	    							this);
+	    					
+	  	  	    			g2d.drawString("" + players[i].getStake(), 
+	  	  	    					(image.getWidth() / 4)+ (image.getWidth())/ 3, 
+	  	  	    					this.image.getHeight() + (image.getWidth()) / 3);
 	    				}
 	  	    				
 	
@@ -149,13 +227,17 @@ public class HandsPanel extends JPanel {
 	  	    				
 	  	    				g2d.drawImage(ImageAssets.getChip(), 
 	  	    						j * (ImageAssets.getChip().getWidth()/2), 
-	  	    					-(image.getWidth() * 2) / 3 - this.TEXT_SIZE, 
+	  	    					-(image.getWidth() * 4) / 7 - this.TEXT_SIZE, 
 	  	    						this);
 	  	    			}
 	  	    			
 	  	    			g2d.drawString("" + players[i].getBalance(), 
 	  	    					(image.getWidth()* 2)/ 3, 
-	  	    				-(image.getWidth() * 2) / 3);
+	  	    				-(image.getWidth() * 4) / 7);
+	  	    			
+	  	    			g2d.drawString("" + players[i].getName(), 
+	  	    					0, 
+	  	    				-(image.getWidth()));
 	  	    			
 	  	    		
 	  	    			// revert
@@ -174,8 +256,13 @@ public class HandsPanel extends JPanel {
   		  	    		}
   	    				// stake
   	    				else {
-  	    					g2d.drawImage(ImageAssets.getChip(), 0, -image.getWidth()/3 - this.TEXT_SIZE, this);
-  	  	  	    			g2d.drawString("" + players[i].getStake(), (image.getWidth())/ 3, -image.getWidth()/3);
+  	    					g2d.drawImage(ImageAssets.getChip(), 
+  	    							image.getWidth() / 4, 
+  	    							-image.getWidth()/4 - this.TEXT_SIZE, 
+  	    							this);
+  	  	  	    			g2d.drawString("" + players[i].getStake(), 
+  	  	  	    					(image.getWidth() / 4) + (image.getWidth())/ 3, 
+  	  	  	    					-image.getWidth()/4);
   	    				}
   	  	    			
   	  	    			
@@ -184,13 +271,16 @@ public class HandsPanel extends JPanel {
   	  	    				
   	  	    				g2d.drawImage(ImageAssets.getChip(), 
   	  	    						j * (ImageAssets.getChip().getWidth()/2), 
-  	  	    						this.image.getHeight() + (image.getWidth() * 2) / 3 - this.TEXT_SIZE, 
+  	  	    						this.image.getHeight() + (image.getWidth() * 4) / 7 - this.TEXT_SIZE, 
   	  	    						this);
   	  	    			}
   	  	    			
   	  	    			g2d.drawString("" + players[i].getBalance(), 
   	  	    					(image.getWidth()* 2)/ 3, 
-  	  	    					this.image.getHeight() + (image.getWidth() * 2) / 3);
+  	  	    					this.image.getHeight() + (image.getWidth() * 4) / 7);
+  	  	    		g2d.drawString("" + players[i].getName(), 
+	  	    					0, 
+	  	    					this.image.getHeight() + image.getWidth());
   	    			}
   	    			
 	  	    		
@@ -209,8 +299,8 @@ public class HandsPanel extends JPanel {
 	  		    		image = ImageAssets.getBlankCardMap().get(card.getType());
 	  		    		
 	  		    		g2d.drawImage(image, 
-	  		    				(cardNo % 5) * cardOffset, 
-	  		    				(cardNo/5) * cardOffset, this);
+	  		    				(cardNo % 5) * hCardOffset, 
+	  		    				(cardNo/5) * vCardOffset, this);
 	  		    		
 	  		    		//set color
 	  		    		if(card.getType() == 'H' || card.getType() == 'D') {
@@ -223,16 +313,16 @@ public class HandsPanel extends JPanel {
 	  		    		
 	  		    		// draw values on top left and bottom right corners
 	  				    g2d.drawString(card.getValue(), 
-	  				    		image.getWidth()/9 +((cardNo % 5) * cardOffset), 
-	  				    		image.getWidth()/4 + (cardNo/5) * cardOffset);
+	  				    		image.getWidth()/9 +((cardNo % 5) * hCardOffset), 
+	  				    		image.getWidth()/4 + (cardNo/5) * vCardOffset);
 	  				    
 	  				    g2d.rotate(Math.toRadians(180), 
 	  				    		image.getWidth()/2, 
 	  				    		image.getHeight()/2);
 	  				    
 	  				    g2d.drawString(card.getValue(), 
-	  				    		image.getWidth()/9 - (cardNo % 5) * cardOffset, 
-	  				    		image.getWidth()/4 - (cardNo/5) * cardOffset);
+	  				    		image.getWidth()/9 - (cardNo % 5) * hCardOffset, 
+	  				    		image.getWidth()/4 - (cardNo/5) * vCardOffset);
 	  				    
 	  				    // reverse rotation
 	  				    g2d.rotate(-Math.toRadians(180), 
