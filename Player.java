@@ -98,6 +98,12 @@ public class Player implements Serializable {
 		this.stake = MIN_STAKE;
 	}
 	
+	public void payDoubleStake(Player p) {
+		p.addToBalance(2 * this.stake);
+		this.removeFromBalance(MIN_STAKE + this.stake);
+		this.stake = MIN_STAKE;
+	}
+	
 	public ArrayList<Integer> handValue() {
 		
 		return this.hand.value();
@@ -110,9 +116,9 @@ public class Player implements Serializable {
 		String output = "";
 		
 		output += this.name;
-		output += "\n" + this.hand;
-		output += "\nBalance: " + this.balance;
-		output += "\nStake: " + this.stake;
+		output += "\t" + this.hand;
+		output += "\tBalance: " + this.balance;
+		output += "\tStake: " + this.stake;
 		
 		return output;
 	}

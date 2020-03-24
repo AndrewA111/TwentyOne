@@ -56,9 +56,9 @@ public class Table {
 			this.gameMessage = "Dealer has 21!";
 			while(currentPlayerPos !=  dealerPos) {
 				
-				// if player doesn't have 21 pay dealer
+				// if player doesn't also have 21, pay dealer
 				if(!(this.players[currentPlayerPos].getHand().maxLegalValue() == 21)) {
-					this.players[currentPlayerPos].payStake(this.players[dealerPos]);
+					this.players[currentPlayerPos].payDoubleStake(this.players[dealerPos]);
 				}
 				
 				this.incrementCurrentPlayer();
@@ -88,13 +88,13 @@ public class Table {
 					this.incrementCurrentPlayer();
 					
 					
-					System.out.println("Player " + winnerPos + " has 21!");
-					this.gameMessage = "Player " + winnerPos + " has 21!";
+					System.out.println("Player " + (winnerPos + 1) + " has 21!");
+					this.gameMessage = "Player " + (winnerPos + 1) + " has 21!";
 					
 					while(currentPlayerPos != winnerPos) {
 						// if player doesn't have 21 pay winning player
 						if(!(this.players[currentPlayerPos].getHand().maxLegalValue() == 21)) {
-							this.players[currentPlayerPos].payStake(this.players[winnerPos]);
+							this.players[currentPlayerPos].payDoubleStake(this.players[winnerPos]);
 						}
 						this.incrementCurrentPlayer();
 					}
@@ -198,7 +198,7 @@ public class Table {
 		if(this.players[pos] == null) {
 			this.players[pos] = player;
 			this.noPlayers++;
-			System.out.println(noPlayers);
+//			System.out.println(noPlayers);
 			return true;
 		}
 		
