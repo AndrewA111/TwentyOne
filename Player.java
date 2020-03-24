@@ -18,6 +18,8 @@ public class Player implements Serializable {
 	private boolean ableToChangeStake;
 	private boolean ableToDrawOrStand;
 	
+	private boolean dealer;
+	
 	/*
 	 * -1 undecided
 	 * 1 draw
@@ -31,6 +33,7 @@ public class Player implements Serializable {
 		this.name = name;
 		this.balance = 200;
 		this.tablePos = tablePos;
+		this.dealer = false;
 		
 		/*
 		 * Initially undecided
@@ -161,6 +164,15 @@ public class Player implements Serializable {
 	public int getBalance() {
 		return balance;
 	}
+
+	public boolean isDealer() {
+		return dealer;
+	}
+
+	public void setDealer(boolean dealer) {
+		this.dealer = dealer;
+	}
+	
 	
 	
 	

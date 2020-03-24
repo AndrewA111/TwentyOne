@@ -28,9 +28,9 @@ public class Table {
 		this.currentPlayerPos = 0;
 		this.noPlayers = 0;
 		this.deck = new Deck();
-		System.out.println(this.deck);
+		System.out.println("Unshuffled deck:\n" + this.deck);
 		this.deck.shuffle();
-		System.out.println(this.deck);
+		System.out.println("Unshuffled deck:\n" + this.deck);
 		this.gameMessage = null;
 		
 		/*
@@ -238,7 +238,10 @@ public class Table {
 		/*
 		 * Deal a single card to the current player
 		 */
-		System.out.println("Current player: " + this.players[this.currentPlayerPos].getName());
+		
+		// ! For testing
+		//System.out.println("Current player: " + this.players[this.currentPlayerPos].getName());
+		
 		Player playerToDealTo = this.players[this.currentPlayerPos];
 		this.deck.dealSingleCard(playerToDealTo);
 		
@@ -255,8 +258,9 @@ public class Table {
 			/*
 			 * !! need to decide how to handle this
 			 */
-			dealer = players[currentPlayerPos];
+//			dealer = players[currentPlayerPos];
 			dealerPos = currentPlayerPos;
+			this.players[this.dealerPos].setDealer(true);
 			return true;
 		}
 		
@@ -326,6 +330,10 @@ public class Table {
 	}
 	
 	public void incrementDealerPos() {
+		
+		// unset flag for current dealer
+		this.players[dealerPos].setDealer(false);
+		
 		/*
 		 * Increment current player
 		 */
@@ -343,6 +351,9 @@ public class Table {
 				dealerPos = 0;
 			}
 		}
+		
+		// set flag for new dealer
+		this.players[dealerPos].setDealer(true);
 	}
 	
 //	/*

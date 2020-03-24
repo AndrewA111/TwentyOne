@@ -8,7 +8,6 @@ public class GameLoopThread implements Runnable{
 	 */
 	private Model model;
 	private Table table;
-//	private Deck deck;
 	
 	/*
 	 * Constructor
@@ -37,6 +36,9 @@ public class GameLoopThread implements Runnable{
 		
 		int numPlayers = 0;
 		
+		/*
+		 * Wait until 2 players have joined
+		 */
 		while(numPlayers < 2) {
 			System.out.println("Still waiting");
 			try {
@@ -52,7 +54,8 @@ public class GameLoopThread implements Runnable{
 		}
 		
 		/*
-		 * Once 2 players have joined, wait further 10s to start game
+		 * Once 2 players have joined, wait further 10s to 
+		 * start game, to allow more players to join
 		 */
 		System.out.println("10s for players to join");
 		this.table.lock();
@@ -75,18 +78,20 @@ public class GameLoopThread implements Runnable{
 		this.table.setGameMessage("Selecting dealer");
 		table.unlock();
 		
-		int selectCards = 1;
-		
 		boolean aceFound = false;
 		
 		while(!aceFound) {
 			
+			/*
+			 * Draw and check for ace. 
+			 * 
+			 * When ace drawn, dealer set to that player, 
+			 * true returned and loop stops
+			 */
 			this.table.lock();
 			aceFound = this.table.drawForAce();
 			this.table.unlock();
 				
-			System.out.println(selectCards + " card drawn to select dealer");
-			selectCards++;
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
@@ -101,6 +106,10 @@ public class GameLoopThread implements Runnable{
 		 * =======================
 		 */
 		while(true) {
+			
+			/*
+			 * Announce dealer
+			 */
 			this.table.lock();
 			System.out.println("The dealer is: " + this.table.dealer().getName());
 			this.table.setGameMessage("The dealer is: " + this.table.dealer().getName());
@@ -109,26 +118,28 @@ public class GameLoopThread implements Runnable{
 			try {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
-			// recall hands and shuffle
+			/*
+			 * Recall player hands and shuffle
+			 */
 			this.table.lock();
 			this.table.recallPlayerHands();
-			System.out.println(this.table.getDeck());
+			System.out.println("Unshuffled deck:\n" + this.table.getDeck());
 			this.table.getDeck().shuffle();
-			System.out.println(this.table.getDeck());
+			System.out.println("Shuffled deck:\n" + this.table.getDeck());
 			this.table.unlock();
 			
 			try {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
-
+			/*
+			 * Allow players to vary stake for 10s
+			 */
 			this.table.lock();
 			System.out.println("Players have 10s to place stake");
 			this.table.setGameMessage("Players have 10s to place stake");
@@ -140,7 +151,6 @@ public class GameLoopThread implements Runnable{
 			try {
 				Thread.sleep(10000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -151,12 +161,9 @@ public class GameLoopThread implements Runnable{
 			 * ======================================
 			 */
 			System.out.println("Dealing cards");
-			/*
-			 * ! probably shouldn't have to pass these arguments
-			 */
-//			this.table.getDeck().dealInitialCards(this.table.getPlayers(), this.table.dealer());
 			
 			this.table.lock();
+			
 			// disable stake-placing
 			this.table.allowStakes(false);
 			
@@ -167,14 +174,14 @@ public class GameLoopThread implements Runnable{
 			// count how many rounds of cards given out
 			int loops = 0;
 			
-			// deal two rounds of card
+			// deal two cards per player
 			while(loops < 2) {
 				
 				this.table.lock();
 				this.table.incrementCurrentPlayer();
 				this.table.dealToCurrentPlayer();
 				
-				// dealer gets last card of round, so increment loops
+				// dealer gets card last, so increment loops
 				if(this.table.currentPlayer() == this.table.dealer()) {
 					loops++;
 				}
@@ -183,7 +190,6 @@ public class GameLoopThread implements Runnable{
 				try {
 					Thread.sleep(500);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -191,7 +197,7 @@ public class GameLoopThread implements Runnable{
 			
 			
 			/*
-			 * ! is delear set before this increment somewhere?
+			 * Start from player after dealer
 			 */
 			this.table.lock();
 			this.table.incrementCurrentPlayer();
@@ -221,38 +227,39 @@ public class GameLoopThread implements Runnable{
 					System.out.println(this.table.currentPlayer().getName() + ". Draw or stand?");
 					this.table.setGameMessage(this.table.currentPlayer().getName() + ". Draw or stand? 10s to choose");
 
-					// set flags that player is to select
+					// set flags that player is able to select draw/stand
 					this.table.currentPlayer().setAbleToDrawOrStand(true);
 					
 					
-					/*
-					 * Keep looping until player stands
-					 */
-					
+					// check whether player wants to draw or stand
 					int playerChoice = (this.table.currentPlayer().getDrawOrStand());
 					
 					this.table.unlock();
 					
-					
+					/*
+					 *  Keep checking player choice until player stands:
+					 *  
+					 * 	-1 undecided
+					 * 	1 draw
+					 * 	2 stand
+					 */
 					while(!(playerChoice == 2)) {
 							
-							System.out.println("-1");
 							try {
 								/*
-								 * 1s pause to limit no of loops
+								 * 0.1s pause to limit loop rate
 								 */
 								Thread.sleep(100);
 							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 
 						
 						/*
-						 * If player selects to draw
+						 * If player selects to draw, deal card
 						 */
 						if(playerChoice == 1) {
-							System.out.println("1");
+							System.out.println("Card drawn.");
 							this.table.lock();
 							this.table.getDeck().dealSingleCard((this.table.currentPlayer()));
 							
@@ -273,13 +280,13 @@ public class GameLoopThread implements Runnable{
 					}
 					
 					
-					System.out.println("2");
+					System.out.println("Stand.");
 					
 					// reset player to undecided (for next round)
 					this.table.currentPlayer().setDrawOrStand(-1);
 					
 					// disable draw/stand buttons
-					this.table.getPlayers()[this.table.getCurrentPlayer()].setAbleToDrawOrStand(false);
+					this.table.currentPlayer().setAbleToDrawOrStand(false);
 					
 					// increment player
 					this.table.incrementCurrentPlayer();
@@ -287,7 +294,7 @@ public class GameLoopThread implements Runnable{
 					this.table.unlock();
 				}
 				
-				System.out.println("Test last");
+				
 				this.table.lock();
 				this.table.checkingWinnerEndRound();
 				
@@ -303,6 +310,12 @@ public class GameLoopThread implements Runnable{
 				System.out.println("Round over. New round in 5s.");
 				this.table.setGameMessage("Round over. New round in 5s.");
 				this.table.unlock();
+				
+				try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		

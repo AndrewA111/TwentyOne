@@ -53,24 +53,6 @@ public class CardDetails {
 		CardDetails.valueMap.put("Q", 10);
 		CardDetails.valueMap.put("K", 10);
 		
-		BufferedImage spriteSheet = null;
-		
-		try {
-			spriteSheet = ImageIO.read(new File("BlankCards.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		int cardWidth = spriteSheet.getWidth()/2;
-		int cardHeight = spriteSheet.getHeight()/3;
-		
-		
-		blankCardMap = new HashMap<Character, BufferedImage>();
-		CardDetails.blankCardMap.put('H', spriteSheet.getSubimage(0, 0, cardWidth, cardHeight));
-		CardDetails.blankCardMap.put('D', spriteSheet.getSubimage(cardWidth, 0, cardWidth, cardHeight));
-		CardDetails.blankCardMap.put('C', spriteSheet.getSubimage(0, cardHeight, cardWidth, cardHeight));
-		CardDetails.blankCardMap.put('S', spriteSheet.getSubimage(cardWidth, cardHeight, cardWidth, cardHeight));
-		CardDetails.blankCardMap.put('E', spriteSheet.getSubimage(0, 2 * cardHeight, cardWidth, cardHeight));
 	}
 	
 	/**
