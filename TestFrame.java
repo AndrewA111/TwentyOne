@@ -32,7 +32,7 @@ public class TestFrame extends JFrame{
 		Player player4 = new Player(4, "Rebecca", 4);
 		Player player5 = new Player(5, "Mike", 5);
 		
-		player1.setDealer(true);
+		player4.setDealer(true);
 		
 		p[0] = player1;
 		p[1] = player2;

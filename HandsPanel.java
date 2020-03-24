@@ -48,15 +48,7 @@ public class HandsPanel extends JPanel {
 		this.setBackground(new Color(0,102,0));
 		
 		this.players = p;
-		
-//		try {
-//			this.chip = ImageIO.read(new File("Chip.png"));
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
-		
+				
 		
 	}
 	
@@ -119,25 +111,11 @@ public class HandsPanel extends JPanel {
 	  	    		// track number of cards a player has
 	  	    		int cardNo = 0;
 	  	    		
-	  	    		
-	  	    		if(this.players[i].isDealer()) {
-	  	    			// translate to dealer chip pos
-		  	    		g2d.translate(0, (this.radius * 2)/3);
-		  	    		
-		  	    		g2d.drawImage(ImageAssets.getDealerChip(), image.getWidth()/2, 0, this);
-		  	    		
-		  	    		// translate back
-		  	    		g2d.translate(0, -(this.radius * 2)/3);
-	  	    			
-	  	    		}
-	  	    		
-	  	    		
-	  	    		
 	  	    		// translate to first card position
 	  	    		g2d.translate(0, this.radius);
 	  	    		
 	  	    		/*
-  	    			 * S stake
+  	    			 * Stake
   	    			 */
 	  	    		
 	  	    		g2d.setColor(Color.WHITE);
@@ -150,49 +128,56 @@ public class HandsPanel extends JPanel {
 	  				    		image.getWidth()/2, 
 	  				    		image.getHeight()/2);
   	    				
-  	    				// stake
-  	  	    			g2d.drawImage(ImageAssets.getChip(), 0, this.image.getHeight() + (image.getWidth()) / 3 - this.TEXT_SIZE, this);
-  	  	    			g2d.drawString("" + players[i].getStake(), (image.getWidth())/ 3, this.image.getHeight() + (image.getWidth()) / 3);
-  	  	    			
-//  	  	    		g2d.drawImage(this.chip, 0, -image.getWidth()/3 - this.TEXT_SIZE, this);
-//	  	    			g2d.drawString("" + players[i].getStake(), (image.getWidth())/ 3, -image.getWidth()/3);
-  	  	    			
-  	  	    			// balance
-  	  	    			for(int j = 0; j < 3; j++) {
-  	  	    				
-  	  	    				g2d.drawImage(ImageAssets.getChip(), 
-  	  	    						j * (ImageAssets.getChip().getWidth()/2), 
-  	  	    					-(image.getWidth() * 2) / 3 - this.TEXT_SIZE, 
-  	  	    						this);
-  	  	    			}
-  	  	    			
-  	  	    			g2d.drawString("" + players[i].getBalance(), 
-  	  	    					(image.getWidth()* 2)/ 3, 
-  	  	    				-(image.getWidth() * 2) / 3);
-  	  	    			
-//  	  	    		// balance
-//  	  	    			for(int j = 0; j < 3; j++) {
-//  	  	    				
-//  	  	    				g2d.drawImage(this.chip, 
-//  	  	    						j * (this.chip.getWidth()/2), 
-//  	  	    						this.image.getHeight() + (image.getWidth() * 2) / 3 - this.TEXT_SIZE, 
-//  	  	    						this);
-//  	  	    			}
-//  	  	    			
-//  	  	    			g2d.drawString("" + players[i].getBalance(), 
-//  	  	    					(image.getWidth()* 2)/ 3, 
-//  	  	    					this.image.getHeight() + (image.getWidth() * 2) / 3);
-  	  	    		
-  	  	    			// revert
+  	    				
+  	    			// if dealer show dealer chip
+    				if(this.players[i].isDealer()) {
+		  	    		
+		  	    		g2d.drawImage(ImageAssets.getDealerChip(), image.getWidth()/4, this.image.getHeight() + (image.getWidth()) / 3 - this.TEXT_SIZE, this);
+		  	    		
+	  	    			
+		  	    		}
+	    				// stake
+	    				else {
+	    					g2d.drawImage(ImageAssets.getChip(), 0, this.image.getHeight() + (image.getWidth()) / 3 - this.TEXT_SIZE, this);
+	  	  	    			g2d.drawString("" + players[i].getStake(), (image.getWidth())/ 3, this.image.getHeight() + (image.getWidth()) / 3);
+	    				}
+	  	    				
+	
+	  	  	    			
+	  	    			// balance
+	  	    			for(int j = 0; j < 3; j++) {
+	  	    				
+	  	    				g2d.drawImage(ImageAssets.getChip(), 
+	  	    						j * (ImageAssets.getChip().getWidth()/2), 
+	  	    					-(image.getWidth() * 2) / 3 - this.TEXT_SIZE, 
+	  	    						this);
+	  	    			}
+	  	    			
+	  	    			g2d.drawString("" + players[i].getBalance(), 
+	  	    					(image.getWidth()* 2)/ 3, 
+	  	    				-(image.getWidth() * 2) / 3);
+	  	    			
+	  	    		
+	  	    			// revert
 	  	  	    		g2d.rotate(Math.toRadians(180), 
 	  				    		image.getWidth()/2, 
 	  				    		image.getHeight()/2);
   	    			}	
   	    			
   	    			else {
+  	    				// if dealer show dealer chip
+  	    				if(this.players[i].isDealer()) {
+  			  	    		
+  			  	    		g2d.drawImage(ImageAssets.getDealerChip(), image.getWidth()/2, -image.getWidth()/3 - this.TEXT_SIZE, this);
+  			  	    		
+  		  	    			
+  		  	    		}
   	    				// stake
-  	  	    			g2d.drawImage(ImageAssets.getChip(), 0, -image.getWidth()/3 - this.TEXT_SIZE, this);
-  	  	    			g2d.drawString("" + players[i].getStake(), (image.getWidth())/ 3, -image.getWidth()/3);
+  	    				else {
+  	    					g2d.drawImage(ImageAssets.getChip(), 0, -image.getWidth()/3 - this.TEXT_SIZE, this);
+  	  	  	    			g2d.drawString("" + players[i].getStake(), (image.getWidth())/ 3, -image.getWidth()/3);
+  	    				}
+  	  	    			
   	  	    			
   	  	    			// balance
   	  	    			for(int j = 0; j < 3; j++) {
