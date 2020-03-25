@@ -96,6 +96,11 @@ public class Table {
 		return false;
 	}
 	
+	public void removePlayer(int pos) {
+		this.players[pos].setTablePos(-1);
+		this.players[pos] = null;
+	}
+	
 	/**
 	 * Method to check number of players at the table
 	 * @return playerCount

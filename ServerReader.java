@@ -58,8 +58,16 @@ public class ServerReader implements Runnable{
 					}
 				}
 				
-				if(messageIn.getCode() == 5) {
-					
+				if(messageIn.getCode() == 6) {
+					for(int i = 0; i < this.model.getTable().getPlayers().length; i++) {
+						
+						if(this.model.getTable().getPlayers()[i] != null) {
+							if(this.model.getTable().getPlayers()[i].getID() == messageIn.getID()) {
+								this.model.getTable().removePlayer(i);
+							}
+						}
+						
+					}
 				}
 				
 			}
