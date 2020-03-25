@@ -26,6 +26,15 @@ public class HandsPanel extends JPanel {
 	
 	private int radius;
 	
+//	private final int O_WIDTH = 884;
+//	
+//	private final int O_HEIGHT = 661;
+	
+	private int O_WIDTH;
+	
+	private int O_HEIGHT;
+	
+	private boolean dimsSet = false;
 	
 	/*
 	 * Int to store min value of width 
@@ -51,11 +60,26 @@ public class HandsPanel extends JPanel {
 		
 	}
 	
+	public void setInitialDims() {
+		
+		if(!dimsSet) {
+			this.O_WIDTH = this.getWidth();
+			this.O_HEIGHT = this.getHeight();
+			dimsSet = true;
+			
+			System.out.println(O_WIDTH + ", " + O_HEIGHT);
+		}
+	}
+	
 	
 	@Override
 	  protected void paintComponent(Graphics g) {
 	    super.paintComponent(g);
 	    Graphics2D g2d = (Graphics2D) g;
+	    
+	    g2d.scale(((double)this.getWidth())/O_WIDTH, 
+	    		((double) this.getHeight())/O_HEIGHT);
+//	    System.out.println(this.getWidth() + ", " + this.getHeight());
 	    
 	    // use antialiasing to reduce effect of pixelation
 	    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -72,7 +96,7 @@ public class HandsPanel extends JPanel {
 	  	    image = ImageAssets.getBlankCardMap().get('D');
 	  	    
 	  	    // set min from width and height
-	  	    this.minWidthOrHeight = Math.min(this.getWidth(), this.getHeight());
+	  	    this.minWidthOrHeight = Math.min(O_WIDTH, this.O_HEIGHT);
 	  	    
 	  	    /*
 	  	     * =============
@@ -84,22 +108,22 @@ public class HandsPanel extends JPanel {
 	  	  
 	  	    
 	  	    // Stake
-	  	    g2d.translate((this.getWidth() * 8)/10, this.getHeight()/10);
+	  	    g2d.translate((this.O_WIDTH * 8)/10, this.O_HEIGHT/10);
 	  	    
 	  	    g2d.setColor(new Color(0,77,0));
 	  	    
 	  	    g2d.fillRect(-ImageAssets.getChip().getWidth(), 
 	  	    		-2 * ImageAssets.getChip().getWidth(), 
-	  	    		(this.getWidth() * 2) / 10, 
-	  	    		(this.getHeight() * 2) / 10);
+	  	    		(this.O_WIDTH * 2) / 10, 
+	  	    		(this.O_HEIGHT * 2) / 10);
 	  	    
 	  	    g2d.setColor(new Color(102, 51, 0));
 	  	    g2d.setStroke(new BasicStroke(5));
 	  	    
 	  	    g2d.drawRect(-ImageAssets.getChip().getWidth(), 
 	  	    		-2 * ImageAssets.getChip().getWidth(), 
-	  	    		(this.getWidth() * 2) / 10, 
-	  	    		(this.getHeight() * 2) / 10);
+	  	    		(this.O_WIDTH * 2) / 10, 
+	  	    		(this.O_HEIGHT * 2) / 10);
 	  	    
 	  	    g2d.drawImage(ImageAssets.getChip(), 
 					0, 
@@ -135,7 +159,7 @@ public class HandsPanel extends JPanel {
 					3 * ImageAssets.getChip().getWidth(), 
 					4 * ImageAssets.getChip().getHeight());
 	  	    
-	  	    g2d.translate((-this.getWidth() * 8)/10, -this.getHeight()/10);
+	  	    g2d.translate((-O_WIDTH * 8)/10, -this.O_HEIGHT/10);
 	  	  
 	  	  
 	  	    
@@ -144,8 +168,8 @@ public class HandsPanel extends JPanel {
 	  	    this.radius = (this.minWidthOrHeight * 5) / 20;
 	  	    
 	  	    // get to center
-	  	    g2d.translate(this.getWidth()/2 - image.getWidth()/2, 
-	  	    		this.getHeight()/2 - image.getHeight()/2);
+	  	    g2d.translate(this.O_WIDTH/2 - image.getWidth()/2, 
+	  	    		this.O_HEIGHT/2 - image.getHeight()/2);
 	  	    
 	  	    // empty place markers
 	  	    for(int i = 0; i < 5; i++) {

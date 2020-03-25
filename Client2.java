@@ -109,13 +109,16 @@ public class Client2 extends JFrame implements ActionListener {
 		 */
 		this.add(southPanel, BorderLayout.SOUTH);
 		
-		this.setVisible(true);
+		
 		
 		/*
 		 * 
 		 */
 		handsPanel = new HandsPanel(this.players);
 		this.add(handsPanel, BorderLayout.CENTER);
+		this.setVisible(true);
+//		this.pack();
+		handsPanel.setInitialDims();
 		
 
 		/*
