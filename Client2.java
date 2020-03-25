@@ -109,15 +109,18 @@ public class Client2 extends JFrame implements ActionListener {
 		 */
 		this.add(southPanel, BorderLayout.SOUTH);
 		
-		this.setVisible(true);
+		
 		
 		/*
 		 * 
 		 */
 		handsPanel = new HandsPanel(this.players);
 		this.add(handsPanel, BorderLayout.CENTER);
+	
+		this.setVisible(true);
 		
-
+		handsPanel.setInitialDims();
+		
 		/*
 		 * Initialize output stream
 		 * 
@@ -135,6 +138,9 @@ public class Client2 extends JFrame implements ActionListener {
 		 */
 		ReadWorker rw = new ReadWorker(socket);
 		rw.execute();
+		
+		
+
 	}
 	
 	public class ReadWorker extends SwingWorker<Void, MessageToClient>{
@@ -205,7 +211,14 @@ public class Client2 extends JFrame implements ActionListener {
 			 */
 			
 			Client2.this.handsPanel.setPlayers(mostRecent.getPlayers());
+			
+			// force panel repaint
 			Client2.this.handsPanel.repaint();
+			
+			// force buttons/text area to refresh
+			Client2.this.revalidate(); 
+
+			System.out.println("Running");
 			
 
 			

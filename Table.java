@@ -293,8 +293,14 @@ public class Table {
 					// store winner pos
 					int winnerPos = currentPlayerPos;
 					
+					// remove flag on current dealer
+					this.dealer().setDealer(false);
+					
 					// winning player is new dealer
 					this.dealerPos = winnerPos;
+					
+					// set flag for new dealer
+					this.dealer().setDealer(true);
 					
 					/*
 					 * Check hands of remaining players
