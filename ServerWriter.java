@@ -10,13 +10,15 @@ public class ServerWriter implements Runnable{
 	
 	private Table table;
 	
+	private Player player;
+	
 	private int clientID;
 	
-	public ServerWriter(Socket s, Model m, int clientID) {
+	public ServerWriter(Socket s, Model m, Player p) {
 		this.socket = s;
 		this.model = m;
 		this.table = this.model.getTable();
-		this.clientID = clientID;
+		this.player = p;
 	}
 	
 	public void run() {
@@ -28,7 +30,11 @@ public class ServerWriter implements Runnable{
 			while(true) {
 //				this.model.lock();
 				this.table.lock();			
-				os.writeObject(new MessageToClient(1, this.clientID, this.table.getPlayers(), model.getTable().getGameMessage()));
+				os.writeObject(new MessageToClient(1, 
+													this.player.getID(), 
+													this.table.getPlayers(), 
+													this.player.getTablePos(), 
+													model.getTable().getGameMessage()));
 //				this.model.unlock();
 				this.table.unlock();
 				/*

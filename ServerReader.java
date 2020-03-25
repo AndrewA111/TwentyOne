@@ -51,9 +51,15 @@ public class ServerReader implements Runnable{
 				}
 				
 				if(messageIn.getCode() == 5) {
-					this.model.lock();
-					this.model.getTable().getDeck().dealInitialCards(this.model.getTable().getPlayers(), this.model.getTable().getPlayers()[0]);
-					this.model.unlock();
+					for(Player player : this.model.getGlobalPlayers()) {
+						if(player.getID() == messageIn.getID()) {
+							this.model.getTable().addPlayer(player);
+						}
+					}
+				}
+				
+				if(messageIn.getCode() == 5) {
+					
 				}
 				
 			}

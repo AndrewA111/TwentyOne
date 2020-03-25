@@ -26,11 +26,11 @@ public class TestFrame extends JFrame{
 	public Player[] createPlayersArray() {
 		
 		Player[] p = new Player[5];
-		Player player1 = new Player(1, "Andrew", 1);
-		Player player2 = new Player(2, "John", 2);
-		Player player3 = new Player(3, "Aaron", 3);
-		Player player4 = new Player(4, "Rebecca", 4);
-		Player player5 = new Player(5, "Mike", 5);
+		Player player1 = new Player(1, "Andrew");
+		Player player2 = new Player(2, "John");
+		Player player3 = new Player(3, "Aaron");
+		Player player4 = new Player(4, "Rebecca");
+		Player player5 = new Player(5, "Mike");
 		
 		player1.setDealer(true);
 		

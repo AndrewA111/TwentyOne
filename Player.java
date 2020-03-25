@@ -5,7 +5,11 @@ public class Player implements Serializable {
 	
 	private int ID;
 	private String name;
-	private int tablePos;
+	
+	/*
+	 * ! to be removed
+	 */
+	private int tablePos = -1;
 	
 	private Hand hand;
 	
@@ -27,12 +31,11 @@ public class Player implements Serializable {
 	 */
 	private int drawOrStand;
 	
-	public Player(int ID, String name, int tablePos) {
+	public Player(int ID, String name) {
 		
 		this.ID = ID;
 		this.name = name;
 		this.balance = 200;
-		this.tablePos = tablePos;
 		this.dealer = false;
 		
 		/*
@@ -125,6 +128,12 @@ public class Player implements Serializable {
 		}
 		
 		return output;
+	}
+
+	
+	
+	public int getID() {
+		return ID;
 	}
 
 	public String getName() {

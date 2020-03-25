@@ -78,6 +78,25 @@ public class Table {
 	}
 	
 	/**
+	 * Add player to first available position
+	 * @param player
+	 * @return
+	 */
+	public boolean addPlayer(Player player) {
+		
+		for(int i = 0; i <this.players.length; i++) {
+			if(this.players[i] == null) {
+				this.players[i] = player;
+				player.setTablePos(i);
+				this.noPlayers++;
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Method to check number of players at the table
 	 * @return playerCount
 	 */

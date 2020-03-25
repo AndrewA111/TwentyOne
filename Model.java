@@ -5,6 +5,7 @@ public class Model {
 	
 	private Table table;
 	private Deck deck;
+	private ArrayList<Player> globalPlayers;
 	
 	/*
 	 * Lock
@@ -15,7 +16,7 @@ public class Model {
 	public Model() {
 		
 		this.table = new Table();
-
+		this.globalPlayers = new ArrayList<Player>();
 		
 	}
 	
@@ -34,6 +35,10 @@ public class Model {
 //		System.out.println("\n" + this.deck);
 		
 	}
+	
+	public void addPlayer(Player p) {
+		this.globalPlayers.add(p);
+	}
 
 
 	public Table getTable() {
@@ -44,6 +49,10 @@ public class Model {
 		return deck;
 	}
 	
+	public ArrayList<Player> getGlobalPlayers() {
+		return globalPlayers;
+	}
+
 	public void lock() {
 		this.modelLock.lock();
 	}

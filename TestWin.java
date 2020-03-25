@@ -62,7 +62,7 @@ public class TestWin {
 		Table table = new Table();
 		
 		for(int i = 0; i < noPlayers; i++) {
-			table.addPlayer(new Player(1, "Player"+ (i+1), 1), i);
+			table.addPlayer(new Player(1, "Player"+ (i+1)), i);
 		}
 		
 		table.getPlayers()[0].setDealer(true);
