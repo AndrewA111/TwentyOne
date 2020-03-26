@@ -43,6 +43,9 @@ public class Table {
 		System.out.println("Unshuffled deck:\n" + this.deck);
 		this.gameMessage = null;
 		
+		// initialise arbitrary dealer pos
+		this.dealerPos = -1;
+		
 		/*
 		 * Initialize hashmap for valuing hands
 		 */
@@ -88,6 +91,8 @@ public class Table {
 			if(this.players[i] == null) {
 				this.players[i] = player;
 				player.setTablePos(i);
+				player.setAbleToJoin(false);
+				player.setAbleToLeave(true);
 				this.noPlayers++;
 				return true;
 			}
@@ -97,8 +102,12 @@ public class Table {
 	}
 	
 	public void removePlayer(int pos) {
+		if(pos == this.dealerPos) {
+			this.incrementDealerPos();
+		}
 		this.players[pos].setTablePos(-1);
 		this.players[pos] = null;
+		this.noPlayers--;
 	}
 	
 	/**
@@ -130,6 +139,8 @@ public class Table {
 		return this.players[this.currentPlayerPos];
 	}
 	
+	
+	
 	public void incrementCurrentPlayer() {
 		/*
 		 * Increment current player
@@ -142,11 +153,23 @@ public class Table {
 		/*
 		 * Check if next position filled, loop until filled position found
 		 */
+		/*
+		 * ! avoid possible infinite loop
+		 */
 		while(players[currentPlayerPos] == null) {
 			currentPlayerPos++;
 			if(currentPlayerPos >= numPlayers) {
 				currentPlayerPos = 0;
 			}
+		}
+	}
+	
+	public void setInitialCurrentPlayer() {
+		
+		currentPlayerPos = 0;
+		
+		if(this.players[this.currentPlayerPos] == null) {
+			this.incrementCurrentPlayer();
 		}
 	}
 	
@@ -219,6 +242,8 @@ public class Table {
 		// ! For testing
 		//System.out.println("Current player: " + this.players[this.currentPlayerPos].getName());
 		
+		
+		
 		Player playerToDealTo = this.players[this.currentPlayerPos];
 		this.deck.dealSingleCard(playerToDealTo);
 		
@@ -232,6 +257,15 @@ public class Table {
 		 * and return true to indicate dealer has been selected
 		 */
 		if(playerHand.get(playerHand.size() - 1).getValue() == "A") {
+			
+			// check dealerPos has been set
+			if(this.dealerPos != -1) {
+				
+				// set current dealer to false
+				this.players[this.dealerPos].setDealer(false);
+			}
+			
+			// set new dealer
 			dealerPos = currentPlayerPos;
 			this.players[this.dealerPos].setDealer(true);
 			return true;

@@ -21,6 +21,8 @@ public class Player implements Serializable {
 	
 	private boolean ableToChangeStake;
 	private boolean ableToDrawOrStand;
+	private boolean ableToJoin;
+	private boolean ableToLeave;
 	
 	private boolean dealer;
 	
@@ -49,6 +51,8 @@ public class Player implements Serializable {
 		
 		this.ableToChangeStake = true;
 		this.ableToDrawOrStand = false;
+		this.ableToJoin = true;
+		this.ableToLeave = false;
 		
 	}
 	
@@ -191,6 +195,23 @@ public class Player implements Serializable {
 	public void setDealer(boolean dealer) {
 		this.dealer = dealer;
 	}
+
+	public boolean isAbleToJoin() {
+		return ableToJoin;
+	}
+
+	public void setAbleToJoin(boolean ableToJoin) {
+		this.ableToJoin = ableToJoin;
+	}
+
+	public boolean isAbleToLeave() {
+		return ableToLeave;
+	}
+
+	public void setAbleToLeave(boolean ableToLeave) {
+		this.ableToLeave = ableToLeave;
+	}
+	
 	
 	
 	
