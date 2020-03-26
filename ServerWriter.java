@@ -28,14 +28,12 @@ public class ServerWriter implements Runnable{
 			os = new ObjectOutputStream(socket.getOutputStream());
 			
 			while(true) {
-//				this.model.lock();
 				this.table.lock();			
 				os.writeObject(new MessageToClient(1, 
 													this.player.getID(), 
 													this.table.getPlayers(), 
 													this.player.getTablePos(), 
 													model.getTable().getGameMessage()));
-//				this.model.unlock();
 				this.table.unlock();
 				/*
 				 * !! Flush and reset

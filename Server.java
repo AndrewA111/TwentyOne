@@ -86,7 +86,9 @@ public class Server {
 			/*
 			 * Create and start read and write threads
 			 */
-			Thread readThread = new Thread(new ServerReader(this.socket, model));
+			Thread readThread = new Thread(new ServerReader(this.socket, 
+											model,
+											this.player));
 			Thread writeThread = new Thread(new ServerWriter(this.socket, 
 											model, 
 											this.player));

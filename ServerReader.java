@@ -6,10 +6,12 @@ public class ServerReader implements Runnable{
 	
 	private Socket socket;
 	private Model model;
+	private Player player;
 	
-	public ServerReader(Socket s, Model m) {
+	public ServerReader(Socket s, Model m, Player p) {
 		this.socket = s;
 		this.model = m;
+		this.player = p;
 	}
 	
 	public void run() {
@@ -20,16 +22,18 @@ public class ServerReader implements Runnable{
 			while(true) {
 				MessageToServer messageIn = (MessageToServer) is.readObject();
 				
+				int pos = this.player.getTablePos();
+				
 				System.out.println("Message code: " + messageIn.getCode());
 				
 				if(messageIn.getCode() == 1) {
-					if(this.model.getTable().getPlayers()[messageIn.getID()].isAbleToChangeStake()) {
-						this.model.getTable().getPlayers()[messageIn.getID()].stakeUp();
+					if(this.player.isAbleToChangeStake()) {
+						this.player.stakeUp();
 					}
 				}
 				if(messageIn.getCode() == 2) {
-					if(this.model.getTable().getPlayers()[messageIn.getID()].isAbleToChangeStake()) {
-						this.model.getTable().getPlayers()[messageIn.getID()].stakeDown();
+					if(this.player.isAbleToChangeStake()) {
+						this.player.stakeDown();
 					}
 					
 				}
@@ -37,37 +41,29 @@ public class ServerReader implements Runnable{
 				 * Draw
 				 */
 				if(messageIn.getCode() == 3) {
-					if(this.model.getTable().getPlayers()[messageIn.getID()].isAbleToDrawOrStand()) {
-						this.model.getTable().getPlayers()[messageIn.getID()].setDrawOrStand(1);;
+					if(this.player.isAbleToDrawOrStand()) {
+						this.player.setDrawOrStand(1);;
 					}
 				}
 				/*
 				 * Stand
 				 */
 				if(messageIn.getCode() == 4) {
-					if(this.model.getTable().getPlayers()[messageIn.getID()].isAbleToDrawOrStand()) {
-						this.model.getTable().getPlayers()[messageIn.getID()].setDrawOrStand(2);
+					if(this.player.isAbleToDrawOrStand()) {
+						this.player.setDrawOrStand(2);
 					}
 				}
 				
 				if(messageIn.getCode() == 5) {
-					for(Player player : this.model.getGlobalPlayers()) {
-						if(player.getID() == messageIn.getID()) {
-							this.model.getTable().addPlayer(player);
-						}
-					}
+
+					this.model.getTable().addPlayer(player);
+
 				}
 				
 				if(messageIn.getCode() == 6) {
-					for(int i = 0; i < this.model.getTable().getPlayers().length; i++) {
-						
-						if(this.model.getTable().getPlayers()[i] != null) {
-							if(this.model.getTable().getPlayers()[i].getID() == messageIn.getID()) {
-								this.model.getTable().removePlayer(i);
-							}
-						}
-						
-					}
+
+					this.model.getTable().removePlayer(this.player.getTablePos());
+
 				}
 				
 			}
