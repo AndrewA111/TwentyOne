@@ -259,6 +259,9 @@ public class Table {
 		if(playerHand.get(playerHand.size() - 1).getValue() == "A") {
 			
 			// check dealerPos has been set
+			/*
+			 * ! potential null pointer exception
+			 */
 			if(this.dealerPos != -1) {
 				
 				// set current dealer to false

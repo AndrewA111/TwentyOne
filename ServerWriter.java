@@ -32,7 +32,7 @@ public class ServerWriter implements Runnable{
 				os.writeObject(new MessageToClient(1, 
 													this.player.getID(), 
 													this.table.getPlayers(), 
-													this.player.getTablePos(), 
+													this.player, 
 													model.getTable().getGameMessage()));
 				this.table.unlock();
 				/*

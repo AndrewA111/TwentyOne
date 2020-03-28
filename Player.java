@@ -7,7 +7,7 @@ public class Player implements Serializable {
 	private String name;
 	
 	/*
-	 * ! to be removed
+	 * ! to be removed, check this?
 	 */
 	private int tablePos = -1;
 	

@@ -199,7 +199,7 @@ public class Client2 extends JFrame implements ActionListener {
 			int ID = mostRecent.getClientID();
 			
 			// position at table ( -1 represents player not sat at table)
-			int pos = mostRecent.getPos();
+			int pos = mostRecent.getPlayer().getTablePos();
 			
 			/*
 			 * Check where this player is sat (if anywhere)
