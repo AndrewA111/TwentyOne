@@ -18,6 +18,10 @@ public class Server {
 	private static Table table;
 	private static Deck deck;
 	
+	/*
+	 * 
+	 */
+	private static int globalID = 0;
 	
 	/**
 	 * Class to produce threads to communicate with clients
@@ -35,35 +39,45 @@ public class Server {
 		 * ID of client associated with this thread
 		 */
 		private int clientID;
-
+		
+		/*
+		 * Object reference to track player associated with this thread
+		 */
+		private Player player;
+		
 		/*
 		 * Constructor
 		 */
 		public ClientThread(Socket s) {
 			this.socket = s;
 			
-			/*
-			 * Assign player to first empty seat
-			 */
-			for(int i = 0; i < table.getPlayers().length; i++) {
-				if(table.getPlayers()[i] == null) {
-					
-					this.clientID = i;
-					
-					/*
-					 * Auto-generate player names for now !!
-					 */
-					String playerName = "Player" + (i+1);
-					
-					/*
-					 * ID logic needs updating !!
-					 */
-					System.out.println(table.addPlayer(new Player(i, playerName, i), i));
-//					table.getPlayers()[i] = new Player(i, playerName, i);
 
-					break;
-				}
-			}
+			// add next available ID		
+			this.clientID = Server.globalID;
+			
+			
+		
+			
+			// increment global ID
+			Server.globalID++;
+			
+			/*
+			 * Auto-generate player names for now !!
+			 */
+			String playerName = "Player" + (this.clientID);
+			
+			/*
+			 * Create player
+			 */
+			this.player = new Player(clientID, playerName);
+			
+			/*
+			 * Add player to model
+			 */
+			model.addPlayer(this.player);
+
+
+			
 
 		}
 		
@@ -72,8 +86,12 @@ public class Server {
 			/*
 			 * Create and start read and write threads
 			 */
-			Thread readThread = new Thread(new ServerReader(this.socket, model));
-			Thread writeThread = new Thread(new ServerWriter(this.socket, model, this.clientID));
+			Thread readThread = new Thread(new ServerReader(this.socket, 
+											model,
+											this.player));
+			Thread writeThread = new Thread(new ServerWriter(this.socket, 
+											model, 
+											this.player));
 			readThread.start();
 			writeThread.start();
 			

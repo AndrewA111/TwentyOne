@@ -5,7 +5,11 @@ public class Player implements Serializable {
 	
 	private int ID;
 	private String name;
-	private int tablePos;
+	
+	/*
+	 * ! to be removed, check this?
+	 */
+	private int tablePos = -1;
 	
 	private Hand hand;
 	
@@ -17,6 +21,8 @@ public class Player implements Serializable {
 	
 	private boolean ableToChangeStake;
 	private boolean ableToDrawOrStand;
+	private boolean ableToJoin;
+	private boolean ableToLeave;
 	
 	private boolean dealer;
 	
@@ -27,12 +33,11 @@ public class Player implements Serializable {
 	 */
 	private int drawOrStand;
 	
-	public Player(int ID, String name, int tablePos) {
+	public Player(int ID, String name) {
 		
 		this.ID = ID;
 		this.name = name;
 		this.balance = 200;
-		this.tablePos = tablePos;
 		this.dealer = false;
 		
 		/*
@@ -44,8 +49,10 @@ public class Player implements Serializable {
 		
 		this.hand = new Hand();
 		
-		this.ableToChangeStake = true;
+		this.ableToChangeStake = false;
 		this.ableToDrawOrStand = false;
+		this.ableToJoin = true;
+		this.ableToLeave = false;
 		
 	}
 	
@@ -127,6 +134,12 @@ public class Player implements Serializable {
 		return output;
 	}
 
+	
+	
+	public int getID() {
+		return ID;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -182,6 +195,23 @@ public class Player implements Serializable {
 	public void setDealer(boolean dealer) {
 		this.dealer = dealer;
 	}
+
+	public boolean isAbleToJoin() {
+		return ableToJoin;
+	}
+
+	public void setAbleToJoin(boolean ableToJoin) {
+		this.ableToJoin = ableToJoin;
+	}
+
+	public boolean isAbleToLeave() {
+		return ableToLeave;
+	}
+
+	public void setAbleToLeave(boolean ableToLeave) {
+		this.ableToLeave = ableToLeave;
+	}
+	
 	
 	
 	

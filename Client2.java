@@ -37,6 +37,9 @@ public class Client2 extends JFrame implements ActionListener {
 	JButton stand;
 	JButton draw;
 	
+	JButton join;
+	JButton leave;
+	
 	HandsPanel handsPanel;
 	
 	
@@ -94,6 +97,14 @@ public class Client2 extends JFrame implements ActionListener {
 		stand = new JButton("Stand");
 		stand.addActionListener(this);
 		buttonPanel.add(stand);
+		
+		join = new JButton("Join");
+		join.addActionListener(this);
+		buttonPanel.add(join);
+		
+		leave = new JButton("Leave");
+		leave.addActionListener(this);
+		buttonPanel.add(leave);
 		
 		southPanel.add(buttonPanel);
 		
@@ -183,13 +194,23 @@ public class Client2 extends JFrame implements ActionListener {
 			 */
 			MessageToClient mostRecent = messages.get(messages.size() -1);
 			
+			
+			
 			int ID = mostRecent.getClientID();
+			
+			// position at table ( -1 represents player not sat at table)
+			int pos = mostRecent.getPlayer().getTablePos();
+			
+			/*
+			 * Check where this player is sat (if anywhere)
+			 */
+			
 			
 			/*
 			 * !! Review
 			 */
-			if(Client2.this.getTitle() != ("Player: " + (ID + 1))) {
-				Client2.this.setTitle("Player: " + (ID + 1));
+			if(Client2.this.getTitle() != ("GameID: " + (ID))) {
+				Client2.this.setTitle("GameID: " + (ID));
 			}
 					
 			gameMessage.setText(mostRecent.getGameMessage());
@@ -199,10 +220,18 @@ public class Client2 extends JFrame implements ActionListener {
 			/*
 			 * Activate/deactivate buttons
 			 */
-			Client2.this.stakeUp.setEnabled(mostRecent.getPlayers()[ID].isAbleToChangeStake());
-			Client2.this.stakeDown.setEnabled(mostRecent.getPlayers()[ID].isAbleToChangeStake());
-			Client2.this.draw.setEnabled(mostRecent.getPlayers()[ID].isAbleToDrawOrStand());
-			Client2.this.stand.setEnabled(mostRecent.getPlayers()[ID].isAbleToDrawOrStand());
+
+			
+			Client2.this.join.setEnabled(mostRecent.getPlayer().isAbleToJoin());
+			Client2.this.leave.setEnabled(mostRecent.getPlayer().isAbleToLeave());
+			
+			
+			Client2.this.stakeUp.setEnabled(mostRecent.getPlayer().isAbleToChangeStake());
+			Client2.this.stakeDown.setEnabled(mostRecent.getPlayer().isAbleToChangeStake());
+			Client2.this.draw.setEnabled(mostRecent.getPlayer().isAbleToDrawOrStand());
+			Client2.this.stand.setEnabled(mostRecent.getPlayer().isAbleToDrawOrStand());
+			
+
 			
 			/*
 			 * !! needs refactoring
@@ -210,7 +239,12 @@ public class Client2 extends JFrame implements ActionListener {
 			 * Update player details according to most recent message
 			 */
 			
-			Client2.this.handsPanel.setPlayers(mostRecent.getPlayers());
+			if(mostRecent.getPlayers() != null) {
+				Client2.this.handsPanel.setPlayers(mostRecent.getPlayers());
+			}
+			
+			
+			
 			
 			// force panel repaint
 			Client2.this.handsPanel.repaint();
@@ -218,7 +252,7 @@ public class Client2 extends JFrame implements ActionListener {
 			// force buttons/text area to refresh
 			Client2.this.revalidate(); 
 
-			System.out.println("Running");
+//			System.out.println("Running");
 			
 
 			
@@ -261,6 +295,22 @@ public class Client2 extends JFrame implements ActionListener {
 		if(e.getSource() == stand) {
 			try {
 				os.writeObject(new MessageToServer(4, clientID));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		if(e.getSource() == join) {
+			try {
+				os.writeObject(new MessageToServer(5, clientID));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		if(e.getSource() == leave) {
+			try {
+				os.writeObject(new MessageToServer(6, clientID));
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

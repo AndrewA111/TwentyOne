@@ -6,10 +6,12 @@ public class ServerReader implements Runnable{
 	
 	private Socket socket;
 	private Model model;
+	private Player player;
 	
-	public ServerReader(Socket s, Model m) {
+	public ServerReader(Socket s, Model m, Player p) {
 		this.socket = s;
 		this.model = m;
+		this.player = p;
 	}
 	
 	public void run() {
@@ -20,16 +22,18 @@ public class ServerReader implements Runnable{
 			while(true) {
 				MessageToServer messageIn = (MessageToServer) is.readObject();
 				
+				int pos = this.player.getTablePos();
+				
 				System.out.println("Message code: " + messageIn.getCode());
 				
 				if(messageIn.getCode() == 1) {
-					if(this.model.getTable().getPlayers()[messageIn.getID()].isAbleToChangeStake()) {
-						this.model.getTable().getPlayers()[messageIn.getID()].stakeUp();
+					if(this.player.isAbleToChangeStake()) {
+						this.player.stakeUp();
 					}
 				}
 				if(messageIn.getCode() == 2) {
-					if(this.model.getTable().getPlayers()[messageIn.getID()].isAbleToChangeStake()) {
-						this.model.getTable().getPlayers()[messageIn.getID()].stakeDown();
+					if(this.player.isAbleToChangeStake()) {
+						this.player.stakeDown();
 					}
 					
 				}
@@ -37,23 +41,51 @@ public class ServerReader implements Runnable{
 				 * Draw
 				 */
 				if(messageIn.getCode() == 3) {
-					if(this.model.getTable().getPlayers()[messageIn.getID()].isAbleToDrawOrStand()) {
-						this.model.getTable().getPlayers()[messageIn.getID()].setDrawOrStand(1);;
+					if(this.player.isAbleToDrawOrStand()) {
+						this.player.setDrawOrStand(1);;
 					}
 				}
 				/*
 				 * Stand
 				 */
 				if(messageIn.getCode() == 4) {
-					if(this.model.getTable().getPlayers()[messageIn.getID()].isAbleToDrawOrStand()) {
-						this.model.getTable().getPlayers()[messageIn.getID()].setDrawOrStand(2);
+					if(this.player.isAbleToDrawOrStand()) {
+						this.player.setDrawOrStand(2);
 					}
 				}
 				
 				if(messageIn.getCode() == 5) {
-					this.model.lock();
-					this.model.getTable().getDeck().dealInitialCards(this.model.getTable().getPlayers(), this.model.getTable().getPlayers()[0]);
-					this.model.unlock();
+
+					this.model.getTable().addPlayer(player);
+					
+					// if full don't allow players to join
+					/*
+					 * ! check this is enforced on server
+					 */
+					if(this.model.getTable().getNoPlayers() >= 5) {
+						for(Player p : this.model.getGlobalPlayers()) {
+							p.setAbleToJoin(false);
+						}
+					}
+
+				}
+				
+				if(messageIn.getCode() == 6) {
+
+					this.model.getTable().removePlayer(this.player.getTablePos());
+					
+					/*
+					 * make sure new players can join
+					 */
+					for(Player p : this.model.getGlobalPlayers()) {
+						
+						// select only players not currently sitting at table
+						if(p.getTablePos() == -1) {
+							p.setAbleToJoin(true);
+						}
+						
+					}
+
 				}
 				
 			}

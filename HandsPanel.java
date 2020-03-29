@@ -75,8 +75,7 @@ public class HandsPanel extends JPanel {
 	    // use antialiasing to reduce effect of pixelation
 	    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	    
-	    // check players array has been received
-	    if(players != null) {
+	    
 	    	
 	    	// set font
 	    	g2d.setFont(new Font("Serif", Font.BOLD, this.TEXT_SIZE));
@@ -190,6 +189,8 @@ public class HandsPanel extends JPanel {
 	  	    	
 	  	    }
 	  	    
+	  	// check players array has been received
+	    if(players != null) {
 	  	    
 	  	    // card offset (within player's hand)
 	      	int hCardOffset = image.getWidth()/3;
