@@ -31,6 +31,16 @@ public class Table {
 		tableLock.unlock();
 	}
 	
+	/*
+	 * Method to call notifyAll() on this table object
+	 * 
+	 * This notifies the waiting ServerWriter threads to 
+	 * continue and send an updated gamestate to clients
+	 */
+	public synchronized void sendUpdate() {
+		this.notifyAll();
+	}
+	
 	public Table() {
 		
 		// set number of places at table

@@ -23,36 +23,44 @@ public class ServerWriter implements Runnable{
 	
 	public void run() {
 		
-		ObjectOutputStream os;
-		try {
-			os = new ObjectOutputStream(socket.getOutputStream());
+		synchronized(this.table) {
 			
-			while(true) {
-				synchronized(this.table) {
-					os.writeObject(new MessageToClient(1, 
-							this.player.getID(), 
-							this.table.getPlayers(), 
-							this.player, 
-							model.getTable().getGameMessage()));
-				}		
+			ObjectOutputStream os;
+			try {
+				os = new ObjectOutputStream(socket.getOutputStream());
+				
+				while(true) {
+					synchronized(this.table) {
+						os.writeObject(new MessageToClient(1, 
+								this.player.getID(), 
+								this.table.getPlayers(), 
+								this.player, 
+								model.getTable().getGameMessage()));
+					}		
 
 
-				/*
-				 * !! Flush and reset
-				 * Makes sure that up to date players array sent
-				 * as opposed previously serialized version 
-				 */
-				os.flush();
-				os.reset();
+					/*
+					 * !! Flush and reset
+					 * Makes sure that up to date players array sent
+					 * as opposed previously serialized version 
+					 */
+					os.flush();
+					os.reset();
 
-				Thread.sleep(50);
+//					Thread.sleep(100);
+					
+					System.out.println("ping");
+					
+					this.table.wait();
+				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
+		
 		
 		
 		while(true) {

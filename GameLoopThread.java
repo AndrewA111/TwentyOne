@@ -10,12 +10,20 @@ public class GameLoopThread implements Runnable{
 	private Table table;
 	
 	/*
+	 * Object to synchronize on and use to notify gameloop 
+	 * when a player has selected draw or stand
+	 */
+	private Object drawStandNotifier;
+	
+	/*
 	 * Constructor
 	 */
-	public GameLoopThread(Model model) {
+	public GameLoopThread(Model model, Object drawStandNotifier) {
 		this.model = model;
 		this.table = model.getTable();
+		this.drawStandNotifier = drawStandNotifier;
 	}
+	
 	
 	/*
 	 * Main game logic
@@ -32,6 +40,7 @@ public class GameLoopThread implements Runnable{
 			 * then wait 10s to start game
 			 * ==============================================
 			 */
+			
 			System.out.println("Waiting for players to arrive");
 			this.table.setGameMessage("Waiting for players to arrive");
 			
@@ -49,6 +58,9 @@ public class GameLoopThread implements Runnable{
 				}
 			}
 			
+			// send update to clients
+			this.table.sendUpdate();
+			
 			/*
 			 * Wait until 2 players have joined
 			 */
@@ -61,6 +73,9 @@ public class GameLoopThread implements Runnable{
 					}
 					
 				}
+				
+				// send update to clients
+				this.table.sendUpdate();
 				
 				System.out.println("Waiting for players to join.");
 				try {
@@ -124,6 +139,9 @@ public class GameLoopThread implements Runnable{
 								p.setAbleToJoin(false);
 							}
 						}
+						
+						// send update to clients
+						this.table.sendUpdate();
 					}
 					
 					
@@ -141,6 +159,9 @@ public class GameLoopThread implements Runnable{
 			
 			System.out.println("Selecting dealer");
 			this.table.setGameMessage("Selecting dealer");
+			
+			// send update to clients
+			this.table.sendUpdate();
 			
 			boolean aceFound = false;
 			
@@ -163,6 +184,9 @@ public class GameLoopThread implements Runnable{
 					aceFound = this.table.drawForAce();
 				}
 				
+				// send update to clients
+				this.table.sendUpdate();
+				
 					
 				try {
 					Thread.sleep(500);
@@ -178,6 +202,9 @@ public class GameLoopThread implements Runnable{
 			System.out.println("The dealer is: " + this.table.dealer().getName());
 			this.table.setGameMessage("The dealer is: " + this.table.dealer().getName());
 			
+			// send update to clients
+			this.table.sendUpdate();
+			
 			try {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
@@ -190,6 +217,9 @@ public class GameLoopThread implements Runnable{
 			synchronized(this.table) {
 				this.table.recallPlayerHands();
 			}
+			
+			// send update to clients
+			this.table.sendUpdate();
 			
 			/*
 			 * Shuffle deck
@@ -217,6 +247,9 @@ public class GameLoopThread implements Runnable{
 				// enable stake-placing
 				this.table.allowStakes(true);
 			}
+			
+			// send update to clients
+			this.table.sendUpdate();
 			
 			
 			try {
@@ -249,6 +282,9 @@ public class GameLoopThread implements Runnable{
 				System.out.println("The dealer is: " + this.table.dealer().getName());
 				this.table.setGameMessage("The dealer is: " + this.table.dealer().getName());
 				
+				// send update to clients
+				this.table.sendUpdate();
+				
 				try {
 					Thread.sleep(3000);
 				} catch (InterruptedException e) {
@@ -256,7 +292,7 @@ public class GameLoopThread implements Runnable{
 				}
 				
 				/*
-				 * Recall player hands and shuffle
+				 * Shuffle
 				 */
 				System.out.println("Unshuffled deck:\n" + this.table.getDeck());
 				this.table.getDeck().shuffle();
@@ -292,6 +328,9 @@ public class GameLoopThread implements Runnable{
 						if(this.table.currentPlayer() == this.table.dealer()) {
 							loops++;
 						}
+						
+						// send update to clients
+						this.table.sendUpdate();
 					}
 
 					
@@ -323,9 +362,14 @@ public class GameLoopThread implements Runnable{
 					if(vingtUn) {
 						this.table.recallPlayerHands();
 						
+						// send update to clients
+						this.table.sendUpdate();
+						
 						/*
 						 * ! Add a pause and some indication of 21
 						 */
+						
+						
 					}
 				}
 
@@ -352,8 +396,12 @@ public class GameLoopThread implements Runnable{
 							this.table.currentPlayer().setAbleToDrawOrStand(true);
 							
 							
-							// check whether player wants to draw or stand
-							playerChoice = (this.table.currentPlayer().getDrawOrStand());
+//							// check whether player wants to draw or stand
+//							playerChoice = (this.table.currentPlayer().getDrawOrStand());
+							playerChoice = -1;
+							
+							// send update to clients
+							this.table.sendUpdate();
 						}
 
 						
@@ -365,6 +413,18 @@ public class GameLoopThread implements Runnable{
 						 * 	2 stand
 						 */
 						while(!(playerChoice == 2)) {
+							
+							// wait until client makes a decision
+							synchronized(this.drawStandNotifier) {
+								try {
+									this.drawStandNotifier.wait();
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+							}
+							
+							// check whether player wants to draw or stand
+							playerChoice = (this.table.currentPlayer().getDrawOrStand());
 								
 								try {
 									/*
@@ -374,7 +434,8 @@ public class GameLoopThread implements Runnable{
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}
-	
+								
+								System.out.println("pong");
 							
 							/*
 							 * If player selects to draw, deal card
@@ -394,6 +455,9 @@ public class GameLoopThread implements Runnable{
 							}
 
 							playerChoice = this.table.currentPlayer().getDrawOrStand();
+							
+							// send update to clients
+							this.table.sendUpdate();
 
 						}
 						
@@ -413,6 +477,12 @@ public class GameLoopThread implements Runnable{
 						
 						// increment player
 						this.table.incrementCurrentPlayer();
+						
+						// send update to clients
+						this.table.sendUpdate();
+						
+						
+						
 
 					}
 					
@@ -463,6 +533,9 @@ public class GameLoopThread implements Runnable{
 							p.setAbleToJoin(true);
 						}
 					}
+					
+					// send update to clients
+					this.table.sendUpdate();
 					
 					try {
 						Thread.sleep(10000);

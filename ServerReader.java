@@ -7,11 +7,20 @@ public class ServerReader implements Runnable{
 	private Socket socket;
 	private Model model;
 	private Player player;
+	private Table table;
 	
-	public ServerReader(Socket s, Model m, Player p) {
+	/*
+	 * Object to synchronize on and use to notify gameloop 
+	 * when a player has selected draw or stand
+	 */
+	private Object drawStandNotifier;
+	
+	public ServerReader(Socket s, Model m, Player p, Object drawStandNotifier) {
 		this.socket = s;
 		this.model = m;
 		this.player = p;
+		this.table = this.model.getTable();
+		this.drawStandNotifier = drawStandNotifier;
 	}
 	
 	public void run() {
@@ -30,11 +39,17 @@ public class ServerReader implements Runnable{
 					if(this.player.isAbleToChangeStake()) {
 						this.player.stakeUp();
 					}
+					
+					// send update to clients
+					this.table.sendUpdate();
 				}
 				if(messageIn.getCode() == 2) {
 					if(this.player.isAbleToChangeStake()) {
 						this.player.stakeDown();
 					}
+					
+					// send update to clients
+					this.table.sendUpdate();
 					
 				}
 				/*
@@ -44,6 +59,10 @@ public class ServerReader implements Runnable{
 					if(this.player.isAbleToDrawOrStand()) {
 						this.player.setDrawOrStand(1);;
 					}
+					
+					synchronized(this.drawStandNotifier) {
+						this.drawStandNotifier.notifyAll();
+					}
 				}
 				/*
 				 * Stand
@@ -51,6 +70,10 @@ public class ServerReader implements Runnable{
 				if(messageIn.getCode() == 4) {
 					if(this.player.isAbleToDrawOrStand()) {
 						this.player.setDrawOrStand(2);
+					}
+					
+					synchronized(this.drawStandNotifier) {
+						this.drawStandNotifier.notifyAll();
 					}
 				}
 				
@@ -67,6 +90,9 @@ public class ServerReader implements Runnable{
 							p.setAbleToJoin(false);
 						}
 					}
+					
+					// send update to clients
+					this.table.sendUpdate();
 
 				}
 				
@@ -85,6 +111,9 @@ public class ServerReader implements Runnable{
 						}
 						
 					}
+					
+					// send update to clients
+					this.table.sendUpdate();
 
 				}
 				
