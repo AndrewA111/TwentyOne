@@ -105,8 +105,20 @@ public class Table {
 		if(pos == this.dealerPos) {
 			this.incrementDealerPos();
 		}
+		
+		// set button states
+		this.players[pos].setAbleToChangeStake(false);
+		this.players[pos].setAbleToDrawOrStand(false);
+		this.players[pos].setAbleToLeave(false);
+		this.players[pos].setAbleToJoin(true);
+		
+		// indicate player no longer at table
 		this.players[pos].setTablePos(-1);
+		
+		// remove table reference to player
 		this.players[pos] = null;
+		
+		// update no players
 		this.noPlayers--;
 	}
 	

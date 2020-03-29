@@ -220,30 +220,18 @@ public class Client2 extends JFrame implements ActionListener {
 			/*
 			 * Activate/deactivate buttons
 			 */
-			if(pos != -1) {
+
 			
-			/*
-			 * Player is sat at table, allow leaving and prevent joining
-			 */
-			Client2.this.join.setEnabled(mostRecent.getPlayers()[pos].isAbleToJoin());
-			Client2.this.leave.setEnabled(mostRecent.getPlayers()[pos].isAbleToLeave());
+			Client2.this.join.setEnabled(mostRecent.getPlayer().isAbleToJoin());
+			Client2.this.leave.setEnabled(mostRecent.getPlayer().isAbleToLeave());
 			
 			
-			Client2.this.stakeUp.setEnabled(mostRecent.getPlayers()[pos].isAbleToChangeStake());
-			Client2.this.stakeDown.setEnabled(mostRecent.getPlayers()[pos].isAbleToChangeStake());
-			Client2.this.draw.setEnabled(mostRecent.getPlayers()[pos].isAbleToDrawOrStand());
-			Client2.this.stand.setEnabled(mostRecent.getPlayers()[pos].isAbleToDrawOrStand());
-			}
-			else {
-				/*
-				 * Player not sat at table, allow joining and prevent leaving
-				 */
-				/*
-				 * ! Need to update this to check whether space at table
-				 */
-				Client2.this.join.setEnabled(true);
-				Client2.this.leave.setEnabled(false);
-			}
+			Client2.this.stakeUp.setEnabled(mostRecent.getPlayer().isAbleToChangeStake());
+			Client2.this.stakeDown.setEnabled(mostRecent.getPlayer().isAbleToChangeStake());
+			Client2.this.draw.setEnabled(mostRecent.getPlayer().isAbleToDrawOrStand());
+			Client2.this.stand.setEnabled(mostRecent.getPlayer().isAbleToDrawOrStand());
+			
+
 			
 			/*
 			 * !! needs refactoring

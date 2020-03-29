@@ -23,6 +23,8 @@ public class GameLoopThread implements Runnable{
 	public void run() {
 		
 		while(true) {
+			
+			
 		
 			/*
 			 * ==============================================
@@ -38,9 +40,30 @@ public class GameLoopThread implements Runnable{
 			int numPlayers = 0;
 			
 			/*
+			 * Allow players to join
+			 * ! needs to be synchronized?
+			 */
+			for(Player p : this.model.getGlobalPlayers()) {
+				
+				// select only players not currently sitting at table
+				if(p.getTablePos() == -1) {
+					p.setAbleToJoin(true);
+				}
+			}
+			
+			/*
 			 * Wait until 2 players have joined
 			 */
 			while(numPlayers < 2) {
+				
+				// if a player remains, let them leave
+				for(Player p : this.table.getPlayers()) {
+					if(p != null) {
+						p.setAbleToLeave(true);
+					}
+					
+				}
+				
 				System.out.println("Waiting for players to join.");
 				try {
 					Thread.sleep(5000);
@@ -96,7 +119,17 @@ public class GameLoopThread implements Runnable{
 				}
 			}
 			
-			
+			/*
+			 * \Stop players from joining
+			 * ! needs to be synchronized?
+			 */
+			for(Player p : this.model.getGlobalPlayers()) {
+				
+				// select only players not currently sitting at table
+				if(p.getTablePos() == -1) {
+					p.setAbleToJoin(false);
+				}
+			}
 			
 			/*
 			 * =============================
@@ -170,6 +203,8 @@ public class GameLoopThread implements Runnable{
 			this.table.lock();
 			System.out.println("Players have 10s to place stake");
 			this.table.setGameMessage("Players have 10s to place stake");
+			// disable stake-placing
+			this.table.allowStakes(true);
 			
 			// enable stake-placing
 			this.table.allowStakes(true);
@@ -188,6 +223,16 @@ public class GameLoopThread implements Runnable{
 			 */
 			while(this.table.getNoPlayers() >= 2) {
 				
+				// disable stake-placing
+				this.table.allowStakes(false);
+				
+				
+				for(Player p : this.table.getPlayers()) {
+					if(p != null) {
+						p.setAbleToLeave(false);
+					}
+					
+				}
 
 				/*
 				 * Announce dealer
@@ -398,6 +443,18 @@ public class GameLoopThread implements Runnable{
 						
 					}
 					
+					/*
+					 * Allow players to join
+					 * ! needs to be synchronized?
+					 */
+					for(Player p : this.model.getGlobalPlayers()) {
+						
+						// select only players not currently sitting at table
+						if(p.getTablePos() == -1 && this.table.getNoPlayers() < 5) {
+							p.setAbleToJoin(true);
+						}
+					}
+					
 					
 					
 					
@@ -417,16 +474,16 @@ public class GameLoopThread implements Runnable{
 					
 					numPlayers = this.table.getNoPlayers();
 					
-					// disable stake-placing
-					this.table.allowStakes(false);
-					
-					
-					for(Player p : this.table.getPlayers()) {
-						if(p != null) {
-							p.setAbleToLeave(false);
-						}
-						
-					}
+//					// disable stake-placing
+//					this.table.allowStakes(false);
+//					
+//					
+//					for(Player p : this.table.getPlayers()) {
+//						if(p != null) {
+//							p.setAbleToLeave(false);
+//						}
+//						
+//					}
 					
 					this.table.unlock();
 				}

@@ -49,7 +49,7 @@ public class Player implements Serializable {
 		
 		this.hand = new Hand();
 		
-		this.ableToChangeStake = true;
+		this.ableToChangeStake = false;
 		this.ableToDrawOrStand = false;
 		this.ableToJoin = true;
 		this.ableToLeave = false;

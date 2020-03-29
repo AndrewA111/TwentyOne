@@ -57,12 +57,34 @@ public class ServerReader implements Runnable{
 				if(messageIn.getCode() == 5) {
 
 					this.model.getTable().addPlayer(player);
+					
+					// if full don't allow players to join
+					/*
+					 * ! check this is enforced on server
+					 */
+					if(this.model.getTable().getNoPlayers() >= 5) {
+						for(Player p : this.model.getGlobalPlayers()) {
+							p.setAbleToJoin(false);
+						}
+					}
 
 				}
 				
 				if(messageIn.getCode() == 6) {
 
 					this.model.getTable().removePlayer(this.player.getTablePos());
+					
+					/*
+					 * make sure new players can join
+					 */
+					for(Player p : this.model.getGlobalPlayers()) {
+						
+						// select only players not currently sitting at table
+						if(p.getTablePos() == -1) {
+							p.setAbleToJoin(true);
+						}
+						
+					}
 
 				}
 				
