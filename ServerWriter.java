@@ -28,13 +28,15 @@ public class ServerWriter implements Runnable{
 			os = new ObjectOutputStream(socket.getOutputStream());
 			
 			while(true) {
-				this.table.lock();			
-				os.writeObject(new MessageToClient(1, 
-													this.player.getID(), 
-													this.table.getPlayers(), 
-													this.player, 
-													model.getTable().getGameMessage()));
-				this.table.unlock();
+				synchronized(this.table) {
+					os.writeObject(new MessageToClient(1, 
+							this.player.getID(), 
+							this.table.getPlayers(), 
+							this.player, 
+							model.getTable().getGameMessage()));
+				}		
+
+
 				/*
 				 * !! Flush and reset
 				 * Makes sure that up to date players array sent
