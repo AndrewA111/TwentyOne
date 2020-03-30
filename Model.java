@@ -1,10 +1,22 @@
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * Model for TwentyOne game
+ * @author Andrew
+ *
+ */
 public class Model {
 	
+	/**
+	 * Table
+	 */
 	private Table table;
 	private Deck deck;
+	
+	/**
+	 * Global players list
+	 */
 	private ArrayList<Player> globalPlayers;
 	
 	/*
@@ -15,7 +27,14 @@ public class Model {
 	
 	public Model() {
 		
+		/*
+		 * Create new table
+		 */
 		this.table = new Table();
+		
+		/*
+		 * Create new global player list
+		 */
 		this.globalPlayers = new ArrayList<Player>();
 		
 	}
@@ -28,19 +47,19 @@ public class Model {
 		System.out.println(this.deck);
 		this.deck.shuffle();
 		System.out.println(this.deck);
-		
-//		
-//		this.deck.dealInitialCards(table.getPlayers());
-//		System.out.println("\n" + this.table);	
-//		System.out.println("\n" + this.deck);
+
 		
 	}
 	
+	/**
+	 * Method to add a new player to global players list
+	 * @param p
+	 */
 	public void addPlayer(Player p) {
 		this.globalPlayers.add(p);
 	}
 
-
+	
 	public Table getTable() {
 		return table;
 	}

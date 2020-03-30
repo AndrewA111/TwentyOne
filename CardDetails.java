@@ -5,6 +5,14 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+/**
+ * Helper class to store and access data for representing cards
+ * 
+ * Used for building deck and referencing cards and their values
+ * 
+ * @author Andrew
+ *
+ */
 public class CardDetails {
 	/**
 	 * Suits
@@ -24,21 +32,27 @@ public class CardDetails {
 	 */
 	private static HashMap<String, Integer> valueMap;
 	
+	/**
+	 * Ace high value
+	 */
+	private static final int aceHigh = 11;
 	
 	/**
-	 * HashMap to store blank card images for each suit
-
+	 * Ace low value
 	 */
-	private static HashMap<Character, BufferedImage> blankCardMap;
-	
-	
+	private static final int aceLow = 1;
+
 	/**
 	 * Constructor
-	 * 
-	 * Populate hashmap with value pairing on creation of class
 	 */
 	public CardDetails() {
-		
+
+		/*
+		 * Populate hashmap with value pairing on creation of class
+		 * 
+		 * (Excludes aces, these are dealt with using 'aceLow' 
+		 * and 'aceHigh' variables)
+		 */
 		valueMap = new HashMap<String, Integer>();
 		CardDetails.valueMap.put("2", 2);
 		CardDetails.valueMap.put("3", 3);
@@ -55,38 +69,45 @@ public class CardDetails {
 		
 	}
 	
+
+
+
 	/**
-	 * Ace high value
+	 * Getter for suits array
+	 * @return suits
 	 */
-	private static final int aceHigh = 11;
-	
-	/**
-	 * Ace low value
-	 */
-	private static final int aceLow = 1;
-
-
-
 	public static char[] getSuits() {
 		return suits;
 	}
-
+	
+	/**
+	 * Getter for values array
+	 * @return values
+	 */
 	public static String[] getValues() {
 		return values;
 	}
-
+	
+	/**
+	 * Getter for valueMap
+	 * @return valueMap
+	 */
 	public static HashMap<String, Integer> getValueMap() {
 		return valueMap;
 	}
-
-	public static HashMap<Character, BufferedImage> getBlankCardMap() {
-		return blankCardMap;
-	}
-
+	
+	/**
+	 * Getter for aceHigh value
+	 * @return
+	 */
 	public static int getAcehigh() {
 		return aceHigh;
 	}
-
+	
+	/**
+	 * Getter for aceLow value
+	 * @return
+	 */
 	public static int getAcelow() {
 		return aceLow;
 	}

@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Class to represent standard 52-card deck
+ * Class to build and represent standard 52-card deck
  * @author Andrew
  *
  */
@@ -30,11 +30,20 @@ public class Deck {
 	 */
 	public Deck() {
 		
+		/*
+		 * Get details from CardDetails helper class
+		 */
 		suits = CardDetails.getSuits();
 		values = CardDetails.getValues();
 		
+		/*
+		 * Create empty arrayList to hold cards
+		 */
 		deck = new ArrayList<Card>();
 		
+		/*
+		 * For each suit, create one of each card value
+		 */
 		for(char suit : suits) {
 			for(String value : values) {
 				deck.add(new Card(value, suit));
@@ -42,47 +51,19 @@ public class Deck {
 		}
 	}
 	
+	/**
+	 * Method to shuffle order of deck
+	 */
 	public void shuffle() {
 		Collections.shuffle(deck);
 	}
 	
+	/**
+	 * Method to add card to end of deck
+	 * @param card card to be added to deck
+	 */
 	public void addCard(Card card) {
 		this.deck.add(card);
-	}
-	
-	/**
-	 * Deal 2 cards to each player, clockwise, starting immediately after dealer
-	 * (Clockwise is in a positive direction through array)
-	 * @param players
-	 * @param dealer
-	 */
-	public void dealInitialCards(Player[] players, Player dealer) {
-		
-		/*
-		 * Get dealer position
-		 */
-		int dealerPos = -1;
-		
-		for(int i = 0; i < players.length; i++) {
-			if(players[i] == dealer) {
-				dealerPos = i;
-			}
-		}
-		
-		for(int i = (dealerPos + 1); i < (dealerPos + (2 * players.length) + 1); i++){
-			
-			// if player in position
-			if(players[i % players.length] != null) {
-				players[i % players.length].addCard(this.deck.remove(0));
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		
 	}
 	
 	/**
@@ -106,7 +87,11 @@ public class Deck {
 		
 		return output;
 	}
-
+	
+	/**
+	 * Getter for deck
+	 * @return deck
+	 */
 	public ArrayList<Card> getDeck() {
 		return deck;
 	}

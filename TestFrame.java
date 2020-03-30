@@ -14,7 +14,7 @@ public class TestFrame extends JFrame{
 		this.setSize(900, 700);
 
 		
-		HandsPanel testPanel = new HandsPanel(createPlayersArray());
+		TablePanel testPanel = new TablePanel(createPlayersArray());
 		this.add(testPanel);
 		
 		

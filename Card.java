@@ -8,7 +8,9 @@ import java.util.HashMap;
  */
 public class Card implements Serializable {
 	
-	// 2,3...10,J,Q,K,A
+	/*
+	 * Card symbol: 2,3...10,J,Q,K,A
+	 */
 	private String symbol;
 	
 	/*
