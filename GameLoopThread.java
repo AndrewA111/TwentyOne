@@ -353,13 +353,13 @@ public class GameLoopThread implements Runnable{
 				boolean dealerHasPlayed = false;
 				
 				// boolean to store whether a 21 is found
-				boolean vingtUn;
+				boolean twentyOne;
 				
 				synchronized(this.table) {
 					// check for 21
-					vingtUn = this.table.checkVingtUn();
+					twentyOne = this.table.checkTwentyOne();
 					
-					if(vingtUn) {
+					if(twentyOne) {
 						this.table.recallPlayerHands();
 						
 						// send update to clients
@@ -375,7 +375,7 @@ public class GameLoopThread implements Runnable{
 
 				
 				// if no 21
-				if(!vingtUn) {
+				if(!twentyOne) {
 					
 					// start from player after dealer
 					this.table.resetToDealerPos();

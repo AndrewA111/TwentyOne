@@ -97,7 +97,7 @@ public class TestWin {
 		
 		System.out.println("Dealer: " + t.dealer().getName() + "\n");
 		
-		System.out.println("\nVingtUn() returns: " + t.checkVingtUn());
+		System.out.println("\ncheckTwentyOne() returns: " + t.checkTwentyOne());
 		
 		System.out.println("\nPlayers all pay 20 to dealer:");
 		
@@ -133,7 +133,7 @@ public class TestWin {
 		
 		System.out.println("Dealer: " + t.dealer().getName() + "\n");
 		
-		System.out.println("\nVingtUn() returns: " + t.checkVingtUn());
+		System.out.println("\ncheckTwentyOne() returns: " + t.checkTwentyOne());
 		
 		System.out.println("\nPlayers all pay double stake (2 x 20) to player2:");
 		
@@ -168,7 +168,7 @@ public class TestWin {
 		
 		System.out.println("Dealer: " + t.dealer().getName() + "\n");
 		
-		System.out.println("\nVingtUn() returns: " + t.checkVingtUn());
+		System.out.println("\ncheckTwentyOne()() returns: " + t.checkTwentyOne());
 		
 		System.out.println("\nResult?");
 		
@@ -203,7 +203,7 @@ public class TestWin {
 		
 		System.out.println("Dealer: " + t.dealer().getName() + "\n");
 		
-		System.out.println("\nVingtUn() returns: " + t.checkVingtUn());
+		System.out.println("\ncheckTwentyOne()() returns: " + t.checkTwentyOne());
 		
 		System.out.println("\nPlayer 4 takes stakes as is first in order (from dealer)");
 		
@@ -240,7 +240,7 @@ public class TestWin {
 		
 		System.out.println("Dealer: " + t.dealer().getName() + "\n");
 		
-		System.out.println("VingtUn() returns: " + t.checkVingtUn());
+		System.out.println("checkTwentyOne()() returns: " + t.checkTwentyOne());
 		
 		// check winners and exchange stakes
 		System.out.println("\nChecking winners and exchanging stakes");
