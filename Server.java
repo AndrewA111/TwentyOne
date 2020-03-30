@@ -19,6 +19,12 @@ public class Server {
 	private static Deck deck;
 	
 	/*
+	 * Object to synchronize on and use to notify gameloop 
+	 * when a player has selected draw or stand
+	 */
+	private static Object drawStandNotifier;
+	
+	/*
 	 * 
 	 */
 	private static int globalID = 0;
@@ -44,6 +50,8 @@ public class Server {
 		 * Object reference to track player associated with this thread
 		 */
 		private Player player;
+		
+		
 		
 		/*
 		 * Constructor
@@ -88,7 +96,8 @@ public class Server {
 			 */
 			Thread readThread = new Thread(new ServerReader(this.socket, 
 											model,
-											this.player));
+											this.player,
+											drawStandNotifier));
 			Thread writeThread = new Thread(new ServerWriter(this.socket, 
 											model, 
 											this.player));
@@ -106,6 +115,7 @@ public class Server {
 		model = new Model();
 		table = model.getTable();
 		deck = model.getDeck();
+		drawStandNotifier = new Object();
 		
 		try {
 			/*
@@ -116,7 +126,7 @@ public class Server {
 			/*
 			 * Main game logic thread
 			 */
-			Thread gameThread = new Thread(new GameLoopThread(model));
+			Thread gameThread = new Thread(new GameLoopThread(model, drawStandNotifier));
 			gameThread.start();
 			
 			/*
