@@ -48,7 +48,7 @@ public class Table {
 	 * Method to call notifyAll() on this table object
 	 * 
 	 * This notifies the waiting ServerWriter threads to 
-	 * continue and send an updated gamestate to clients
+	 * continue and send an updated game state to clients
 	 */
 	public synchronized void sendUpdate() {
 		this.notifyAll();

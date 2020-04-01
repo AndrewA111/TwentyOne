@@ -55,7 +55,7 @@ public class ServerWriter implements Runnable{
 				
 				while(true) {
 					
-					// synchronize writing to prevent concurrent modification exception
+					// synchronize writing to prevent concurrent modification
 					synchronized(this.table) {
 						
 						/*
@@ -66,8 +66,6 @@ public class ServerWriter implements Runnable{
 								this.table.getPlayers(), 
 								this.player, 
 								model.getTable().getGameMessage()));
-						
-
 
 					/*
 					 * Flush and reset to ensure that up-to-date players array 
@@ -75,9 +73,6 @@ public class ServerWriter implements Runnable{
 					 */
 					os.flush();
 					os.reset();
-					
-					// for testing to monitor when messages sent
-					System.out.println("ping");
 					
 					/*
 					 * Thread set to wait. 

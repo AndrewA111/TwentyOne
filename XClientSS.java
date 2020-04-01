@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 
-public class ClientSS extends JFrame implements ActionListener {
+public class XClientSS extends JFrame implements ActionListener {
 	
 	private static int PORT = 8765;
 	private static String server = "127.0.0.1";
@@ -48,7 +48,7 @@ public class ClientSS extends JFrame implements ActionListener {
 	
 	private ObjectOutputStream os;
 	
-	public ClientSS() {
+	public XClientSS() {
 		
 		/*
 		 * Initialize hashmap for valuing hands
@@ -183,8 +183,8 @@ public class ClientSS extends JFrame implements ActionListener {
 			/*
 			 * !! Review
 			 */
-			if(ClientSS.this.getTitle() != ("Player: " + (ID + 1))) {
-				ClientSS.this.setTitle("Player: " + (ID + 1));
+			if(XClientSS.this.getTitle() != ("Player: " + (ID + 1))) {
+				XClientSS.this.setTitle("Player: " + (ID + 1));
 			}
 					
 			gameMessage.setText(mostRecent.getGameMessage());
@@ -194,10 +194,10 @@ public class ClientSS extends JFrame implements ActionListener {
 			/*
 			 * Activate/deactivate buttons
 			 */
-			ClientSS.this.stakeUp.setEnabled(mostRecent.getPlayers()[ID].isAbleToChangeStake());
-			ClientSS.this.stakeDown.setEnabled(mostRecent.getPlayers()[ID].isAbleToChangeStake());
-			ClientSS.this.draw.setEnabled(mostRecent.getPlayers()[ID].isAbleToDrawOrStand());
-			ClientSS.this.stand.setEnabled(mostRecent.getPlayers()[ID].isAbleToDrawOrStand());
+			XClientSS.this.stakeUp.setEnabled(mostRecent.getPlayers()[ID].isAbleToChangeStake());
+			XClientSS.this.stakeDown.setEnabled(mostRecent.getPlayers()[ID].isAbleToChangeStake());
+			XClientSS.this.draw.setEnabled(mostRecent.getPlayers()[ID].isAbleToDrawOrStand());
+			XClientSS.this.stand.setEnabled(mostRecent.getPlayers()[ID].isAbleToDrawOrStand());
 			
 			/*
 			 * !! needs refactoring
@@ -238,7 +238,7 @@ public class ClientSS extends JFrame implements ActionListener {
 	
 	public static void main(String[] args) {
 		
-		new ClientSS();
+		new XClientSS();
 		
 	}
 

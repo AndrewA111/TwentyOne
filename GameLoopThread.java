@@ -390,7 +390,7 @@ public class GameLoopThread implements Runnable{
 						synchronized(this.table) {
 							//notify who is playing
 							System.out.println(this.table.currentPlayer().getName() + ". Draw or stand?");
-							this.table.setGameMessage(this.table.currentPlayer().getName() + ". Draw or stand? 10s to choose");
+							this.table.setGameMessage(this.table.currentPlayer().getName() + ". Draw or stand?");
 		
 							// set flags that player is able to select draw/stand
 							this.table.currentPlayer().setAbleToDrawOrStand(true);
