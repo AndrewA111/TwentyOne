@@ -322,6 +322,17 @@ public class Table {
 		}
 	}
 	
+	/**
+	 * Method to set all players at table's ableToLeave flags
+	 */
+	public void allowLeaving(boolean canLeave) {
+		for(Player player: this.players) {
+			if(player != null) {
+				player.setAbleToLeave(canLeave);
+			}
+		}
+	}
+	
 	/*
 	 * ===================
 	 * Deal Methods
@@ -447,8 +458,8 @@ public class Table {
 					// set flag for new dealer
 					this.dealer().setDealer(true);
 
-					System.out.println("Player " + (winnerPos + 1) + " has 21!");
-					this.gameMessage = "Player " + (winnerPos + 1) + " has 21!";
+					System.out.println(this.players[winnerPos].getName() + " has 21!");
+					this.gameMessage = this.players[winnerPos].getName()  + " has 21!";
 					
 					/*
 					 * Check hands of remaining players

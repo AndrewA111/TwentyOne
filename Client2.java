@@ -317,6 +317,7 @@ public class Client2 extends JFrame implements ActionListener {
 			Client2.this.handsPanel.repaint();
 			
 			// force buttons/text area to refresh
+			Client2.this.repaint();
 			Client2.this.revalidate(); 
 
 	

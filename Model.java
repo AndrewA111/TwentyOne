@@ -12,7 +12,6 @@ public class Model {
 	 * Table
 	 */
 	private Table table;
-	private Deck deck;
 	
 	/**
 	 * Global players list
@@ -39,18 +38,6 @@ public class Model {
 		
 	}
 	
-	/*
-	 * This needs updated to that dealer selection is first thing that happens
-	 */
-	public void newGame() {
-		this.deck = new Deck();
-		System.out.println(this.deck);
-		this.deck.shuffle();
-		System.out.println(this.deck);
-
-		
-	}
-	
 	/**
 	 * Method to add a new player to global players list
 	 * @param p
@@ -58,14 +45,26 @@ public class Model {
 	public void addPlayer(Player p) {
 		this.globalPlayers.add(p);
 	}
+	
+	/**
+	 * Method to set all players not currently at table able to join, 
+	 * so long as table isn't full
+	 * @param canJoin
+	 */
+	public void allowJoining(boolean allow) {
+		
+		for (Player p : this.globalPlayers) {
+			// select only players not currently sitting at table
+			if(p.getTablePos() == -1 && this.table.getNoPlayers() < 5) {
+				p.setAbleToJoin(allow);
+			}
+		}
+		
+	}
 
 	
 	public Table getTable() {
 		return table;
-	}
-	
-	public Deck getDeck() {
-		return deck;
 	}
 	
 	public ArrayList<Player> getGlobalPlayers() {
@@ -79,13 +78,7 @@ public class Model {
 	public void unlock() {
 		this.modelLock.unlock();
 	}
-
-
-	public static void main(String[] args) {
-		Model model = new Model();
-		
-
-	}
+	
 }
 
 

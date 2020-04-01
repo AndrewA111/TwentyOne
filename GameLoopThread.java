@@ -31,9 +31,7 @@ public class GameLoopThread implements Runnable{
 	public void run() {
 		
 		while(true) {
-			
-			
-		
+
 			/*
 			 * ==============================================
 			 * Wait until at least two players have arrived 
@@ -47,15 +45,10 @@ public class GameLoopThread implements Runnable{
 			int numPlayers = 0;
 			
 			/*
-			 * Allow players to join
-			 * ! needs to be synchronized?
+			 * Allow players to join if space available
 			 */
-			for(Player p : this.model.getGlobalPlayers()) {
-				
-				// select only players not currently sitting at table
-				if(p.getTablePos() == -1) {
-					p.setAbleToJoin(true);
-				}
+			if(this.table.getNoPlayers() < 5) {
+				this.model.allowJoining(true);
 			}
 			
 			// send update to clients
@@ -66,45 +59,40 @@ public class GameLoopThread implements Runnable{
 			 */
 			while(numPlayers < 2) {
 				
-				// if a player remains, let them leave
-				for(Player p : this.table.getPlayers()) {
-					if(p != null) {
-						p.setAbleToLeave(true);
-					}
-					
-				}
+				// if a single player remains, let them leave
+				this.table.allowLeaving(true);
 				
 				// send update to clients
 				this.table.sendUpdate();
 				
-				System.out.println("Waiting for players to join.");
 				try {
 					Thread.sleep(5000);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
 				/*
-				 * ! Synchronize?
+				 * Check number of players
 				 */
 				synchronized(this.table) {
 					numPlayers = this.table.getNoPlayers();
 				}
 			
 				/*
-				 * Once numPlayers >= 2, pause for 10s to allow other players to join
-				 * 
-				 * Carried out in while loop in case player leaves before game starts
-				 * 
+				 * Once numPlayers >= 2, wait for 10s to allow other players to join
 				 */
 				if(numPlayers >= 2) {
+					
 					/*
 					 * Once 2 players have joined, wait further 10s to 
 					 * start game, to allow more players to join
 					 */
 					System.out.println("10s for players to join");
 					this.table.setGameMessage("10s for players to join");
+					
+					// send update to clients
+					this.table.sendUpdate();
+					
 					try {
 						Thread.sleep(10000);
 					} catch (InterruptedException e) {
@@ -117,28 +105,21 @@ public class GameLoopThread implements Runnable{
 					 * Synchronize to prevent last-minute leaving/joining
 					 */
 					synchronized(this.table) {
+						
+						/*
+						 *  check number players at table
+						 */
 						numPlayers = this.table.getNoPlayers();
 						
 						/*
 						 * Stop players from leaving
 						 */
-						for(Player p : this.table.getPlayers()) {
-							if(p != null) {
-								p.setAbleToLeave(false);
-							}
-							
-						}
+						this.table.allowLeaving(false);
 						
 						/*
 						 * Stop players from joining
 						 */
-						for(Player p : this.model.getGlobalPlayers()) {
-							
-							// select only players not currently sitting at table
-							if(p.getTablePos() == -1) {
-								p.setAbleToJoin(false);
-							}
-						}
+						this.model.allowJoining(false);
 						
 						// send update to clients
 						this.table.sendUpdate();
@@ -163,6 +144,7 @@ public class GameLoopThread implements Runnable{
 			// send update to clients
 			this.table.sendUpdate();
 			
+			// boolean to indicate if an ace has been drawn
 			boolean aceFound = false;
 			
 			// set player to start from for drawing for ace
@@ -187,11 +169,10 @@ public class GameLoopThread implements Runnable{
 				// send update to clients
 				this.table.sendUpdate();
 				
-					
+				// 0.5s pause for visual dealing effect	
 				try {
 					Thread.sleep(500);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -239,8 +220,10 @@ public class GameLoopThread implements Runnable{
 			 * Allow players to vary stake for 10s
 			 */
 			synchronized(this.table) {
+				
 				System.out.println("Players have 10s to place stake");
 				this.table.setGameMessage("Players have 10s to place stake");
+				
 				// disable stake-placing
 				this.table.allowStakes(true);
 				
@@ -268,13 +251,8 @@ public class GameLoopThread implements Runnable{
 				// disable stake-placing
 				this.table.allowStakes(false);
 				
-				
-				for(Player p : this.table.getPlayers()) {
-					if(p != null) {
-						p.setAbleToLeave(false);
-					}
-					
-				}
+				// disable leaving
+				this.table.allowLeaving(false);
 
 				/*
 				 * Announce dealer
@@ -333,20 +311,15 @@ public class GameLoopThread implements Runnable{
 						this.table.sendUpdate();
 					}
 
-					
+					// 0.5s pause for visual dealing effect	
 					try {
 						Thread.sleep(500);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 				}
-				
-				
-				
-				/*
-				 * Start from player after dealer
-				 */
 
+				// Start from player after dealer
 				this.table.incrementCurrentPlayer();
 				
 				// boolean to check when everyone played
@@ -355,23 +328,33 @@ public class GameLoopThread implements Runnable{
 				// boolean to store whether a 21 is found
 				boolean twentyOne;
 				
+				/*
+				 * Synchronize to prevent concurrent modification exception
+				 */
 				synchronized(this.table) {
 					// check for 21
 					twentyOne = this.table.checkTwentyOne();
-					
-					if(twentyOne) {
-						this.table.recallPlayerHands();
-						
-						// send update to clients
-						this.table.sendUpdate();
-						
-						/*
-						 * ! Add a pause and some indication of 21
-						 */
-						
-						
-					}
 				}
+					
+				if(twentyOne) {
+					
+					// update to show message of who has 21
+					this.table.sendUpdate();
+					
+					try {
+						Thread.sleep(3000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					
+					// recall hands
+					this.table.recallPlayerHands();
+					
+					// update
+					this.table.sendUpdate();
+					
+				}
+
 
 				
 				// if no 21
@@ -443,7 +426,7 @@ public class GameLoopThread implements Runnable{
 							if(playerChoice == 1) {
 								System.out.println("Card drawn.");
 
-
+								// deal card
 								synchronized(this.table){
 									this.table.getDeck().dealSingleCard((this.table.currentPlayer()));
 								}
@@ -453,7 +436,8 @@ public class GameLoopThread implements Runnable{
 								
 
 							}
-
+							
+							// check player choice status
 							playerChoice = this.table.currentPlayer().getDrawOrStand();
 							
 							// send update to clients
@@ -480,13 +464,12 @@ public class GameLoopThread implements Runnable{
 						
 						// send update to clients
 						this.table.sendUpdate();
-						
-						
-						
 
 					}
 					
-					
+					/**
+					 * Exchange stakes based on final hands 
+					 */
 					synchronized(this.table) {
 						this.table.checkingWinnerEndRound();
 					}
@@ -515,24 +498,14 @@ public class GameLoopThread implements Runnable{
 					// enable stake-placing
 					this.table.allowStakes(true);
 					
-					for(Player p : this.table.getPlayers()) {
-						if(p != null) {
-							p.setAbleToLeave(true);
-						}
-						
-					}
+					// allow players to leave
+					this.table.allowLeaving(true);
 					
 					/*
 					 * Allow players to join
 					 * ! needs to be synchronized?
 					 */
-					for(Player p : this.model.getGlobalPlayers()) {
-						
-						// select only players not currently sitting at table
-						if(p.getTablePos() == -1 && this.table.getNoPlayers() < 5) {
-							p.setAbleToJoin(true);
-						}
-					}
+					this.model.allowJoining(true);
 					
 					// send update to clients
 					this.table.sendUpdate();

@@ -26,10 +26,6 @@ public class Server {
 	 */
 	private static Table table;
 	
-	/**
-	 * !
-	 */
-	private static Deck deck;
 	
 	/**
 	 * Object to synchronize on and use to notify gameloop 
@@ -136,16 +132,13 @@ public class Server {
 		 */
 		table = model.getTable();
 		
-		/*
-		 * !
-		 */
-		deck = model.getDeck();
 		
 		/*
 		 * Initialise object to synchronise on to 
 		 * control draw/stand request communication
 		 */
 		drawStandNotifier = new Object();
+		
 		
 		try {
 			/*
