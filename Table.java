@@ -44,6 +44,12 @@ public class Table {
 	 */
 	private int noPlayers;
 	
+	/**
+	 * Boolean to indicate whether game is at a 
+	 * stage where table can be joined
+	 */
+	private boolean joinable;
+	
 	/*
 	 * Method to call notifyAll() on this table object
 	 * 
@@ -79,6 +85,9 @@ public class Table {
 		
 		// initially no dealer
 		this.dealerPos = -1;
+		
+		// allow joining
+		this.joinable = true;
 		
 		/*
 		 * Initialize hashmap for valuing hands
@@ -324,11 +333,24 @@ public class Table {
 	
 	/**
 	 * Method to set all players at table's ableToLeave flags
+	 * @param canLeave
 	 */
 	public void allowLeaving(boolean canLeave) {
 		for(Player player: this.players) {
 			if(player != null) {
 				player.setAbleToLeave(canLeave);
+			}
+		}
+	}
+	
+	/**
+	 * Method to set all players'cards visibility flag
+	 * @param visible
+	 */
+	public void cardsVisible(boolean visible) {
+		for(Player player: this.players) {
+			if(player != null) {
+				player.setCardsVisible(visible);
 			}
 		}
 	}
@@ -617,6 +639,27 @@ public class Table {
 	public void setCurrentPlayer(int currentPlayer) {
 		this.currentPlayerPos = currentPlayer;
 	}
+	
+	/**
+	 * Getter for joinable
+	 * @return joinable
+	 */
+	public boolean isJoinable() {
+		return joinable;
+	}
+	
+	/**
+	 * Setter for joinable
+	 * @param joinable
+	 */
+	public void setJoinable(boolean joinable) {
+		this.joinable = joinable;
+	}
+	
+	
+	
+	
+	
 	
 	
 

@@ -58,6 +58,11 @@ public class Player implements Serializable {
 	 */
 	private boolean dealer;
 	
+	/**
+	 * Flag for whether players cards are visible to others
+	 */
+	private boolean cardsVisible;
+	
 	/*
 	 * Integer to indicate whether player wishes to draw or stand
 	 * 
@@ -83,7 +88,7 @@ public class Player implements Serializable {
 	 * @param ID Player ID
 	 * @param name Player name
 	 */
-	public Player(int ID, String name) {
+	public Player(int ID, String name, boolean canJoin) {
 		
 		this.ID = ID;
 		this.name = name;
@@ -110,10 +115,13 @@ public class Player implements Serializable {
 		this.ableToDrawOrStand = false;
 		
 		// enable joining
-		this.ableToJoin = true;
+		this.ableToJoin = canJoin;
 		
 		// disable leaving
 		this.ableToLeave = false;
+		
+		// initially set card visibility to false
+		this.cardsVisible = false;
 		
 	}
 	
@@ -370,6 +378,24 @@ public class Player implements Serializable {
 	public void setAbleToLeave(boolean ableToLeave) {
 		this.ableToLeave = ableToLeave;
 	}
+
+	/**
+	 * Getter for cards visibility flag
+	 * @return cardsVisible
+	 */
+	public boolean isCardsVisible() {
+		return cardsVisible;
+	}
+	
+	/**
+	 * Setter for cards visibility flag
+	 * @param cardsVisible
+	 */
+	public void setCardsVisible(boolean cardsVisible) {
+		this.cardsVisible = cardsVisible;
+	}
+	
+	
 	
 	
 	
