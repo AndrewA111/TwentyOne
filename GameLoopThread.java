@@ -59,78 +59,13 @@ public class GameLoopThread implements Runnable{
 			 */
 			while(numPlayers < 2) {
 				
-				// if a single player remains, let them leave
-				this.table.allowLeaving(true);
-				
-				// send update to clients
-				this.table.sendUpdate();
-				
-				try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				
-				/*
-				 * Check number of players
+				/**
+				 * Wait for players. Returns number of players when complete.
 				 */
-				synchronized(this.table) {
-					numPlayers = this.table.getNoPlayers();
-				}
-			
-				/*
-				 * Once numPlayers >= 2, wait for 10s to allow other players to join
-				 */
-				if(numPlayers >= 2) {
-					
-					/*
-					 * Once 2 players have joined, wait further 10s to 
-					 * start game, to allow more players to join
-					 */
-					System.out.println("10s for players to join");
-					this.table.setGameMessage("10s for players to join");
-					
-					// send update to clients
-					this.table.sendUpdate();
-					
-					try {
-						Thread.sleep(10000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					
-					/*
-					 * Check no one left in interim
-					 * 
-					 * Synchronize to prevent last-minute leaving/joining
-					 */
-					synchronized(this.table) {
-						
-						/*
-						 *  check number players at table
-						 */
-						numPlayers = this.table.getNoPlayers();
-						
-						/*
-						 * Stop players from leaving
-						 */
-						this.table.allowLeaving(false);
-						
-						/*
-						 * Stop players from joining
-						 */
-						this.model.allowJoining(false);
-						
-						// send update to clients
-						this.table.sendUpdate();
-					}
-					
-					
-					
-				}
+				numPlayers = this.waitForPlayers();
+				
 			}
-			
-			
+
 			
 			/*
 			 * =============================
@@ -534,5 +469,94 @@ public class GameLoopThread implements Runnable{
 		}
 		
 		
+	}
+	
+	/**
+	 * Method to wait check whether enough players (>=2) are at 
+	 * the table to start a game
+	 * 
+	 * If enough players have joined the table, 
+	 * a 10s wait is initiated for further players to join.
+	 * 
+	 * At the end of the 10s wait, joining/leaving capability is locked. 
+	 * Number of players at table is returned (as a check on number of
+	 * players remaing after 10s waiting period)
+	 * 
+	 * @return
+	 */
+	public int waitForPlayers() {
+		
+		// if a single player remains, let them leave
+		this.table.allowLeaving(true);
+		
+		// send update to clients
+		this.table.sendUpdate();
+		
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		// variable to store number of players
+		int playerCount;
+		
+		/*
+		 * Check number of players
+		 */
+		synchronized(this.table) {
+			playerCount = this.table.getNoPlayers();
+		}
+	
+		/*
+		 * Once numPlayers >= 2, wait for 10s to allow other players to join
+		 */
+		if(playerCount >= 2) {
+			
+			/*
+			 * Once 2 players have joined, wait further 10s to 
+			 * start game, to allow more players to join
+			 */
+			System.out.println("10s for players to join");
+			this.table.setGameMessage("10s for players to join");
+			
+			// send update to clients
+			this.table.sendUpdate();
+			
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			/*
+			 * Check no one left in interim
+			 * 
+			 * Synchronize to prevent last-minute leaving/joining
+			 */
+			synchronized(this.table) {
+
+				/*
+				 * Stop players from leaving
+				 */
+				this.table.allowLeaving(false);
+				
+				/*
+				 * Stop players from joining
+				 */
+				this.model.allowJoining(false);
+				
+				/*
+				 *  check number players at table
+				 */
+				playerCount = this.table.getNoPlayers();
+				
+				// send update to clients
+				this.table.sendUpdate();
+			}
+	
+		}
+		
+		return playerCount;
 	}
 }
