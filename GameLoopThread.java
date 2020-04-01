@@ -48,6 +48,11 @@ public class GameLoopThread implements Runnable{
 			 * Allow players to join if space available
 			 */
 			if(this.table.getNoPlayers() < 5) {
+				
+				// flag for new players
+				this.table.setJoinable(true);
+				
+				// set buttons for existing players
 				this.model.allowJoining(true);
 			}
 			
@@ -84,6 +89,9 @@ public class GameLoopThread implements Runnable{
 			// boolean to indicate if an ace has been drawn
 			boolean aceFound = false;
 			
+			// show cards to all players for dealer selection
+			this.table.cardsVisible(true);
+			
 			// set player to start from for drawing for ace
 			this.table.setInitialCurrentPlayer();
 			
@@ -119,24 +127,9 @@ public class GameLoopThread implements Runnable{
 			 */
 			System.out.println("The dealer is: " + this.table.dealer().getName());
 			this.table.setGameMessage("The dealer is: " + this.table.dealer().getName());
-
-			/*
-			 * Recall player hands
-			 */
-			synchronized(this.table) {
-				this.table.recallPlayerHands();
-			}
 			
 			// send update to clients
 			this.table.sendUpdate();
-			
-			/*
-			 * Shuffle deck
-			 */
-			System.out.println("Unshuffled deck:\n" + this.table.getDeck());
-			this.table.getDeck().shuffle();
-			System.out.println("Shuffled deck:\n" + this.table.getDeck());
-
 			
 			// Pause before round
 			try {
@@ -145,6 +138,21 @@ public class GameLoopThread implements Runnable{
 				e.printStackTrace();
 			}
 			
+			/*
+			 * Recall player hands
+			 */
+			synchronized(this.table) {
+				this.table.recallPlayerHands();
+			}
+			
+			/*
+			 * Shuffle deck
+			 */
+			System.out.println("Unshuffled deck:\n" + this.table.getDeck());
+			this.table.getDeck().shuffle();
+			System.out.println("Shuffled deck:\n" + this.table.getDeck());
+
+
 			/*
 			 * =====================================
 			 * Allow players to vary stake for 10s
@@ -181,6 +189,12 @@ public class GameLoopThread implements Runnable{
 				
 				// disable leaving
 				this.table.allowLeaving(false);
+				
+				/*
+				 *  cards dealt face-down 
+				 *  (players can only view their own cards)
+				 */
+				this.table.cardsVisible(false);
 
 				/*
 				 * Announce dealer
@@ -247,6 +261,9 @@ public class GameLoopThread implements Runnable{
 				}
 					
 				if(twentyOne) {
+					
+					// show all players' cards
+					this.table.cardsVisible(true);
 					
 					// update to show message of who has 21
 					this.table.sendUpdate();
@@ -341,11 +358,26 @@ public class GameLoopThread implements Runnable{
 
 					}
 					
+					// show all players' cards at end of round
+					this.table.cardsVisible(true);
+					
 					/**
 					 * Exchange stakes based on final hands 
 					 */
 					synchronized(this.table) {
 						this.table.checkingWinnerEndRound();
+					}
+					
+					System.out.println("Round over.");
+					this.table.setGameMessage("Round over.");
+					
+					// send update to clients
+					this.table.sendUpdate();
+					
+					try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
 					
 					/*
@@ -365,8 +397,8 @@ public class GameLoopThread implements Runnable{
 					/*
 					 * Allow players to vary stake for 10s
 					 */
-					System.out.println("Round over. Players have 10s to place stake");
-					this.table.setGameMessage("Round over. Players have 10s to place stake");
+					System.out.println("Players have 10s to place stake");
+					this.table.setGameMessage("Players have 10s to place stake");
 					
 					// enable stake-placing
 					this.table.allowStakes(true);
@@ -378,6 +410,11 @@ public class GameLoopThread implements Runnable{
 					 * Allow players to join
 					 * ! needs to be synchronized?
 					 */
+					
+					// flag for new players
+					this.table.setJoinable(true);
+					
+					// set buttons for existing players
 					this.model.allowJoining(true);
 					
 					// send update to clients
@@ -475,7 +512,14 @@ public class GameLoopThread implements Runnable{
 				/*
 				 * Stop players from joining
 				 */
+				
+				// flag for new players
+				this.table.setJoinable(false);
+				
+				// set buttons for existing players
 				this.model.allowJoining(false);
+				
+				
 				
 				/*
 				 *  check number players at table

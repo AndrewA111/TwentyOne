@@ -82,7 +82,7 @@ public class Server {
 			/*
 			 * Create player
 			 */
-			this.player = new Player(clientID, playerName);
+			this.player = new Player(clientID, playerName, table.isJoinable());
 			
 			/*
 			 * Add player to model

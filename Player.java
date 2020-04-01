@@ -88,7 +88,7 @@ public class Player implements Serializable {
 	 * @param ID Player ID
 	 * @param name Player name
 	 */
-	public Player(int ID, String name) {
+	public Player(int ID, String name, boolean canJoin) {
 		
 		this.ID = ID;
 		this.name = name;
@@ -115,12 +115,12 @@ public class Player implements Serializable {
 		this.ableToDrawOrStand = false;
 		
 		// enable joining
-		this.ableToJoin = true;
+		this.ableToJoin = canJoin;
 		
 		// disable leaving
 		this.ableToLeave = false;
 		
-		// initially set cards to !!
+		// initially set card visibility to false
 		this.cardsVisible = false;
 		
 	}
