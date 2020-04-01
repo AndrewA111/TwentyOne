@@ -56,7 +56,7 @@ public class ImageAssets {
 		
 		// images are stored in grid. 2 col x 3 rows
 		int cardWidth = spriteSheet.getWidth()/2;
-		int cardHeight = spriteSheet.getHeight()/3;
+		int cardHeight = spriteSheet.getHeight()/4;
 		
 		/*
 		 *  Create HashMap to store/access card image by relevant type 
@@ -69,12 +69,13 @@ public class ImageAssets {
 		ImageAssets.blankCardMap.put('C', spriteSheet.getSubimage(0, cardHeight, cardWidth, cardHeight));
 		ImageAssets.blankCardMap.put('S', spriteSheet.getSubimage(cardWidth, cardHeight, cardWidth, cardHeight));
 		ImageAssets.blankCardMap.put('E', spriteSheet.getSubimage(0, 2 * cardHeight, cardWidth, cardHeight));
+		ImageAssets.blankCardMap.put('B', spriteSheet.getSubimage(cardWidth, 2 * cardHeight, cardWidth, cardHeight));
 		
 		/*
 		 * Select chips from spriteSheet and assign to relevant reference 
 		 */
-		ImageAssets.chip = spriteSheet.getSubimage(cardWidth, 2 * cardHeight, chipLength, chipLength);
-		ImageAssets.dealerChip = spriteSheet.getSubimage(cardWidth + chipLength, 2 * cardHeight, chipLength, chipLength);
+		ImageAssets.chip = spriteSheet.getSubimage(0, 3 * cardHeight, chipLength, chipLength);
+		ImageAssets.dealerChip = spriteSheet.getSubimage(0 + chipLength, 3 * cardHeight, chipLength, chipLength);
 	}
 	
 	/**

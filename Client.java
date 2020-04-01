@@ -102,6 +102,11 @@ public class Client extends JFrame implements ActionListener {
 	private Player[] players = null;
 	
 	/**
+	 * Reference to store player associated with this client
+	 */
+	private Player player = null;
+	
+	/**
 	 * Constructor
 	 */
 	public Client() {
@@ -185,7 +190,7 @@ public class Client extends JFrame implements ActionListener {
 		 * 
 		 * Add to centre of Jframe
 		 */
-		handsPanel = new TablePanel(this.players);
+		handsPanel = new TablePanel(this.players, this.player);
 		this.add(handsPanel, BorderLayout.CENTER);
 		
 		/*
@@ -311,6 +316,7 @@ public class Client extends JFrame implements ActionListener {
 			 */
 			if(mostRecent.getPlayers() != null) {
 				Client.this.handsPanel.setPlayers(mostRecent.getPlayers());
+				Client.this.handsPanel.setPlayer(mostRecent.getPlayer());
 			}
 			
 			// force panel repaint

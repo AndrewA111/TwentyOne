@@ -30,6 +30,13 @@ public class TablePanel extends JPanel {
 	private final int TEXT_SIZE = 14;
 	
 	/**
+	 * Boolean for setting a debug mode 
+	 * where all players cards are revealed 
+	 * at all times
+	 */
+	private final boolean DEBUG_MODE = false;
+	
+	/**
 	 * Card-circle radius
 	 */
 	private int radius;
@@ -59,10 +66,15 @@ public class TablePanel extends JPanel {
 	private Player[] players;
 	
 	/**
+	 * Player associated with client calling this panel
+	 */
+	private Player player;
+	
+	/**
 	 * Constructor
 	 * @param p players array to be displayed
 	 */
-	public TablePanel(Player[] p) {
+	public TablePanel(Player[] p, Player player) {
 		
 		/*
 		 * call imageAssets to create hashmap for card images
@@ -78,6 +90,11 @@ public class TablePanel extends JPanel {
 		 * Initialize players array
 		 */
 		this.players = p;
+		
+		/*
+		 * Set player associated with client
+		 */
+		this.player = player;
 				
 		
 	}
@@ -413,45 +430,65 @@ public class TablePanel extends JPanel {
   		for(Card card : this.players[i].getHand().getHand()) {
 
   			// get and draw card
-	    		image = ImageAssets.getBlankCardMap().get(card.getType());
+  			
+  				if(this.player != null && 
+  						(this.players[i].isCardsVisible() 
+							|| (this.players[i].getID() == this.player.getID()) 
+							|| this.DEBUG_MODE)) {
+  					
+  					image = ImageAssets.getBlankCardMap().get(card.getType());
+  				}
+  				else {
+  					image = ImageAssets.getBlankCardMap().get('B');
+  				}
+	    		
 	    		
 	    		g2d.drawImage(image, 
 	    				(cardNo % 5) * hCardOffset, 
 	    				(cardNo/5) * vCardOffset, this);
 	    		
-	    		//set color red if hearts or diamonds
-	    		if(card.getType() == 'H' || card.getType() == 'D') {
-	    			g2d.setColor(new Color(255,0,0));
-	    		}
-	    		// else set color black (spade or clubs)
-	    		else {
-	    			g2d.setColor(Color.BLACK);
-	    		}
+	    		
+	    		if(this.player != null && 
+  						(this.players[i].isCardsVisible() 
+							|| (this.players[i].getID() == this.player.getID()) 
+							|| this.DEBUG_MODE)) {
+	  					
+	    			//set color red if hearts or diamonds
+		    		if(card.getType() == 'H' || card.getType() == 'D') {
+		    			g2d.setColor(new Color(255,0,0));
+		    		}
+		    		// else set color black (spade or clubs)
+		    		else {
+		    			g2d.setColor(Color.BLACK);
+		    		}
+		    		
+		    		
+		    		/*
+		    		 *  draw values on top left and bottom right corners
+		    		 */
+		    		
+		    		// draw top-left
+				    g2d.drawString(card.getValue(), 
+				    		image.getWidth()/9 +((cardNo % 5) * hCardOffset), 
+				    		image.getWidth()/4 + (cardNo/5) * vCardOffset);
+				    
+				    // rotate 180 deg
+				    g2d.rotate(Math.toRadians(180), 
+				    		image.getWidth()/2, 
+				    		image.getHeight()/2);
+				    
+				    // draw bottom-right
+				    g2d.drawString(card.getValue(), 
+				    		image.getWidth()/9 - (cardNo % 5) * hCardOffset, 
+				    		image.getWidth()/4 - (cardNo/5) * vCardOffset);
+				    
+				    // reverse rotation
+				    g2d.rotate(-Math.toRadians(180), 
+				    		image.getWidth()/2, 
+				    		image.getHeight()/2);
+	  			}
 	    		
 	    		
-	    		/*
-	    		 *  draw values on top left and bottom right corners
-	    		 */
-	    		
-	    		// draw top-left
-			    g2d.drawString(card.getValue(), 
-			    		image.getWidth()/9 +((cardNo % 5) * hCardOffset), 
-			    		image.getWidth()/4 + (cardNo/5) * vCardOffset);
-			    
-			    // rotate 180 deg
-			    g2d.rotate(Math.toRadians(180), 
-			    		image.getWidth()/2, 
-			    		image.getHeight()/2);
-			    
-			    // draw bottom-right
-			    g2d.drawString(card.getValue(), 
-			    		image.getWidth()/9 - (cardNo % 5) * hCardOffset, 
-			    		image.getWidth()/4 - (cardNo/5) * vCardOffset);
-			    
-			    // reverse rotation
-			    g2d.rotate(-Math.toRadians(180), 
-			    		image.getWidth()/2, 
-			    		image.getHeight()/2);
 	    		
 			    // increment card number
 	    		cardNo++;
@@ -481,7 +518,25 @@ public class TablePanel extends JPanel {
 	public void setPlayers(Player[] players) {
 		this.players = players;
 	}
-
+	
+	/**
+	 * Getter for player
+	 * @return player
+	 */
+	public Player getPlayer() {
+		return player;
+	}
+	
+	/**
+	 * Setter for player
+	 * @param player
+	 */
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+	
+	
+	
 
 
 }
