@@ -60,7 +60,9 @@ public class GameLoopThread implements Runnable{
 			while(numPlayers < 2) {
 				
 				/**
-				 * Wait for players. Returns number of players when complete.
+				 * Wait for players. 
+				 * 
+				 * waitForPlayers() returns number of players when complete
 				 */
 				numPlayers = this.waitForPlayers();
 				
@@ -68,9 +70,9 @@ public class GameLoopThread implements Runnable{
 
 			
 			/*
-			 * =============================
-			 * Select dealer by drawing lots
-			 * =============================
+			 * =================================
+			 * Select dealer by drawing for ace
+			 * =================================
 			 */
 			
 			System.out.println("Selecting dealer");
@@ -117,16 +119,7 @@ public class GameLoopThread implements Runnable{
 			 */
 			System.out.println("The dealer is: " + this.table.dealer().getName());
 			this.table.setGameMessage("The dealer is: " + this.table.dealer().getName());
-			
-			// send update to clients
-			this.table.sendUpdate();
-			
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			
+
 			/*
 			 * Recall player hands
 			 */
@@ -145,6 +138,7 @@ public class GameLoopThread implements Runnable{
 			System.out.println("Shuffled deck:\n" + this.table.getDeck());
 
 			
+			// Pause before round
 			try {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
@@ -152,15 +146,14 @@ public class GameLoopThread implements Runnable{
 			}
 			
 			/*
+			 * =====================================
 			 * Allow players to vary stake for 10s
+			 * =====================================
 			 */
 			synchronized(this.table) {
 				
 				System.out.println("Players have 10s to place stake");
 				this.table.setGameMessage("Players have 10s to place stake");
-				
-				// disable stake-placing
-				this.table.allowStakes(true);
 				
 				// enable stake-placing
 				this.table.allowStakes(true);
@@ -222,43 +215,25 @@ public class GameLoopThread implements Runnable{
 				 * Initially deal 2 cards to each player
 				 * ======================================
 				 */
-				System.out.println("Dealing cards");
 				
-				// reset to dealer pos
-				this.table.resetToDealerPos();
-				
-				// count how many rounds of cards given out
-				int loops = 0;
-				
-				// deal two cards per player
-				while(loops < 2) {
-					
-					synchronized(this.table) {
-						this.table.incrementCurrentPlayer();
-						this.table.dealToCurrentPlayer();
-						
-						// dealer gets card last, so increment loops
-						if(this.table.currentPlayer() == this.table.dealer()) {
-							loops++;
-						}
-						
-						// send update to clients
-						this.table.sendUpdate();
-					}
-
-					// 0.5s pause for visual dealing effect	
-					try {
-						Thread.sleep(500);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-
-				// Start from player after dealer
-				this.table.incrementCurrentPlayer();
+				/*
+				 * Deal initial cards and sets current player 
+				 * to player after dealer
+				 */
+				this.dealInitialCards();
 				
 				// boolean to check when everyone played
 				boolean dealerHasPlayed = false;
+				
+				
+				/*
+				 * ======================================
+				 * Check whether anyone has been dealt 
+				 * a 'natural 21' 
+				 * 
+				 * (Score of 21 on first 2 cards)
+				 * ======================================
+				 */
 				
 				// boolean to store whether a 21 is found
 				boolean twentyOne;
@@ -291,8 +266,12 @@ public class GameLoopThread implements Runnable{
 				}
 
 
+				/*
+				 * ==============================================
+				 * If no ''natural 21' proceed with normal round
+				 * ==============================================
+				 */
 				
-				// if no 21
 				if(!twentyOne) {
 					
 					// start from player after dealer
@@ -306,6 +285,7 @@ public class GameLoopThread implements Runnable{
 						int playerChoice;
 						
 						synchronized(this.table) {
+							
 							//notify who is playing
 							System.out.println(this.table.currentPlayer().getName() + ". Draw or stand?");
 							this.table.setGameMessage(this.table.currentPlayer().getName() + ". Draw or stand?");
@@ -313,9 +293,7 @@ public class GameLoopThread implements Runnable{
 							// set flags that player is able to select draw/stand
 							this.table.currentPlayer().setAbleToDrawOrStand(true);
 							
-							
-//							// check whether player wants to draw or stand
-//							playerChoice = (this.table.currentPlayer().getDrawOrStand());
+							// initialy set -1 to indicate no choice yet
 							playerChoice = -1;
 							
 							// send update to clients
@@ -332,61 +310,22 @@ public class GameLoopThread implements Runnable{
 						 */
 						while(!(playerChoice == 2)) {
 							
-							// wait until client makes a decision
-							synchronized(this.drawStandNotifier) {
-								try {
-									this.drawStandNotifier.wait();
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
-							}
-							
-							// check whether player wants to draw or stand
-							playerChoice = (this.table.currentPlayer().getDrawOrStand());
-								
-								try {
-									/*
-									 * 0.1s pause to limit loop rate
-									 */
-									Thread.sleep(100);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
-								
-								System.out.println("pong");
-							
 							/*
-							 * If player selects to draw, deal card
+							 * playerChoice() waits for message from client 
+							 * and returns choice received
 							 */
-							if(playerChoice == 1) {
-								System.out.println("Card drawn.");
-
-								// deal card
-								synchronized(this.table){
-									this.table.getDeck().dealSingleCard((this.table.currentPlayer()));
-								}
-								
-								// reset to undecided
-								this.table.currentPlayer().setDrawOrStand(-1);
-								
-
-							}
-							
-							// check player choice status
-							playerChoice = this.table.currentPlayer().getDrawOrStand();
-							
-							// send update to clients
-							this.table.sendUpdate();
+							playerChoice = this.playerChoice();
 
 						}
 						
-						// if this was dealers turn, round finished
+						/*
+						 *  if this was dealers turn, round finished
+						 */
 						if(this.table.currentPlayer() == this.table.dealer()) {
 							dealerHasPlayed = true;
 						}
 						
-						
-						System.out.println("Stand.");
+
 						
 						// reset player to undecided (for next round)
 						this.table.currentPlayer().setDrawOrStand(-1);
@@ -409,12 +348,11 @@ public class GameLoopThread implements Runnable{
 						this.table.checkingWinnerEndRound();
 					}
 					
-					
-					
 					/*
 					 * Set new dealer
 					 */
 					this.table.incrementDealerPos();
+					
 					
 					/*
 					 * Recall hands
@@ -454,18 +392,11 @@ public class GameLoopThread implements Runnable{
 					/*
 					 * Check if enough players for a new round
 					 */
-					
 					numPlayers = this.table.getNoPlayers();
 
 				}
 			}
-		
-		
-		
-		
-		
-		
-		
+
 		}
 		
 		
@@ -558,5 +489,103 @@ public class GameLoopThread implements Runnable{
 		}
 		
 		return playerCount;
+	}
+	
+	/**
+	 * Method to deal initial cards and set current 
+	 * player to player after dealer
+	 */
+	public void dealInitialCards() {
+		System.out.println("Dealing cards");
+		
+		// reset to dealer pos
+		this.table.resetToDealerPos();
+		
+		// count how many rounds of cards given out
+		int loops = 0;
+		
+		// deal two cards per player
+		while(loops < 2) {
+			
+			synchronized(this.table) {
+				this.table.incrementCurrentPlayer();
+				this.table.dealToCurrentPlayer();
+				
+				// dealer gets card last, so increment loops
+				if(this.table.currentPlayer() == this.table.dealer()) {
+					loops++;
+				}
+				
+				// send update to clients
+				this.table.sendUpdate();
+			}
+
+			// 0.5s pause for visual dealing effect	
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
+		// Start from player after dealer
+		this.table.incrementCurrentPlayer();
+	}
+	
+	/**
+	 * Method to wait for the client to submit a draw/stand choice.
+	 * 
+	 * Makes the appropriate model updates then returns choice
+	 * 
+	 * @return -1 (indicates to repeat), 2 (indicates stand/turn over) 
+	 */
+	public int playerChoice() {
+		// wait until client makes a decision
+		synchronized(this.drawStandNotifier) {
+			try {
+				this.drawStandNotifier.wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		// check whether player wants to draw or stand
+		int choice = (this.table.currentPlayer().getDrawOrStand());
+			
+			try {
+				/*
+				 * 0.1s pause to limit loop rate
+				 */
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			System.out.println("pong");
+		
+		/*
+		 * If player selects to draw, deal card
+		 */
+		if(choice == 1) {
+			System.out.println("Card drawn.");
+
+			// deal card
+			synchronized(this.table){
+				this.table.getDeck().dealSingleCard((this.table.currentPlayer()));
+			}
+			
+			// reset to undecided
+			this.table.currentPlayer().setDrawOrStand(-1);
+			
+
+		}
+		
+		// check player choice status
+		choice = this.table.currentPlayer().getDrawOrStand();
+		
+		// send update to clients
+		this.table.sendUpdate();
+		
+		return choice;
 	}
 }

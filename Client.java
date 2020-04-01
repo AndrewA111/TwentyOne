@@ -27,7 +27,7 @@ import javax.swing.SwingWorker;
  * @author Andrew
  *
  */
-public class Client2 extends JFrame implements ActionListener {
+public class Client extends JFrame implements ActionListener {
 	
 	/**
 	 * Port number
@@ -104,7 +104,7 @@ public class Client2 extends JFrame implements ActionListener {
 	/**
 	 * Constructor
 	 */
-	public Client2() {
+	public Client() {
 		
 		/*
 		 * Initialize hashmap for valuing hands
@@ -285,8 +285,8 @@ public class Client2 extends JFrame implements ActionListener {
 			/*
 			 * ! Set title to players ID
 			 */
-			if(Client2.this.getTitle() != ("GameID: " + (ID))) {
-				Client2.this.setTitle("GameID: " + (ID));
+			if(Client.this.getTitle() != ("GameID: " + (ID))) {
+				Client.this.setTitle("GameID: " + (ID));
 			}
 			
 			/*
@@ -299,26 +299,26 @@ public class Client2 extends JFrame implements ActionListener {
 			/*
 			 * Activate/deactivate buttons using flags on player
 			 */
-			Client2.this.join.setEnabled(mostRecent.getPlayer().isAbleToJoin());
-			Client2.this.leave.setEnabled(mostRecent.getPlayer().isAbleToLeave());
-			Client2.this.stakeUp.setEnabled(mostRecent.getPlayer().isAbleToChangeStake());
-			Client2.this.stakeDown.setEnabled(mostRecent.getPlayer().isAbleToChangeStake());
-			Client2.this.draw.setEnabled(mostRecent.getPlayer().isAbleToDrawOrStand());
-			Client2.this.stand.setEnabled(mostRecent.getPlayer().isAbleToDrawOrStand());
+			Client.this.join.setEnabled(mostRecent.getPlayer().isAbleToJoin());
+			Client.this.leave.setEnabled(mostRecent.getPlayer().isAbleToLeave());
+			Client.this.stakeUp.setEnabled(mostRecent.getPlayer().isAbleToChangeStake());
+			Client.this.stakeDown.setEnabled(mostRecent.getPlayer().isAbleToChangeStake());
+			Client.this.draw.setEnabled(mostRecent.getPlayer().isAbleToDrawOrStand());
+			Client.this.stand.setEnabled(mostRecent.getPlayer().isAbleToDrawOrStand());
 			
 			/*
 			 * Update player details according to most recent message
 			 */
 			if(mostRecent.getPlayers() != null) {
-				Client2.this.handsPanel.setPlayers(mostRecent.getPlayers());
+				Client.this.handsPanel.setPlayers(mostRecent.getPlayers());
 			}
 			
 			// force panel repaint
-			Client2.this.handsPanel.repaint();
+			Client.this.handsPanel.repaint();
 			
 			// force buttons/text area to refresh
-			Client2.this.repaint();
-			Client2.this.revalidate(); 
+			Client.this.repaint();
+			Client.this.revalidate(); 
 
 	
 		}
@@ -392,6 +392,6 @@ public class Client2 extends JFrame implements ActionListener {
 	public static void main(String[] args) {
 		
 		// Create main JFrame
-		new Client2();
+		new Client();
 	}
 }
