@@ -179,27 +179,6 @@ public class Table {
 		this.noPlayers--;
 	}
 	
-	/**
-	 * Method to check number of players at the table
-	 * @return playerCount number of players at table
-	 */
-	public int checkNumPlayers() {
-		
-		// track number of players at table
-		int playerCount = 0; 
-		
-		/*
-		 * Check how many players are at table
-		 */
-		for(Player player : players) {
-			if(player != null) {
-				playerCount++;
-			}
-		}
-		
-		return playerCount;
-	}
-	
 	
 	/**
 	 * Method to get player in dealer position

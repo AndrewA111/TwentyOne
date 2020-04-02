@@ -122,6 +122,7 @@ public class Client extends JFrame implements ActionListener {
 		this.setSize(900,700);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
+		this.setTitle("TwentyOne");
 		
 		/*
 		 * JPanel to put buttons (top row) 
@@ -287,12 +288,7 @@ public class Client extends JFrame implements ActionListener {
 			int ID = mostRecent.getClientID();
 			
 
-			/*
-			 * ! Set title to players ID
-			 */
-			if(Client.this.getTitle() != ("GameID: " + (ID))) {
-				Client.this.setTitle("GameID: " + (ID));
-			}
+			
 			
 			/*
 			 * Update game message
@@ -317,6 +313,22 @@ public class Client extends JFrame implements ActionListener {
 			if(mostRecent.getPlayers() != null) {
 				Client.this.handsPanel.setPlayers(mostRecent.getPlayers());
 				Client.this.handsPanel.setPlayer(mostRecent.getPlayer());
+			}
+			
+			/*
+			 * Set title to players ID
+			 */
+			
+			// if deafult title remains
+			if(Client.this.getTitle().equals("TwentyOne")) {
+				
+				// check player has been set
+				if(mostRecent.getPlayer() != null) {
+
+					// set title to player name
+					Client.this.setTitle("TwentyOne - " + mostRecent.getPlayer().getName());
+				}
+				
 			}
 			
 			// force panel repaint

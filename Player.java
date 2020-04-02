@@ -141,7 +141,6 @@ public class Player implements Serializable {
 	}
 	
 	/**
-	 * !! coudl include check whether can change stake in here?
 	 * Method to increase stake by set increment
 	 */
 	public void stakeUp() {

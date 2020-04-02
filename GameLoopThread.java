@@ -618,24 +618,54 @@ public class GameLoopThread implements Runnable{
 		 */
 		if(choice == 1) {
 			System.out.println("Card drawn.");
-
-			// deal card
+			
+			// variable to store player minimum legal value
+			int minLegalValue;
+			
+			// synchronize for Java collection access
 			synchronized(this.table){
 				
+				//  deal card
 				this.table.getDeck().dealSingleCard((this.table.currentPlayer()));
 				
+				// check min legal value
+				minLegalValue = this.table.currentPlayer().getHand().minLegalValue();
+				
+			}
+				
 				// check if bust (>= 21)
-				if(this.table.currentPlayer().getHand().minLegalValue() == -1) {
+				if(minLegalValue == -1) {
 					
 					// sent to stand (end round)
 					this.table.currentPlayer().setDrawOrStand(2);
+					
+					// notify table of bust
+					this.table.setGameMessage(this.table.currentPlayer().getName() +
+												" bust!");
+					
+					// set cards visible to others (as indication of bust)
+					this.table.currentPlayer().setCardsVisible(true);
+					
+					// disable draw/stand buttons
+					this.table.currentPlayer().setAbleToDrawOrStand(false);
+					
+					// send update to clients
+					this.table.sendUpdate();
+					
+					// pause for table to see bust indication
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 				// else set player to undecided for next loop
 				else {
 
 					this.table.currentPlayer().setDrawOrStand(-1);
 				}
-			}
+			
+			
 			
 			
 			
