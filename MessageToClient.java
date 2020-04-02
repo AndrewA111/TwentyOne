@@ -7,13 +7,7 @@ import java.io.Serializable;
  */
 public class MessageToClient implements Serializable{
 	
-	/*
-	 * Message codes:
-	 * 	1 - Players array (game state for client)
-	 * 	2 - 
-	 */
-	private Integer code;
-	
+
 	/**
 	 * ID of client associated with this 
 	 */
@@ -36,26 +30,16 @@ public class MessageToClient implements Serializable{
 	
 	/**
 	 * Constructor
-	 * @param code 
 	 * @param clientID client ID associated with this client
 	 * @param players players array at table
 	 * @param player player associated with this client
 	 * @param gameMessage game message
 	 */
-	public MessageToClient(Integer code, Integer clientID,  Player[] players, Player player, String gameMessage) {
-		this.code = code;
+	public MessageToClient(Integer clientID,  Player[] players, Player player, String gameMessage) {
 		this.clientID = clientID;
 		this.players = players;
 		this.gameMessage = gameMessage;
 		this.player = player;
-	}
-	
-	/**
-	 * Getter for code
-	 * @return code
-	 */
-	public Integer getCode() {
-		return code;
 	}
 	
 	/**

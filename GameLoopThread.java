@@ -609,8 +609,6 @@ public class GameLoopThread implements Runnable{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
-			System.out.println("pong");
 		
 		/*
 		 * If player selects to draw, deal card

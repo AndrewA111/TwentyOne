@@ -61,11 +61,11 @@ public class ServerWriter implements Runnable{
 						/*
 						 * write message to client
 						 */
-						os.writeObject(new MessageToClient(1, 
-								this.player.getID(), 
-								this.table.getPlayers(), 
-								this.player, 
-								model.getTable().getGameMessage()));
+						os.writeObject(new MessageToClient(
+											this.player.getID(), 
+											this.table.getPlayers(), 
+											this.player, 
+											model.getTable().getGameMessage()));
 
 					/*
 					 * Flush and reset to ensure that up-to-date players array 
