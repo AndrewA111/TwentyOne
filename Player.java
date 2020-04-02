@@ -84,6 +84,11 @@ public class Player implements Serializable {
 	private final static int STAKE_INC = 10;
 	
 	/**
+	 * Initial balance to give to players
+	 */
+	private final static int INITIAL_BALANCE = 200;
+	
+	/**
 	 * Constructor
 	 * @param ID Player ID
 	 * @param name Player name
@@ -94,7 +99,7 @@ public class Player implements Serializable {
 		this.name = name;
 		
 		// set initial balance
-		this.balance = 20;
+		this.balance = INITIAL_BALANCE;
 		
 		// initially set player as not being dealer
 		this.dealer = false;

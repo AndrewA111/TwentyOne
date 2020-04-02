@@ -212,9 +212,6 @@ public class Table {
 		/*
 		 * Check if next position filled, loop until filled position found
 		 */
-		/*
-		 * ! avoid possible infinite loop
-		 */
 		while(players[currentPlayerPos] == null) {
 			currentPlayerPos++;
 			if(currentPlayerPos >= numPlayers) {
@@ -225,7 +222,6 @@ public class Table {
 	
 	/**
 	 * Method to set initial current player
-	 * !
 	 */
 	public void setInitialCurrentPlayer() {
 		
@@ -517,7 +513,6 @@ public class Table {
 	
 	/**
 	 * Method to assess result between players and dealer at end of round
-	 * !
 	 */
 	public void checkingWinnerEndRound() {
 		

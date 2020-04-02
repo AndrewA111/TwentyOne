@@ -75,7 +75,7 @@ public class Server {
 			Server.globalID++;
 			
 			/*
-			 * ! Auto-generate player names
+			 * Auto-generate player names
 			 */
 			String playerName = "Player" + (this.clientID);
 			
