@@ -411,7 +411,7 @@ public class TablePanel extends JPanel {
     						this);
     			}
     			
-    			g2d.drawString("" + players[i].getBalance(), 
+    			g2d.drawString("" + players[i].getBalance() + " (" + (players[i].getBalance() + players[i].getStake()) + ")", 
     						(image.getWidth()* 2)/ 3, 
     						this.image.getHeight() + (image.getWidth() * 4) / 7);
 	    		g2d.drawString("" + players[i].getName(), 

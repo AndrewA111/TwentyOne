@@ -300,7 +300,12 @@ public class Client extends JFrame implements ActionListener {
 			/*
 			 * Activate/deactivate buttons using flags on player
 			 */
-			Client.this.join.setEnabled(mostRecent.getPlayer().isAbleToJoin());
+			
+			// only allow join if play has sufficient funds to play
+			Client.this.join.setEnabled(mostRecent.getPlayer().isAbleToJoin() && 
+					((mostRecent.getPlayer().getBalance() + mostRecent.getPlayer().getStake()) >= 
+												Player.getMinStake()));
+			
 			Client.this.leave.setEnabled(mostRecent.getPlayer().isAbleToLeave());
 			Client.this.stakeUp.setEnabled(mostRecent.getPlayer().isAbleToChangeStake());
 			Client.this.stakeDown.setEnabled(mostRecent.getPlayer().isAbleToChangeStake());

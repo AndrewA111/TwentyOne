@@ -410,7 +410,6 @@ public class GameLoopThread implements Runnable{
 				
 				/*
 				 * Allow players to join
-				 * ! needs to be synchronized?
 				 */
 				
 				// flag for new players
