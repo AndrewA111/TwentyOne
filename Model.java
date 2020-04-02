@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Model for TwentyOne game
@@ -18,10 +17,6 @@ public class Model {
 	 */
 	private ArrayList<Player> globalPlayers;
 	
-	/*
-	 * Lock
-	 */
-	private ReentrantLock modelLock = new ReentrantLock();
 	
 	
 	public Model() {
@@ -71,14 +66,6 @@ public class Model {
 		return globalPlayers;
 	}
 
-	public void lock() {
-		this.modelLock.lock();
-	}
-	
-	public void unlock() {
-		this.modelLock.unlock();
-	}
-	
 }
 
 

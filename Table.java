@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Class to represent table for TwentOne game

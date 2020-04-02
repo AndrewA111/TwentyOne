@@ -600,15 +600,6 @@ public class GameLoopThread implements Runnable{
 		
 		// check whether player wants to draw or stand
 		int choice = (this.table.currentPlayer().getDrawOrStand());
-			
-			try {
-				/*
-				 * 0.1s pause to limit loop rate
-				 */
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
 		
 		/*
 		 * If player selects to draw, deal card
