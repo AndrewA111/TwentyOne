@@ -117,21 +117,36 @@ public class ServerReader implements Runnable{
 				 * Message code 5 - Join table
 				 */
 				if(messageIn.getCode() == 5) {
-
-					this.model.getTable().addPlayer(player);
 					
-					// if full don't allow players to join
 					/*
-					 * ! check this is enforced
+					 *  synchronize to avoid race between multiple 
+					 *  clients to take final position
 					 */
-					if(this.model.getTable().getNoPlayers() >= 5) {
-						for(Player p : this.model.getGlobalPlayers()) {
-							p.setAbleToJoin(false);
+					synchronized(this.table) {
+						
+						boolean added = this.model.getTable().addPlayer(player);
+						
+						/* 
+						 * players can only join between rounds, 
+						 * so allow stake changing
+						 */
+						if(added) {
+							this.player.setAbleToChangeStake(true);
 						}
+						
+						/* 
+						 * if table now full don't allow players to join
+						 */
+						if(this.model.getTable().getNoPlayers() >= 5) {
+							for(Player p : this.model.getGlobalPlayers()) {
+								p.setAbleToJoin(false);
+							}
+						}
+						
+						// send update to clients
+						this.table.sendUpdate();
 					}
 					
-					// send update to clients
-					this.table.sendUpdate();
 
 				}
 				

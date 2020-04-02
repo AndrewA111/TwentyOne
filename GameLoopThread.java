@@ -274,11 +274,6 @@ public class GameLoopThread implements Runnable{
 						e.printStackTrace();
 					}
 					
-					// recall hands
-					this.table.recallPlayerHands();
-					
-					// update
-					this.table.sendUpdate();
 					
 				}
 
@@ -384,54 +379,65 @@ public class GameLoopThread implements Runnable{
 					 * Set new dealer
 					 */
 					this.table.incrementDealerPos();
-					
-					
-					/*
-					 * Recall hands
-					 */
-					synchronized(this.table) {
-						this.table.recallPlayerHands();
-					}
-					
-
-					/*
-					 * Allow players to vary stake for 10s
-					 */
-					System.out.println("Players have 10s to place stake");
-					this.table.setGameMessage("Players have 10s to place stake");
-					
-					// enable stake-placing
-					this.table.allowStakes(true);
-					
-					// allow players to leave
-					this.table.allowLeaving(true);
-					
-					/*
-					 * Allow players to join
-					 * ! needs to be synchronized?
-					 */
-					
-					// flag for new players
-					this.table.setJoinable(true);
-					
-					// set buttons for existing players
-					this.model.allowJoining(true);
-					
-					// send update to clients
-					this.table.sendUpdate();
-					
-					try {
-						Thread.sleep(10000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					
-					/*
-					 * Check if enough players for a new round
-					 */
-					numPlayers = this.table.getNoPlayers();
-
+	
 				}
+				
+				/*
+				 * =====================================
+				 * Clear hands and allow joining/staking 
+				 * for next round
+				 * =====================================
+				 */
+				
+				/*
+				 * Recall hands
+				 */
+				synchronized(this.table) {
+					this.table.recallPlayerHands();
+				}
+				
+				/*
+				 * Allow players to vary stake for 10s
+				 */
+				System.out.println("Players have 10s to place stake");
+				this.table.setGameMessage("Players have 10s to place stake");
+				
+				// enable stake-placing
+				this.table.allowStakes(true);
+				
+				// allow players to leave
+				this.table.allowLeaving(true);
+				
+				/*
+				 * Allow players to join
+				 * ! needs to be synchronized?
+				 */
+				
+				// flag for new players
+				this.table.setJoinable(true);
+				
+				// set buttons for existing players
+				this.model.allowJoining(true);
+				
+				// send update to clients
+				this.table.sendUpdate();
+				
+				try {
+					Thread.sleep(10000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
+				/*
+				 * Check if enough players for a new round
+				 */
+				numPlayers = this.table.getNoPlayers();
+
+				// flag for new players
+				this.table.setJoinable(false);
+				
+				// set buttons for existing players
+				this.model.allowJoining(false);
 			}
 
 		}
