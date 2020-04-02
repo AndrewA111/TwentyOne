@@ -153,10 +153,41 @@ public class Hand implements Serializable {
 		}
 		
 		/*
-		 * No legal value found, return 01
+		 * No legal value found, return -1
 		 */
 		return -1;
 	}
+	
+	/**
+	 * Method to return min legal value (<= 21) for this hand
+	 * 
+	 * @return min legal value, or -1 if no legal value found
+	 */
+	public int minLegalValue() {
+		/*
+		 * generate values arrayList
+		 */
+		ArrayList<Integer> values = this.value();
+		
+		/*
+		 * Get min value (last in list) 
+		 */	
+		int min = values.get(values.size() - 1);
+		
+		/*
+		 * If min value is vale (<= 21) return it
+		 */
+		if(min <= 21) {
+			return min;
+		}
+		
+		/*
+		 * No legal values, return -1
+		 */
+		return -1;
+	}
+		
+	
 	
 	/**
 	 * Method to return values list as a string

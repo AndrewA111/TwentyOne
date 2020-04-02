@@ -621,11 +621,23 @@ public class GameLoopThread implements Runnable{
 
 			// deal card
 			synchronized(this.table){
+				
 				this.table.getDeck().dealSingleCard((this.table.currentPlayer()));
+				
+				// check if bust (>= 21)
+				if(this.table.currentPlayer().getHand().minLegalValue() == -1) {
+					
+					// sent to stand (end round)
+					this.table.currentPlayer().setDrawOrStand(2);
+				}
+				// else set player to undecided for next loop
+				else {
+
+					this.table.currentPlayer().setDrawOrStand(-1);
+				}
 			}
 			
-			// reset to undecided
-			this.table.currentPlayer().setDrawOrStand(-1);
+			
 			
 
 		}
