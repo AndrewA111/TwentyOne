@@ -94,7 +94,7 @@ public class Player implements Serializable {
 		this.name = name;
 		
 		// set initial balance
-		this.balance = 200;
+		this.balance = 20;
 		
 		// initially set player as not being dealer
 		this.dealer = false;
@@ -178,24 +178,185 @@ public class Player implements Serializable {
 	
 	/**
 	 * Method to pay Player p this players stake and 
-	 * reset this stake to min value
+	 * reset this stake to min value if possible
 	 * @param p Player to pay
+	 * @return true if player retains funds to continue playing, 
+	 * false otherwise
 	 */
-	public void payStake(Player p) {
+	public boolean payOwnStake(Player p) {
+		
+		// pay stake
 		p.addToBalance(this.stake);
+		
+		if(this.balance < MIN_STAKE) {
+			
+			this.stake = 0;
+			
+			// disable joining
+			this.ableToJoin = false;
+			
+			// indicate player out of funds
+			return false;
+		}
+		
+		// replenish stake
 		this.removeFromBalance(MIN_STAKE);
 		this.stake = MIN_STAKE;
+		
+		// indicate player can carry on
+		return true;
 	}
 	
 	/**
-	 * Method to pay Player p double this players 
-	 * stake and reset this stake to min value
-	 * @param p Player to pay
+	 * Method to pay Player p equivalent to their stake and 
+	 * reset this stake to min value if possible
+	 * @param p player to pay
+	 * @return true if player retains funds to continue playing, 
+	 * false otherwise
 	 */
-	public void payDoubleStake(Player p) {
-		p.addToBalance(2 * this.stake);
-		this.removeFromBalance(MIN_STAKE + this.stake);
+	public boolean payOpponentsStake(Player p) {
+		
+		/*
+		 *  if funds exceed those available, 
+		 *  player pays what they have
+		 */
+		if(p.getStake() > (this.balance + this.stake)) {
+			
+			// pay what the player has
+			p.addToBalance(this.balance +this.stake);
+			this.balance = 0;
+			this.stake = 0;
+			
+			// indicate out of funds
+			return false;
+		}
+		
+		// pay stake
+		p.addToBalance(p.stake);
+		this.removeFromBalance(p.stake);
+		
+		// get total balance
+		this.addToBalance(this.stake);
+		this.stake = 0;
+		
+		// if this leaves insufficient funds to play on
+		if((this.balance) < MIN_STAKE) {
+			
+			// disable joining
+			this.ableToJoin = false;
+			
+			// indicate out of funds
+			return false;
+		}
+		
+		// replenish stake
+		this.removeFromBalance(MIN_STAKE);
 		this.stake = MIN_STAKE;
+		
+		// indicate player can continue
+		return true;
+				
+	}
+	
+	/**
+	 * Method to pay Player p  double this players stake and reset this stake to min value if possible
+	 * @param p Player to pay
+	 * @return true if player retains funds to continue playing, 
+	 * false otherwise 
+	 */
+	public boolean payDoubleOwnStake(Player p) {
+		
+		/*
+		 *  if funds exceed those available, 
+		 *  player pays what they have
+		 */
+		if((2 * this.stake) > (this.balance + this.stake)) {
+			
+			// pay what the player has
+			p.addToBalance(this.balance +this.stake);
+			this.balance = 0;
+			this.stake = 0;
+			
+			// indicate out of funds
+			return false;
+		}
+		
+		// pay stake
+		p.addToBalance(2 * this.stake);
+		this.removeFromBalance(2 * this.stake);
+		
+		// get total balance
+		this.addToBalance(this.stake);
+		this.stake = 0;
+		
+		// if this leaves insufficient funds to play on
+		if((this.balance) < MIN_STAKE) {
+			
+			// disable joining
+			this.ableToJoin = false;
+			
+			// indicate out of funds
+			return false;
+		}
+		
+		// replenish stake
+		this.removeFromBalance(MIN_STAKE);
+		this.stake = MIN_STAKE;
+		
+		// indicate player can continue
+		return true;
+		
+		
+	}
+	
+	/**
+	 * Method to pay Player p double their
+	 * stake and reset this stake to min value if possible
+	 * @param p Player to pay
+	 * @return true if player retains funds to continue playing, 
+	 * false otherwise 
+	 */
+	public boolean payDoubleOpponentsStake(Player p) {
+		
+		/*
+		 *  if funds exceed those available, 
+		 *  player pays what they have
+		 */
+		if((2 * p.getStake()) > (this.balance + this.stake)) {
+			
+			// pay what the player has
+			p.addToBalance(this.balance +this.stake);
+			this.balance = 0;
+			this.stake = 0;
+			
+			// indicate out of funds
+			return false;
+		}
+		
+		// pay stake
+		p.addToBalance(2 * p.stake);
+		this.removeFromBalance(2 * p.stake);
+		
+		// get total balance
+		this.addToBalance(this.stake);
+		this.stake = 0;
+		
+		// if this leaves insufficient funds to play on
+		if((this.balance) < MIN_STAKE) {
+			
+			// disable joining
+			this.ableToJoin = false;
+			
+			// indicate out of funds
+			return false;
+		}
+		
+		// replenish stake
+		this.removeFromBalance(MIN_STAKE);
+		this.stake = MIN_STAKE;
+		
+		// indicate player can continue
+		return true;
 	}
 	
 	/**
@@ -393,6 +554,15 @@ public class Player implements Serializable {
 	public void setCardsVisible(boolean cardsVisible) {
 		this.cardsVisible = cardsVisible;
 	}
+
+	/**
+	 * Getter for min stake
+	 * @return MIN_STAKE
+	 */
+	public static int getMinStake() {
+		return MIN_STAKE;
+	}
+	
 	
 	
 	

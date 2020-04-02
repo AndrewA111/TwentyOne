@@ -418,7 +418,17 @@ public class Table {
 				
 				// if player doesn't also have 21, pay dealer
 				if(!(this.players[currentPlayerPos].getHand().maxLegalValue() == 21)) {
-					this.players[currentPlayerPos].payDoubleStake(this.players[dealerPos]);
+					
+					// pay dealer, checking if player has sufficient funds to proceed
+					boolean fundsRemaining = this.players[currentPlayerPos].payDoubleOwnStake(this.players[dealerPos]);
+					
+					if(!fundsRemaining) {
+						
+						// remove player if not enough funds to stake
+						this.removePlayer(currentPlayerPos);
+					}
+					
+					
 				}
 				
 				// increment to player after dealer for start of next round
@@ -474,7 +484,18 @@ public class Table {
 						
 						// if player doesn't have 21 pay winning player
 						if(!(this.players[currentPlayerPos].getHand().maxLegalValue() == 21)) {
-							this.players[currentPlayerPos].payDoubleStake(this.players[winnerPos]);
+							
+							/*
+							 *  pay winner double their stake, checking if paying player 
+							 *  has sufficient funds to proceed
+							 */
+							boolean fundsRemaining = this.players[currentPlayerPos].payDoubleOpponentsStake(this.players[winnerPos]);
+							
+							if(!fundsRemaining) {
+								
+								// remove player if not enough funds to stake
+								this.removePlayer(currentPlayerPos);
+							}
 						}
 						this.incrementCurrentPlayer();
 					}
@@ -507,23 +528,67 @@ public class Table {
 		this.incrementCurrentPlayer();
 		
 		/*
+		 * Variable to check if dealer busts
+		 */
+		boolean dealerBust = false;
+		/*
 		 * Loop through all players except dealer
 		 */
-		while(currentPlayerPos != dealerPos) {
+		while((currentPlayerPos != dealerPos) && !dealerBust) {
 			
 			// if player bust
 			if(this.players[currentPlayerPos].getHand().maxLegalValue() == -1) {
-				this.players[currentPlayerPos].payStake(this.players[dealerPos]);
+				
+				// pay dealer, checking if player has sufficient funds to proceed
+				boolean fundsRemaining = this.players[currentPlayerPos].payOwnStake(this.players[dealerPos]);
+				
+				if(!fundsRemaining) {
+					
+					// remove player if not enough funds to stake
+					this.removePlayer(currentPlayerPos);
+				}
 			}
 			// if player has greater value than dealer
 			else if(this.players[currentPlayerPos].getHand().maxLegalValue() >
 					this.players[this.dealerPos].getHand().maxLegalValue()) {
-				this.players[dealerPos].payStake(this.players[currentPlayerPos]);
+				
+				// dealer pays player
+				boolean fundsRemaining = this.players[dealerPos].payOpponentsStake(this.players[currentPlayerPos]);
+				
+				// if dealer has insufficient funds to play
+				if(!fundsRemaining) {
+					
+					// flag dealer bust, so round finishes
+					dealerBust = true;
+					
+					System.out.println("Dealer out of funds! Round over.");
+					this.gameMessage = "Dealer out of funds! Round over.";
+					
+					this.cardsVisible(true);
+					this.sendUpdate();
+					
+					try {
+						Thread.sleep(3000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					
+					// remove dealer
+					this.removePlayer(dealerPos);
+				}
 			}
 			// if player has lower value than dealer
 			else if(this.players[currentPlayerPos].getHand().maxLegalValue() <
 					this.players[this.dealerPos].getHand().maxLegalValue()) {
-				this.players[currentPlayerPos].payStake(this.players[dealerPos]);
+				
+				// pay dealer, checking if player has sufficient funds to proceed
+				boolean fundsRemaining = this.players[currentPlayerPos].payOwnStake(this.players[dealerPos]);
+				
+				if(!fundsRemaining) {
+					
+					// remove player if not enough funds to stake
+					this.removePlayer(currentPlayerPos);
+				}
 			}
 			
 			this.incrementCurrentPlayer();
