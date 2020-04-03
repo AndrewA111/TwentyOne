@@ -184,11 +184,19 @@ public class GameLoopThread implements Runnable{
 			 */
 			while(this.table.getNoPlayers() >= 2) {
 				
-				// disable stake-placing
-				this.table.allowStakes(false);
+				/*
+				 * synchronized to prevent last-minute updates 
+				 * from ServerReader
+				 */
+				synchronized(this.table) {
+					
+					// disable stake-placing
+					this.table.allowStakes(false);
+					
+					// disable leaving
+					this.table.allowLeaving(false);
+				}
 				
-				// disable leaving
-				this.table.allowLeaving(false);
 				
 				/*
 				 *  cards dealt face-down 
@@ -339,11 +347,18 @@ public class GameLoopThread implements Runnable{
 						
 
 						
+						/*
+						 * Synchronize to prevent last-minute 
+						 * updates from ServerReader
+						 */
+						synchronized(this.table) {
+							// disable draw/stand buttons
+							this.table.currentPlayer().setAbleToDrawOrStand(false);
+						}
+						
+						
 						// reset player to undecided (for next round)
 						this.table.currentPlayer().setDrawOrStand(-1);
-						
-						// disable draw/stand buttons
-						this.table.currentPlayer().setAbleToDrawOrStand(false);
 						
 						// increment player
 						this.table.incrementCurrentPlayer();
@@ -431,12 +446,20 @@ public class GameLoopThread implements Runnable{
 				 * Check if enough players for a new round
 				 */
 				numPlayers = this.table.getNoPlayers();
-
-				// flag for new players
-				this.table.setJoinable(false);
 				
-				// set buttons for existing players
-				this.model.allowJoining(false);
+				/*
+				 * Synchronize to avoid last-minute joining
+				 */
+				synchronized(this.table){
+					
+					// flag for new players
+					this.table.setJoinable(false);
+					
+					// set buttons for existing players
+					this.model.allowJoining(false);
+				}
+				
+				
 			}
 
 		}
@@ -523,8 +546,6 @@ public class GameLoopThread implements Runnable{
 				
 				// set buttons for existing players
 				this.model.allowJoining(false);
-				
-				
 				
 				/*
 				 *  check number players at table

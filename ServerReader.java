@@ -69,10 +69,19 @@ public class ServerReader implements Runnable{
 				 * Message code 1 - Increase stake
 				 */
 				if(messageIn.getCode() == 1) {
-					if(this.player.isAbleToChangeStake()) {
-						this.player.stakeUp();
-					}
 					
+					/*
+					 * Synchronized to prevent last-minute 
+					 * state change
+					 */
+					synchronized(this.table) {
+						
+						if(this.player.isAbleToChangeStake()) {
+							this.player.stakeUp();
+						}
+						
+					}
+	
 					// send update to clients
 					this.table.sendUpdate();
 				}
@@ -80,9 +89,18 @@ public class ServerReader implements Runnable{
 				 * Message code 2 - Decrease stake
 				 */
 				if(messageIn.getCode() == 2) {
-					if(this.player.isAbleToChangeStake()) {
-						this.player.stakeDown();
+					
+					/*
+					 * Synchronized to prevent last-minute 
+					 * state change
+					 */
+					synchronized(this.table){
+						
+						if(this.player.isAbleToChangeStake()) {
+							this.player.stakeDown();
+						}
 					}
+					
 					
 					// send update to clients
 					this.table.sendUpdate();
@@ -92,9 +110,18 @@ public class ServerReader implements Runnable{
 				 * Message code 3 - Draw card
 				 */
 				if(messageIn.getCode() == 3) {
-					if(this.player.isAbleToDrawOrStand()) {
-						this.player.setDrawOrStand(1);;
+					
+					/*
+					 * Synchronized to prevent last-minute 
+					 * state change
+					 */
+					synchronized(this.table) {
+						
+						if(this.player.isAbleToDrawOrStand()) {
+							this.player.setDrawOrStand(1);;
+						}
 					}
+					
 					
 					synchronized(this.drawStandNotifier) {
 						this.drawStandNotifier.notifyAll();
@@ -104,9 +131,18 @@ public class ServerReader implements Runnable{
 				 * Message code 4 - Stand (end turn)
 				 */
 				if(messageIn.getCode() == 4) {
-					if(this.player.isAbleToDrawOrStand()) {
-						this.player.setDrawOrStand(2);
+					
+					/*
+					 * Synchronized to prevent last-minute 
+					 * state change
+					 */
+					synchronized(this.table) {
+						
+						if(this.player.isAbleToDrawOrStand()) {
+							this.player.setDrawOrStand(2);
+						}
 					}
+					
 					
 					synchronized(this.drawStandNotifier) {
 						this.drawStandNotifier.notifyAll();
@@ -120,11 +156,17 @@ public class ServerReader implements Runnable{
 					
 					/*
 					 *  synchronize to avoid race between multiple 
-					 *  clients to take final position
+					 *  clients to take final position and last-minute joining
 					 */
 					synchronized(this.table) {
 						
-						boolean added = this.model.getTable().addPlayer(player);
+						// boolean to check whether player added
+						boolean added = false;
+						
+						// join if joining allowed
+						if(this.player.isAbleToJoin()) {
+							added = this.model.getTable().addPlayer(player);
+						}
 						
 						/* 
 						 * players can only join between rounds, 
@@ -154,23 +196,33 @@ public class ServerReader implements Runnable{
 				 * Message code 6 - Leave table
 				 */
 				if(messageIn.getCode() == 6) {
-
-					this.model.getTable().removePlayer(this.player.getTablePos());
 					
 					/*
-					 * make sure new players can join
+					 *  synchronize to avoid last-minute leaving
 					 */
-					for(Player p : this.model.getGlobalPlayers()) {
+					synchronized(this.table) {
 						
-						// select only players not currently sitting at table
-						if(p.getTablePos() == -1) {
-							p.setAbleToJoin(true);
+						// leave if leaving allowed
+						if(this.player.isAbleToLeave()) {
+							this.model.getTable().removePlayer(this.player.getTablePos());
 						}
 						
+						/*
+						 * make sure new players can join
+						 */
+						for(Player p : this.model.getGlobalPlayers()) {
+							
+							// select only players not currently sitting at table
+							if(p.getTablePos() == -1) {
+								p.setAbleToJoin(true);
+							}
+							
+						}
+						
+						// send update to clients
+						this.table.sendUpdate();
 					}
 					
-					// send update to clients
-					this.table.sendUpdate();
 
 				}
 				
