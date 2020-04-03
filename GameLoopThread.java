@@ -178,26 +178,23 @@ public class GameLoopThread implements Runnable{
 			}
 			
 			/*
+			 * synchronized to prevent last-minute updates 
+			 * from ServerReader
+			 */
+			synchronized(this.table) {
+
+				// disable stake-placing
+				this.table.allowStakes(false);
+
+			}
+			
+			/*
 			 * =======================
 			 * Round logic
 			 * =======================
 			 */
 			while(this.table.getNoPlayers() >= 2) {
-				
-				/*
-				 * synchronized to prevent last-minute updates 
-				 * from ServerReader
-				 */
-				synchronized(this.table) {
-					
-					// disable stake-placing
-					this.table.allowStakes(false);
-					
-					// disable leaving
-					this.table.allowLeaving(false);
-				}
-				
-				
+
 				/*
 				 *  cards dealt face-down 
 				 *  (players can only view their own cards)
@@ -441,30 +438,32 @@ public class GameLoopThread implements Runnable{
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				
+
 				/*
-				 * Check if enough players for a new round
+				 * synchronized to prevent last-minute updates 
+				 * from ServerReader
 				 */
-				numPlayers = this.table.getNoPlayers();
-				
-				/*
-				 * Synchronize to avoid last-minute joining
-				 */
-				synchronized(this.table){
+				synchronized(this.table) {
 					
 					// flag for new players
 					this.table.setJoinable(false);
 					
 					// set buttons for existing players
 					this.model.allowJoining(false);
+					
+					// disable stake-placing
+					this.table.allowStakes(false);
+					
+					// disable leaving
+					this.table.allowLeaving(false);
 				}
 				
-				
+				/*
+				 * Check if enough players for a new round
+				 */
+				numPlayers = this.table.getNoPlayers();	
 			}
-
 		}
-		
-		
 	}
 	
 	/**
