@@ -1,4 +1,8 @@
-
+/**
+ * Text class for Hand class
+ * @author Andrew
+ *
+ */
 public class TestHand {
 	public static void main(String[] args) {
 		

@@ -1,9 +1,5 @@
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 
-import javax.imageio.ImageIO;
 
 /**
  * Helper class to store and access data for representing cards

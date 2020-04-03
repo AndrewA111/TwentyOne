@@ -2,6 +2,11 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+/**
+ * Class to create thread to write messages to client
+ * @author Andrew
+ *
+ */
 public class ServerWriter implements Runnable{
 	
 	/**

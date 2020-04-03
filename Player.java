@@ -1,6 +1,13 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Class to represent game players, including flags 
+ * to indicate actions they can take in game
+ * 
+ * @author Andrew
+ *
+ */
 public class Player implements Serializable {
 	
 	/**
