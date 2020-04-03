@@ -216,16 +216,11 @@ public class ServerReader implements Runnable{
 							if(p.getTablePos() == -1) {
 								p.setAbleToJoin(true);
 							}
-							
-						}
-						
+						}					
 						// send update to clients
 						this.table.sendUpdate();
 					}
-					
-
 				}
-				
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
